@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <title>Pedidos Xico</title>
+      <link rel="stylesheet" href="examples/css/sample.css" />
+
+<!-- <msdropdown> -->
+<link rel="stylesheet" type="text/css" href="css/msdropdown/dd.css" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+      <link rel="stylesheet" href="css/creative.css">
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+      <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+
+      <link rel="stylesheet" type="text/css" href="css/msdropdown/skin2.css" />
+      <link rel="stylesheet" type="text/css" href="css/msdropdown/flags.css" />
+      <script src="js/msdropdown/jquery.dd.js"></script>
+    </head>
+
+    <body>
+      <header>
+        <nav class="navbar navbar-default ">
+           <div class="container-fluid">
+             <a class="navbar-brand" href="#">
+             <img width="60px" style="margin-top:-10px;" src="assets/logo.svg" alt="">
+             </a>
+             <div class="region">
+             <p>Pedidos Región Centro</p>
+             </div>
+          </div>
+        </nav>
+          <section id="head-blog" >
+            <!-- Nav tabs -->
+
+                           <!-- Tab Semana-->
+              <div  class="tab-content" style="margin-top:-70px;">
+                <div class="tab-pane fade in active" id="m1">
+                    <div  style=" display:inline; width:20%;">Visitando</div>
+
+
+    <select style="width:auto;">
+      <option   data-description="">Selecciona una tienda para visitar</option>
+      <option   data-image="assets/tiendas/1.png">Plaza Hidalgo</option>
+      <option   data-image="assets/tiendas/2.png">Sendero</option>
+      <option    data-image="assets/tiendas/3.png">Hombres ilustres</option>
+      <option   data-image="assets/tiendas/4.png">Palmas</option>
+      <option    data-image="assets/tiendas/5.png">Hidalgo</option>
+  </select>
+
+
+                      <div class="menu-1" style="height:120px; width:100%; padding:1%; border-top:solid 1px #eee;">
+                          <ul style="margin-left:-40px; margin-top:5px;">
+                          <li class="col-xs-4" style="list-style:none;"><a href="#pedido" data-toggle="tab"><img href="#pedido" data-toggle="tab" src="assets/icon-1.svg" alt=""><span style="font-size:9px; color:grey;"><br>Generar Pedido</a></li>
+                          <li class="col-xs-4" style="list-style:none;"><img src="assets/icon-2.svg" alt=""><p><span style="font-size:9px; color:grey;">Revisar Existencias</span></p></li>
+                          <li class="col-xs-4" style="list-style:none;"><img src="assets/icon-3.svg" alt=""><p><span style="font-size:9px; color:grey;">Reporte de Calidad</span></p></li>
+                          </ul>
+                      </div>
+
+                      <div class="panel-group"  style="border:none;"role="tablist" aria-multiselectable="true">
+
+  <div class="panel panel-default" >
+    <div class="panel-heading" role="tab" id="headingTwo" style="max-height:46px; background-color:white;">
+      <h4 class="panel-title">
+        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+      <span class="glyphicon glyphicon-menu-down"></span> Mis pedidos
+        </a>
+      </h4>
+    </div>
+    <div id="collapseTwo"  class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+      <div class="panel-body no-padding">
+
+        <table class="table table-striped">
+               <tr><td>Pedido 12 de Noviembre 2017 #099q09</td></tr>
+               <tr><td>Pedido 12 de Noviembre 2017 #099q09</td></tr>
+               <tr><td>Pedido 12 de Noviembre 2017 #099q09</td></tr>
+               <tr><td>Pedido 12 de Noviembre 2017 #099q09</td></tr>
+          </table>
+        </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" style="height:46px; background-color:white;" role="tab" id="headingThree">
+      <h4 class="panel-title">
+        <a class="collapsed" role="button"  data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            <span class="glyphicon glyphicon-menu-down"></span>Historial de Existencias
+        </a>
+      </h4>
+    </div>
+    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+      <div class="panel-body no-padding">
+
+        <table class="table table-striped">
+               <tr><td>Existencias 12 de Noviembre 2017 #099q09</td></tr>
+               <tr><td>Existencias 12 de Noviembre 2017 #099q09</td></tr>
+               <tr><td>Existencias 12 de Noviembre 2017 #099q09</td></tr>
+               <tr><td>Existencias 12 de Noviembre 2017 #099q09</td></tr>
+          </table>
+      </div>
+    </div>
+  </div>
+</div>
+                      </div>
+              <div class="tab-pane fade" id="m2">
+                         2
+                       </div>
+
+                       <div class="tab-pane fade" id="pedido">
+                                  Esto es un pedido
+                                  <a href="#m1" data-toggle="tab">volver
+                                  </a>
+                                </div>
+                     </div>
+
+</div>
+
+<div id="footer-panel">
+  <ul class="nav nav-tabs" style="width:100%; border:none !important;">
+                   <li style="width:33%;"class="active"><a id="tabsemana" href="#m1" data-toggle="tab" aria-label="Left Align"><i class="material-icons no-padding">home</i></a></li>
+                   <li  style="width:33%;"><a id="tabordenes" href="#m2" data-toggle="tab"><i class="material-icons no-padding">notifications</i></a></li>
+                   <li  style="width:33%;"><a id="tabproyectos" href="#m3" data-toggle="tab"><i class="material-icons no-padding">menu</i></a></li>
+
+                 </ul>
+</div>
+
+
+          </section>
+        </header>
+
+    </body>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+      <script src="js/bootstrap-tooltip.js"></script>
+      <script>
+      function createByJson() {
+      	var jsonData = [
+      					{description:'Choos your payment gateway', value:'', text:'Payment Gateway'},
+      					{image:'images/msdropdown/icons/Amex-56.png', description:'My life. My card...', value:'amex', text:'Amex'},
+      					{image:'images/msdropdown/icons/Discover-56.png', description:'It pays to Discover...', value:'Discover', text:'Discover'},
+      					{image:'images/msdropdown/icons/Mastercard-56.png', title:'For everything else...', description:'For everything else...', value:'Mastercard', text:'Mastercard'},
+      					{image:'images/msdropdown/icons/Cash-56.png', description:'Sorry not available...', value:'cash', text:'Cash on devlivery', disabled:true},
+      					{image:'images/msdropdown/icons/Visa-56.png', description:'All you need...', value:'Visa', text:'Visa'},
+      					{image:'images/msdropdown/icons/Paypal-56.png', description:'Pay and get paid...', value:'Paypal', text:'Paypal'}
+      					];
+      	$("#byjson").msDropDown({byJson:{data:jsonData, name:'payments2'}}).data("dd");
+      }
+      $(document).ready(function(e) {
+      	//no use
+      	try {
+      		var pages = $("#pages").msDropdown({on:{change:function(data, ui) {
+      												var val = data.value;
+      												if(val!="")
+      													window.location = val;
+      											}}}).data("dd");
+
+      		var pagename = document.location.pathname.toString();
+      		pagename = pagename.split("/");
+      		pages.setIndexByValue(pagename[pagename.length-1]);
+      		$("#ver").html(msBeautify.version.msDropdown);
+      	} catch(e) {
+      		//console.log(e);
+      	}
+
+      	$("#ver").html(msBeautify.version.msDropdown);
+
+      	//convert
+      	$("select").msDropdown({roundedBorder:false});
+      	createByJson();
+      	$("#tech").data("dd");
+      });
+      function showValue(h) {
+      	console.log(h.name, h.value);
+      }
+      $("#tech").change(function() {
+      	console.log("by jquery: ", this.value);
+      })
+      //
+      </script>
+
+</html>
