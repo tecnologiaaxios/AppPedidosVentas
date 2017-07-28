@@ -33,15 +33,20 @@
 <div id="form-login">
   <form>
     <div class="form-group">
+      <input type="text" class="form-control input-lg input-login" id="username" placeholder="Nombre de usuario" required>
+      <span style="display: none;" id="helpblockUserName" class="help-block">Campo obligatorio</span>
+    </div>
 
-      <input type="email" class="form-control input-lg" id="exampleInputEmail1" placeholder="Usuario">
+    <div class="form-group">
+      <input type="password" class="form-control input-lg input-login" id="contraseña" placeholder="Contraseña" required>
+      <span style="display: none;" id="helpblockContraseña" class="help-block">Campo obligatorio</span>
     </div>
     <div class="form-group">
-
-      <input type="password" class="form-control input-lg" id="exampleInputPassword1" placeholder="Contraseña">
+      <button class="btn btn-primary btn-lg btn-login" id="entrar" onclick="login()" type="button" style="width:100%;">Entrar</button>
     </div>
 
-        <a href="panel.html"  style=" width:100%;" type="submit" class="btn btn-default btn-lg">Entrar</a>  </form>
+        <!--<a href="panel.html"  style=" width:100%;" type="submit" class="btn btn-default btn-lg">Entrar</a>  -->
+  </form>
 
 </div>
 <div id="footer-login">
@@ -51,6 +56,22 @@
 
           </section>
         </header>
+
+<script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
+        <script src="js/jquery-3.2.1.min.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyA19j6-VLNcXLJfBkfd_lZfFFbzg6z0Imc",
+        authDomain: "xico-netcontrol.firebaseapp.com",
+        databaseURL: "https://xico-netcontrol.firebaseio.com",
+        projectId: "xico-netcontrol",
+        storageBucket: "xico-netcontrol.appspot.com",
+        messagingSenderId: "248615705793"
+      };
+      firebase.initializeApp(config);
+    </script>
+    <script src="js/login.js"></script>
 
     </body>
 </html>
