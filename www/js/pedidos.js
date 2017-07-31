@@ -8,20 +8,92 @@ function llenarSelectTiendas() {
 
     let row = "";
     for(let tienda in tiendas) {
-      row += '<option value="'+tienda+'">'+tiendas[tienda].nombre+'</option>';
+      let imagen = "";
+      switch (tiendas[tienda].consorcio) {
+        case "SORIANA":
+          imagen = "assets/tiendas/soriana.png";
+          break;
+        case "SMART":
+          imagen = "assets/tiendas/smart.png";
+          break;
+        case "GRAND":
+          imagen = "assets/tiendas/grand.png";
+          break;
+        case "IBARRA":
+          imagen = "assets/tiendas/ibarra.png";
+          break;
+        case "CHEDRAUI":
+          imagen = "assets/tiendas/chedraui.png";
+          break;
+        case "STM":
+          imagen = "assets/tiendas/stm.png";
+          break;
+      }
+
+      row += '<option value="'+tienda+'" data-image="'+imagen+'">'+tiendas[tienda].nombre+'</option>';
     }
     $('#tiendas').empty().append('<option value="Tiendas" disabled selected>Tienda</option>');
-    $('#tiendas').append(row);
+    $('#tiendas').append(row).msDropdown();
   });
 }
 
+llenarSelectTiendas();
+
+/*function llenarSelectTiendas() {
+  var jsonData = [
+    {description:'', value:'', text:'Tienda'}
+  ];
+
+  let tiendasRef = db.ref('tiendas');
+  tiendasRef.on('value', function(snapshot) {
+    let tiendas = snapshot.val();
+
+    for(let tienda in tiendas) {
+      let imagen = "";
+      switch (tiendas[tienda].consorcio) {
+        case "SORIANA":
+          imagen = "assets/tiendas/soriana.png";
+          break;
+        case "SMART":
+          imagen = "assets/tiendas/smart.png";
+          break;
+        case "GRAND":
+          imagen = "assets/tiendas/grand.png";
+          break;
+        case "IBARRA":
+          imagen = "assets/tiendas/ibarra.png";
+          break;
+        case "CHEDRAUI":
+          imagen = "assets/tiendas/chedraui.png";
+          break;
+        case "STM":
+          imagen = "assets/tiendas/stm.png";
+          break;
+      }
+
+      let json = {image:imagen, value:tienda, text:tiendas[tienda].nombre};
+      jsonData.push(json);
+    }
+    $("#tiendas").msDropDown({byJson:{data:jsonData, name:'tiendas'}}).data("dd");
+    $("#tiendas").msDropdown().data("dd").on("change", function(res) {
+      let idTienda = $('#tiendas').msDropdown().data('dd').value;
+      let tiendaActualRef = db.ref('tiendas/'+idTienda);
+      tiendaActualRef.once('value', function(snapshot) {
+        let tienda = snapshot.val();
+        $('#tienda').val(tienda.nombre);
+        $('#region').val(tienda.region);
+      });
+    });
+  });
+
+}*/
+
 
 function llenarSelectProductos() {
-  let idTienda = $('#tiendas').val();
+  let idTienda = $("#tiendas").val();
   let productosRef = db.ref('tiendas/'+idTienda+'/productos');
   productosRef.on('value', function(snapshot) {
     let productos = snapshot.val();
-    //console.log(productos);
     let row = "";
     for(let producto in productos) {
       row += '<option value="'+producto+'">'+productos[producto].clave + ' ' + productos[producto].nombre +' ' + productos[producto].empaque +'</option>';
@@ -31,11 +103,31 @@ function llenarSelectProductos() {
     //$('#productos').multiselect();
   });
 }
+
+/*function llenarSelectProductos() {
+  var jsonData = [
+    {description:'', value:'', text:'Tienda'}
+  ];
+
+  let idTienda = $("#tiendas").msDropdown().data("dd").value;
+  let productosRef = db.ref('tiendas/'+idTienda+'/productos');
+  productosRef.on('value', function(snapshot) {
+    let productos = snapshot.val();
+    //console.log(productos);
+    for(let producto in productos) {
+      let json = {value:producto, text:productos[producto].nombre};
+      jsonData.push(json);
+    }
+    $("#tiendas").msDropDown({byJson:{data:jsonData, name:'productos'}}).data("dd");
+  });
+}*/
+
 //llenarSelectProductos();
 
 $('#tiendas').change(function(){
   llenarSelectProductos();
-  let idTienda = $('#tiendas').val();
+  let idTienda = $("#tiendas").val();
+  console.log(idTienda);
   let tiendaActualRef = db.ref('tiendas/'+idTienda);
   tiendaActualRef.once('value', function(snapshot) {
     let tienda = snapshot.val();
@@ -45,7 +137,8 @@ $('#tiendas').change(function(){
 });
 
 $('#productos').change(function(){
-  let idTienda = $('#tiendas').val();
+  //let idTienda = $('#tiendas').val();
+  let idTienda = $("#element").msDropdown().data("dd").value;
   let idProducto = $('#productos').val();
   let productoActualRef = db.ref('tiendas/'+idTienda+'/productos/'+idProducto);
   productoActualRef.once('value', function(snapshot){
@@ -78,10 +171,10 @@ $('#degusPz').keyup(function(){
   $('#totalKg').val(totalKg);
 });
 
-$(document).ready(function() {
+/*$(document).ready(function() {
   llenarSelectTiendas();
   //llenarSelectProductos();
-})
+})*/
 
 function agregarProducto() {
   let clave = $('#clave').val();
