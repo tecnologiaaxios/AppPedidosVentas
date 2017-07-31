@@ -28,6 +28,12 @@ function llenarSelectTiendas() {
         case "STM":
           imagen = "assets/tiendas/stm.png";
           break;
+        case "MASBODEGA":
+          imagen = "assets/tiendas/masbodega.png";
+          break;
+        case "CHUPER":
+          imagen = "assets/tiendas/chuper.png";
+          break;
       }
 
       row += '<option value="'+tienda+'" data-image="'+imagen+'">'+tiendas[tienda].nombre+'</option>';
