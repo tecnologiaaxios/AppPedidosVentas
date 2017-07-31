@@ -34,6 +34,9 @@ function llenarSelectTiendas() {
         case "CHUPER":
           imagen = "assets/tiendas/chuper.png";
           break;
+        case "ARTELI":
+          imagen = "assets/tiendas/arteli.png";
+          break;
       }
 
       row += '<option value="'+tienda+'" data-image="'+imagen+'">'+tiendas[tienda].nombre+'</option>';
