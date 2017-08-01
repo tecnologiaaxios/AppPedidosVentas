@@ -146,8 +146,7 @@ $('#tiendas').change(function(){
 });
 
 $('#productos').change(function(){
-  //let idTienda = $('#tiendas').val();
-  let idTienda = $("#element").msDropdown().data("dd").value;
+  let idTienda = $('#tiendas').val();
   let idProducto = $('#productos').val();
   let productoActualRef = db.ref('tiendas/'+idTienda+'/productos/'+idProducto);
   productoActualRef.once('value', function(snapshot){
