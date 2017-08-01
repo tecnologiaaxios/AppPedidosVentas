@@ -250,4 +250,12 @@ function guardarPedido() {
   $("#productos").val('Productos')
   $('#productosPedido tbody').empty();
   listaProductosPedido.length = 0;
+
+  let notificacionesRef = db.ref('notificaciones/almacen');
+  let notificacion = {
+    leida: false,
+    mensaje: "Se ha generado un pedido: Clave: " + key
+  }
+
+  notificacionesRef.push(notificacion);
 }
