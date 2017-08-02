@@ -38,7 +38,7 @@ function llenarSelectTiendas() {
 
       row += '<option value="'+tienda+'" data-image="'+imagen+'">'+tiendas[tienda].nombre+'</option>';
     }
-    $('#tiendas').empty().append('<option value="Tiendas" disabled selected>Tienda</option>');
+    $('#tiendas').empty().append('<option value="Tiendas" disabled selected>Selecciona una tienda para visitar</option>');
     $('#tiendas').append(row).msDropdown();
   });
 }
