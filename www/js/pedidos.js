@@ -5,8 +5,8 @@ function llenarSelectTiendas() {
   let tiendasRef = db.ref('tiendas');
   tiendasRef.on('value', function(snapshot) {
     let tiendas = snapshot.val();
-
     let row = "";
+
     for(let tienda in tiendas) {
       let imagen = "";
       switch (tiendas[tienda].consorcio) {
@@ -41,12 +41,14 @@ function llenarSelectTiendas() {
 
       row += '<option value="'+tienda+'" data-image="'+imagen+'">'+tiendas[tienda].nombre+'</option>';
     }
+
+    $('#tiendas').show();
     $('#tiendas').empty().append('<option value="Tiendas" disabled selected>Tienda</option>');
     $('#tiendas').append(row).msDropdown();
   });
 }
 
-llenarSelectTiendas();
+//llenarSelectTiendas();
 
 /*function llenarSelectTiendas() {
   var jsonData = [
@@ -179,10 +181,10 @@ $('#degusPz').keyup(function(){
   $('#totalKg').val(totalKg);
 });
 
-/*$(document).ready(function() {
+$(document).ready(function() {
   llenarSelectTiendas();
   //llenarSelectProductos();
-})*/
+})
 
 function agregarProducto() {
   let clave = $('#clave').val();
