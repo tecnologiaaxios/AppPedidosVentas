@@ -41,7 +41,7 @@ function llenarSelectTiendas() {
 
       row += '<option value="'+tienda+'" data-image="'+imagen+'">'+tiendas[tienda].nombre+'</option>';
     }
-    $('#tiendas').empty().append('<option value="Tiendas" disabled selected>Selecciona una tienda para visitar</option>');
+    $('#tiendas').empty().append('<option value="Tiendas" disabled selected>Tienda</option>');
     $('#tiendas').append(row).msDropdown();
   });
 }
@@ -250,12 +250,4 @@ function guardarPedido() {
   $("#productos").val('Productos')
   $('#productosPedido tbody').empty();
   listaProductosPedido.length = 0;
-
-  let notificacionesRef = db.ref('notificaciones/almacen');
-  let notificacion = {
-    leida: false,
-    mensaje: "Se ha generado un pedido: Clave: " + key
-  }
-
-  notificacionesRef.push(notificacion);
 }
