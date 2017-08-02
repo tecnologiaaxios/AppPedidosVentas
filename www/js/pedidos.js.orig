@@ -5,8 +5,8 @@ function llenarSelectTiendas() {
   let tiendasRef = db.ref('tiendas');
   tiendasRef.on('value', function(snapshot) {
     let tiendas = snapshot.val();
-
     let row = "";
+
     for(let tienda in tiendas) {
       let imagen = "";
       switch (tiendas[tienda].consorcio) {
@@ -41,12 +41,18 @@ function llenarSelectTiendas() {
 
       row += '<option value="'+tienda+'" data-image="'+imagen+'">'+tiendas[tienda].nombre+'</option>';
     }
+<<<<<<< HEAD
+
+    $('#tiendas').show();
     $('#tiendas').empty().append('<option value="Tiendas" disabled selected>Tienda</option>');
+=======
+    $('#tiendas').empty().append('<option value="Tiendas" disabled selected>Selecciona una tienda para visitar</option>');
+>>>>>>> 8c3ac871a46f8ce06d04b3d837ab4ff471fbf88c
     $('#tiendas').append(row).msDropdown();
   });
 }
 
-llenarSelectTiendas();
+//llenarSelectTiendas();
 
 /*function llenarSelectTiendas() {
   var jsonData = [
@@ -179,10 +185,10 @@ $('#degusPz').keyup(function(){
   $('#totalKg').val(totalKg);
 });
 
-/*$(document).ready(function() {
+$(document).ready(function() {
   llenarSelectTiendas();
   //llenarSelectProductos();
-})*/
+})
 
 function agregarProducto() {
   let clave = $('#clave').val();
@@ -250,4 +256,12 @@ function guardarPedido() {
   $("#productos").val('Productos')
   $('#productosPedido tbody').empty();
   listaProductosPedido.length = 0;
+
+  let notificacionesRef = db.ref('notificaciones/almacen');
+  let notificacion = {
+    leida: false,
+    mensaje: "Se ha generado un pedido: Clave: " + key
+  }
+
+  notificacionesRef.push(notificacion);
 }
