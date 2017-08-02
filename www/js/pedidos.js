@@ -206,10 +206,10 @@ function agregarProducto() {
   let datosProducto = {
     clave: clave,
     nombre: nombre,
-    pedidoPz: pedidoPz,
-    degusPz: degusPz,
-    totalPz: totalPz,
-    totalKg: totalKg
+    pedidoPz: Number(pedidoPz),
+    degusPz: Number(degusPz),
+    totalPz: Number(totalPz),
+    totalKg: Number(totalKg)
   };
   listaProductosPedido.push(datosProducto);
 
