@@ -41,9 +41,13 @@ function llenarSelectTiendas() {
 
       row += '<option value="'+tienda+'" data-image="'+imagen+'">'+tiendas[tienda].nombre+'</option>';
     }
+<<<<<<< HEAD
 
     $('#tiendas').show();
+    $('#tiendas').empty().append('<option value="Tiendas" disabled selected>Tienda</option>');
+=======
     $('#tiendas').empty().append('<option value="Tiendas" disabled selected>Selecciona una tienda para visitar</option>');
+>>>>>>> 8c3ac871a46f8ce06d04b3d837ab4ff471fbf88c
     $('#tiendas').append(row).msDropdown();
   });
 }

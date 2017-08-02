@@ -40,8 +40,15 @@
         <!-- Tab Semana-->
         <div  class="tab-content" style="margin-top:-70px;">
           <div class="tab-pane fade in active" id="m1">
+
             <!--<div id="tiendas"></div>-->
-            <select id="tiendas" style="width:90%; display: none;" required></select>
+<<<<<<< HEAD
+            <select id="tiendas" style="width:400px; display:none;" required>
+
+            </select>
+=======
+            <select id="tiendas" style="width:90%;" required></select>
+>>>>>>> 8c3ac871a46f8ce06d04b3d837ab4ff471fbf88c
             <!--<select id="tiendas2" style="width:auto;">
               <option data-description="">Selecciona una tienda para visitar</option>
               <option data-image="assets/tiendas/soriana.png">Plaza Hidalgo</option>
