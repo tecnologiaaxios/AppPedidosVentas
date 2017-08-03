@@ -261,3 +261,110 @@ function guardarPedido() {
 
   notificacionesRef.push(notificacion);
 }
+
+
+function mostrarHistorialPedidos() {
+  console.log("HOLA");
+  let historialPedidosEntradaRef = db.ref('historialPedidosEntrada');
+  historialPedidosEntradaRef.on('value', function(snapshot) {
+    let historialPedidos = snapshot.val();
+    //console.log(historialPedidos);
+    let row = "";
+    //$('#tablaPedidosEnProceso tbody').empty();
+    for(pedido in historialPedidos) {
+      let histRef = db.ref('historialPedidosEntrada/'+pedido);
+      histRef.on('value', function(snapshot) {
+        let hola = snapshot.val();
+        for(i in hola){
+          let pedidoActual = db.ref('historialPedidosEntrada/'+pedido+'/'+i+'/encabezado');
+          //console.log(pedidoActual);
+          pedidoActual.once('value', function(snapshot) {
+          let ped = snapshot.val();
+          //console.log(ped)
+          //$('#tienda').val(tienda.nombre);
+          //$('#region').val(tienda.region);
+          //console.log(i);
+          row += '<tr>' +
+              '<td>' + ped.fechaCaptura+ '</td>' +
+              '<td>' + ped.ruta+ '</td>' +
+              '<td>' + ped.tienda + '</td>' +
+             '</tr>';
+           });
+        }
+      });
+      //console.log(historialPedidos.val());
+      //let div = $('<div/>', {'class': 'panel-body no-padding'});
+      //let tr = $('<tr/>');
+      //let td = $('<td/>');
+
+      
+
+      //let div1 = '<div class="input-group-addon btn btn-primary"><span class="glyphicon glyphicon-calendar"></span></div>';
+
+      //div.append(tr);
+      $('#historialPedidos').html(row);
+      
+    }
+    
+  });
+}
+
+mostrarHistorialPedidos();
+
+//$('#historialPedidos').empty().append(mostrarHistorialPedidos());
+      /*row += '<tr>' +
+              '<td>' + pedidoPadre + '</td>' +
+              '<td>' + pedidosPadre[pedidoPadre].fechaCreacionPadre + '</td>' +
+              '<td>' + pedidosPadre[pedidoPadre].fechaRuta + '</td>' +
+              '<td><input type="text" class="form-control" style="width: 100px; display:inline-block padding-right: 10px;" placeholder="Nueva fecha de ruta"><button class="btn btn-primary" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button></td>' +
+              '<td>' + pedidosPadre[pedidoPadre].ruta + '</td>' +
+              '<td></td>' +
+             '</tr>';*/
+
+      /*let diaCaptura = pedidosPadre[pedidoPadre].fechaCreacionPadre.substr(0,2);
+      let mesCaptura = pedidosPadre[pedidoPadre].fechaCreacionPadre.substr(3,2);
+      let añoCaptura = pedidosPadre[pedidoPadre].fechaCreacionPadre.substr(6,4);
+      let fechaCaptura = mesCaptura + '/' + diaCaptura + '/' + añoCaptura;
+      moment.locale('es');
+      let fechaCapturaMostrar = moment(fechaCaptura).format('DD MMMM YYYY');
+
+      let fechaRutaMostrar;
+      if(pedidosPadre[pedidoPadre].fechaRuta.length > 0) {
+        let diaRuta = pedidosPadre[pedidoPadre].fechaRuta.substr(0,2);
+        let mesRuta = pedidosPadre[pedidoPadre].fechaRuta.substr(3,2);
+        let añoRuta = pedidosPadre[pedidoPadre].fechaRuta.substr(6,4);
+        let fechaRuta = mesRuta + '/' + diaRuta + '/' + añoRuta;
+
+        fechaRutaMostrar = moment(fechaRuta).format('DD MMMM YYYY');
+      } else {
+        fechaRutaMostrar = "Fecha pendiente";
+      }
+
+      row = '<td>' + pedidoPadre + '</td>' +
+            '<td>' + fechaCapturaMostrar + '</td>' +
+            '<td>' + fechaRutaMostrar + '</td>';
+
+      div.append(input);
+      div.append('<span class="input-group-addon btn-primary"><i class="glyphicon glyphicon-calendar"></i></span>');
+      //div.append(button);
+      td.append(div);
+      td.append(button);
+      tr.append(row);
+      tr.append(td);
+      tr.append('<td>' + pedidosPadre[pedidoPadre].ruta + '</td>');
+      div2.append(input2);
+      span2.append(button2);
+      div2.append(span2);
+      td2.append(div2);
+      tr.append(td2);
+      tr.append('<td><a class="btn btn-info" href="pedidoPadre.html?id='+pedidoPadre+'">Ver más</a></td>');
+
+      $('#tablaPedidosEnProceso tbody').append(tr);
+
+      $('.input-group.date').datepicker({
+        format: "dd/mm/yyyy",
+        startDate: "today",
+        language: "es"
+      });
+    }
+  });*/
