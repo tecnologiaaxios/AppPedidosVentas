@@ -1,4 +1,5 @@
-var db = firebase.database();
+const db = firebase.database();
+const auth = firebase.auth();
 var listaProductosPedido = [];
 
 function llenarSelectTiendas() {
@@ -111,7 +112,6 @@ function llenarSelectProductos() {
     }
     $('#productos').empty().append('<option value="Productos" disabled selected>Productos</option>');
     $('#productos').append(row);
-    //$('#productos').multiselect();
   });
 }
 
@@ -227,6 +227,8 @@ function guardarPedido() {
   let tienda = $('#tienda').val();
   let ruta = $('#region').val();
   let fechaCaptura = moment().format('DD/MM/YYYY');
+  let uid = auth.currentUser.uid;
+  console.log(uid);
 
   let encabezado = {
     encabezado: {
@@ -234,9 +236,10 @@ function guardarPedido() {
       tienda: tienda,
       ruta: ruta,
       fechaRuta: "",
-      estado: "Pendiente"
+      estado: "Pendiente",
+      promotora: uid
     }
-  }
+  };
 
   let key = pedidoRef.push(encabezado).getKey();
 
@@ -253,18 +256,34 @@ function guardarPedido() {
   $('#productosPedido tbody').empty();
   listaProductosPedido.length = 0;
 
-  let notificacionesRef = db.ref('notificaciones/almacen');
-  let notificacion = {
-    leida: false,
-    mensaje: "Se ha generado un pedido: Clave: " + key
-  }
+  //Envío de notificación al almacen
+  let usuariosAlmacenRef = db.ref('usuarios/planta/almacen');
+  usuariosAlmacenRef.once('value', function(snapshot) {
+    let usuarios = snapshot.val();
+    for(let usuario in usuarios) {
+      let notificacionesRefLista = db.ref('notificaciones/almacen/'+usuario+'/lista');
+      moment.locale('es');
+      let formato = moment().format("MMMM DD YYYY, HH:mm:ss");
+      let fecha = formato.toString();
+      let notificacion = {
+        fecha: fecha,
+        leida: false,
+        mensaje: "Se ha generado un pedido: Clave: " + key
+      };
+      notificacionesRefLista.push(notificacion);
 
-  notificacionesRef.push(notificacion);
+      let notificacionesRef = db.ref('notificaciones/almacen/'+usuario);
+      notificacionesRef.once('value', function(snapshot) {
+        let notusuario = snapshot.val();
+        let cont = notusuario.cont + 1;
+
+        notificacionesRef.update({cont: cont});
+      });
+    }
+  });
 }
 
-
 function mostrarHistorialPedidos() {
-  console.log("HOLA");
   let historialPedidosEntradaRef = db.ref('historialPedidosEntrada');
   historialPedidosEntradaRef.on('value', function(snapshot) {
     let historialPedidos = snapshot.val();
@@ -294,15 +313,15 @@ function mostrarHistorialPedidos() {
       //let tr = $('<tr/>');
       //let td = $('<td/>');
 
-      
+
 
       //let div1 = '<div class="input-group-addon btn btn-primary"><span class="glyphicon glyphicon-calendar"></span></div>';
 
       //div.append(tr);
       $('#historialPedidos').html(row);
-      
+
     }
-    
+
   });
 }
 
