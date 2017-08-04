@@ -261,7 +261,7 @@ function guardarPedido() {
   usuariosAlmacenRef.once('value', function(snapshot) {
     let usuarios = snapshot.val();
     for(let usuario in usuarios) {
-      let notificacionesRefLista = db.ref('notificaciones/almacen/'+usuario+'/lista');
+      let notificacionesListaRef = db.ref('notificaciones/almacen/'+usuario+'/lista');
       moment.locale('es');
       let formato = moment().format("MMMM DD YYYY, HH:mm:ss");
       let fecha = formato.toString();
@@ -270,7 +270,7 @@ function guardarPedido() {
         leida: false,
         mensaje: "Se ha generado un pedido: Clave: " + key
       };
-      notificacionesRefLista.push(notificacion);
+      notificacionesListaRef.push(notificacion);
 
       let notificacionesRef = db.ref('notificaciones/almacen/'+usuario);
       notificacionesRef.once('value', function(snapshot) {
