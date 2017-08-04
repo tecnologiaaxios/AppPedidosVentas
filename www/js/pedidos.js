@@ -284,11 +284,8 @@ function mostrarHistorialPedidos() {
           //$('#tienda').val(tienda.nombre);
           //$('#region').val(tienda.region);
           //console.log(i);
-          row += '<tr>' +
-              '<td>' + ped.fechaCaptura+ '</td>' +
-              '<td>' + ped.ruta+ '</td>' +
-              '<td>' + ped.tienda + '</td>' +
-             '</tr>';
+          row += '<tr><td>' +
+              ped.fechaCaptura +" "+ped.ruta +" "+ ped.tienda+'</td></tr>';
            });
         }
       });
