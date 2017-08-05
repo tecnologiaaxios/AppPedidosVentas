@@ -2,8 +2,74 @@ const db = firebase.database();
 const auth = firebase.auth();
 var listaProductosPedido = [];
 
+function haySesion() {
+  auth.onAuthStateChanged(function (user) {
+    //si hay un usuario
+    if (user) {
+      llenarSelectTiendas();
+
+    }
+    else {
+      $(location).attr("href", "index.html");
+    }
+  });
+}
+
+haySesion();
+
 function llenarSelectTiendas() {
-  let tiendasRef = db.ref('tiendas');
+  let uid = auth.currentUser.uid;
+  let usuariosRef = db.ref('usuarios/tiendas/supervisoras/'+uid);
+  usuariosRef.once('value', function(snapshot) {
+    let region = snapshot.val().region;
+
+    let tiendasRef = db.ref('regiones/'+region);
+    tiendasRef.on('value', function(snapshot) {
+      let tiendas = snapshot.val();
+      let row = "";
+
+      for(let tienda in tiendas) {
+        let imagen = "";
+        switch (tiendas[tienda].consorcio) {
+          case "SORIANA":
+            imagen = "assets/tiendas/soriana.png";
+            break;
+          case "SMART":
+            imagen = "assets/tiendas/smart.png";
+            break;
+          case "GRAND":
+            imagen = "assets/tiendas/grand.png";
+            break;
+          case "IBARRA":
+            imagen = "assets/tiendas/ibarra.png";
+            break;
+          case "CHEDRAUI":
+            imagen = "assets/tiendas/chedraui.png";
+            break;
+          case "STM":
+            imagen = "assets/tiendas/stm.png";
+            break;
+          case "MASBODEGA":
+            imagen = "assets/tiendas/masbodega.png";
+            break;
+          case "CHUPER":
+            imagen = "assets/tiendas/chuper.png";
+            break;
+          case "ARTELI":
+            imagen = "assets/tiendas/arteli.png";
+            break;
+        }
+
+        row += '<option value="'+tienda+'" data-image="'+imagen+'">'+tiendas[tienda].nombre+'</option>';
+      }
+
+      $('#tiendas').show();
+      $('#tiendas').empty().append('<option value="Tiendas" disabled selected>Selecciona una tienda para visitar</option>');
+      $('#tiendas').append(row).msDropdown();
+    });
+  });
+
+  /*let tiendasRef = db.ref('tiendas');
   tiendasRef.on('value', function(snapshot) {
     let tiendas = snapshot.val();
     let row = "";
@@ -46,7 +112,7 @@ function llenarSelectTiendas() {
     $('#tiendas').show();
     $('#tiendas').empty().append('<option value="Tiendas" disabled selected>Selecciona una tienda para visitar</option>');
     $('#tiendas').append(row).msDropdown();
-  });
+  });*/
 }
 
 //llenarSelectTiendas();
@@ -103,15 +169,22 @@ function llenarSelectTiendas() {
 
 function llenarSelectProductos() {
   let idTienda = $("#tiendas").val();
-  let productosRef = db.ref('tiendas/'+idTienda+'/productos');
-  productosRef.on('value', function(snapshot) {
-    let productos = snapshot.val();
-    let row = "";
-    for(let producto in productos) {
-      row += '<option value="'+producto+'">'+productos[producto].clave + ' ' + productos[producto].nombre +' ' + productos[producto].empaque +'</option>';
-    }
-    $('#productos').empty().append('<option value="Productos" disabled selected>Productos</option>');
-    $('#productos').append(row);
+
+  let uid = auth.currentUser.uid;
+  let usuarioRef = db.ref('usuarios/tiendas/supervisoras/'+uid);
+  usuarioRef.once('value', function(snapshot) {
+    let region = snapshot.val().region;
+
+    let productosRef = db.ref('regiones/'+region+'/'+idTienda+'/productos');
+    productosRef.on('value', function(snapshot) {
+      let productos = snapshot.val();
+      let row = "";
+      for(let producto in productos) {
+        row += '<option value="'+producto+'">'+productos[producto].clave + ' ' + productos[producto].nombre +' ' + productos[producto].empaque +'</option>';
+      }
+      $('#productos').empty().append('<option value="Productos" disabled selected>Productos</option>');
+      $('#productos').append(row);
+    });
   });
 }
 
@@ -138,24 +211,36 @@ function llenarSelectProductos() {
 $('#tiendas').change(function(){
   llenarSelectProductos();
   let idTienda = $("#tiendas").val();
-  console.log(idTienda);
-  let tiendaActualRef = db.ref('tiendas/'+idTienda);
-  tiendaActualRef.once('value', function(snapshot) {
-    let tienda = snapshot.val();
-    $('#tienda').val(tienda.nombre);
-    $('#region').val(tienda.region);
+
+  let uid = auth.currentUser.uid;
+  let usuariosRef = db.ref('usuarios/tiendas/supervisoras/'+uid);
+  usuariosRef.once('value', function(snapshot) {
+    let region = snapshot.val().region;
+
+    let tiendaActualRef = db.ref('regiones/'+region+'/'+idTienda);
+    tiendaActualRef.once('value', function(snapshot) {
+      let tienda = snapshot.val();
+      $('#tienda').val(tienda.nombre);
+      $('#region').val(region);
+    });
   });
 });
 
 $('#productos').change(function(){
   let idTienda = $('#tiendas').val();
   let idProducto = $('#productos').val();
-  let productoActualRef = db.ref('tiendas/'+idTienda+'/productos/'+idProducto);
-  productoActualRef.once('value', function(snapshot){
-    let producto = snapshot.val();
-    $('#clave').val(producto.clave);
-    $('#nombre').val(producto.nombre);
-    $('#empaque').val(producto.empaque);
+  let uid = auth.currentUser.uid;
+  let usuariosRef = db.ref('usuarios/tiendas/supervisoras/'+uid);
+  usuariosRef.once('value', function(snapshot) {
+    let region = snapshot.val().region;
+
+    let productoActualRef = db.ref('regiones/'+region+'/'+idTienda+'/productos/'+idProducto);
+    productoActualRef.once('value', function(snapshot){
+      let producto = snapshot.val();
+      $('#clave').val(producto.clave);
+      $('#nombre').val(producto.nombre);
+      $('#empaque').val(producto.empaque);
+    });
   });
 });
 
@@ -181,10 +266,10 @@ $('#degusPz').keyup(function(){
   $('#totalKg').val(totalKg);
 });
 
-$(document).ready(function() {
+/*$(document).ready(function() {
   llenarSelectTiendas();
   //llenarSelectProductos();
-})
+});*/
 
 function agregarProducto() {
   let clave = $('#clave').val();
