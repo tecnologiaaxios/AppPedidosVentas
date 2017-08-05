@@ -2,12 +2,15 @@ const db = firebase.database();
 const auth = firebase.auth();
 var listaProductosPedido = [];
 
+function logout() {
+  auth.signOut();
+}
+
 function haySesion() {
   auth.onAuthStateChanged(function (user) {
     //si hay un usuario
     if (user) {
       llenarSelectTiendas();
-
     }
     else {
       $(location).attr("href", "index.html");
