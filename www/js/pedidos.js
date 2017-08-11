@@ -11,6 +11,7 @@ function haySesion() {
     //si hay un usuario
     if (user) {
       llenarSelectTiendas();
+      mostrarHistorialPedidos();
     }
     else {
       $(location).attr("href", "index.html");
@@ -63,7 +64,7 @@ function llenarSelectTiendas() {
             break;
         }
 
-        row += '<option value="'+tienda+'" data-image="'+imagen+'">'+tiendas[tienda].nombre+'</option>';
+        row += '<option value="'+tiendas[tienda].consorcio+'" data-image="'+imagen+'">'+tiendas[tienda].nombre+'</option>';
       }
 
       $('#tiendas').show();
@@ -170,8 +171,8 @@ function llenarSelectTiendas() {
 }*/
 
 
-function llenarSelectProductos() {
-  let idTienda = $("#tiendas").val();
+/*function llenarSelectProductos() {
+  let consorcio= $("#tiendas").val();
 
   let uid = auth.currentUser.uid;
   let usuarioRef = db.ref('usuarios/tiendas/supervisoras/'+uid);
@@ -183,11 +184,25 @@ function llenarSelectProductos() {
       let productos = snapshot.val();
       let row = "";
       for(let producto in productos) {
-        row += '<option value="'+producto+'">'+productos[producto].clave + ' ' + productos[producto].nombre +' ' + productos[producto].empaque +'</option>';
+        row += '<option value="'+producto+'">'+productos[producto].clave + ' ' + productos[producto].nombre + ' ' + productos[producto].empaque +'</option>';
       }
       $('#productos').empty().append('<option value="Productos" disabled selected>Productos</option>');
       $('#productos').append(row);
     });
+  });
+}*/
+
+function llenarSelectProductos() {
+  let consorcio = $('#tiendas').val();
+
+  let productosRef = db.ref('productos/'+consorcio);
+  productosRef.on('value', function(snapshot) {
+    let productos = snapshot.val();
+    let options = '<option value="Productos" disabled selected>Productos</option>';
+    for(let producto in productos) {
+      options += '<option value="'+producto+'">'+ producto + '  ' + productos[producto].nombre + '  ' + productos[producto].empaque +'</option>';
+    }
+    $('#productos').html(options);
   });
 }
 
@@ -229,7 +244,7 @@ $('#tiendas').change(function(){
   });
 });
 
-$('#productos').change(function(){
+/*$('#productos').change(function(){
   let idTienda = $('#tiendas').val();
   let idProducto = $('#productos').val();
   let uid = auth.currentUser.uid;
@@ -245,13 +260,27 @@ $('#productos').change(function(){
       $('#empaque').val(producto.empaque);
     });
   });
+});*/
+
+$('#productos').change(function() {
+  let consorcio = $('#tiendas').val();
+  let idProducto = $('#productos').val();
+
+  let productoActualRef = db.ref('productos/'+consorcio+'/'+idProducto);
+  productoActualRef.on('value', function(snapshot) {
+    let producto = snapshot.val();
+    $('#clave').val(idProducto);
+    $('#nombre').val(producto.nombre);
+    $('#empaque').val(producto.empaque);
+  });
 });
 
 $('#pedidoPz').keyup(function(){
   let pedidoPz = Number($('#pedidoPz').val());
   let degusPz = Number($('#degusPz').val());
+  let cambioFisico = Number($('#cambioFisico').val());
   let empaque = Number($('#empaque').val());
-  let totalPz = pedidoPz+degusPz;
+  let totalPz = pedidoPz+degusPz+cambioFisico;
   let totalKg = (totalPz*empaque).toFixed(4);
 
   $('#totalPz').val(totalPz);
@@ -261,8 +290,21 @@ $('#pedidoPz').keyup(function(){
 $('#degusPz').keyup(function(){
   let pedidoPz = Number($('#pedidoPz').val());
   let degusPz = Number($('#degusPz').val());
+  let cambioFisico = Number($('#cambioFisico').val());
   let empaque = Number($('#empaque').val());
-  let totalPz = pedidoPz+degusPz;
+  let totalPz = pedidoPz+degusPz+cambioFisico;
+  let totalKg = (totalPz*empaque).toFixed(4);
+
+  $('#totalPz').val(totalPz);
+  $('#totalKg').val(totalKg);
+});
+
+$('#cambioFisico').keyup(function(){
+  let pedidoPz = Number($('#pedidoPz').val());
+  let degusPz = Number($('#degusPz').val());
+  let cambioFisico = Number($('#cambioFisico').val());
+  let empaque = Number($('#empaque').val());
+  let totalPz = pedidoPz+degusPz+cambioFisico;
   let totalKg = (totalPz*empaque).toFixed(4);
 
   $('#totalPz').val(totalPz);
@@ -279,6 +321,7 @@ function agregarProducto() {
   let nombre = $('#nombre').val();
   let pedidoPz = $('#pedidoPz').val();
   let degusPz = $('#degusPz').val();
+  let cambioFisico = $('#cambioFisico').val();
   let totalPz = $('#totalPz').val();
   let totalKg = $('#totalKg').val();
 
@@ -298,6 +341,7 @@ function agregarProducto() {
     nombre: nombre,
     pedidoPz: Number(pedidoPz),
     degusPz: Number(degusPz),
+    cambioFisico: Number(cambioFisico),
     totalPz: Number(totalPz),
     totalKg: Number(totalKg)
   };
@@ -306,6 +350,7 @@ function agregarProducto() {
   $('#productos').focus();
   $('#pedidoPz').val('');
   $('#degusPz').val('');
+  $('#cambioFisico').val('');
   $('#totalPz').val('');
   $('#totalKg').val('')
 }
@@ -372,48 +417,37 @@ function guardarPedido() {
 }
 
 function mostrarHistorialPedidos() {
-  let historialPedidosEntradaRef = db.ref('historialPedidosEntrada');
-  historialPedidosEntradaRef.on('value', function(snapshot) {
-    let historialPedidos = snapshot.val();
-    //console.log(historialPedidos);
-    let row = "";
-    //$('#tablaPedidosEnProceso tbody').empty();
-    for(pedido in historialPedidos) {
-      let histRef = db.ref('historialPedidosEntrada/'+pedido);
-      histRef.on('value', function(snapshot) {
-        let hola = snapshot.val();
-        for(i in hola){
-          let pedidoActual = db.ref('historialPedidosEntrada/'+pedido+'/'+i+'/encabezado');
-          //console.log(pedidoActual);
-          pedidoActual.once('value', function(snapshot) {
-          let ped = snapshot.val();
-          //console.log(ped)
-          //$('#tienda').val(tienda.nombre);
-          //$('#region').val(tienda.region);
-          //console.log(i);
-          row += '<tr><td>' +
-              ped.fechaCaptura +" "+ped.ruta +" "+ ped.tienda+'</td></tr>';
-           });
+  let uid = auth.currentUser.uid
+
+  let usuarioRef = db.ref('usuarios/tiendas/supervisoras/'+uid);
+  usuarioRef.once('value', function(snapshot) {
+    let region = snapshot.val().region;
+
+    let historialPedidosEntradaRef = db.ref('regiones/'+region);
+    historialPedidosEntradaRef.once('value', function(snapshot) {
+      let tiendas = snapshot.val();
+      let row = "";
+
+      for(let tienda in tiendas) {
+        let historialPedidos = tiendas[tienda].historialPedidos;
+        for(let pedido in historialPedidos) {
+          let ped = historialPedidos[pedido].encabezado;
+
+          let diaCaptura = ped.fechaCaptura.substr(0,2);
+          let mesCaptura = ped.fechaCaptura.substr(3,2);
+          let añoCaptura = ped.fechaCaptura.substr(6,4);
+          let fechaCaptura = mesCaptura + '/' + diaCaptura + '/' + añoCaptura;
+          moment.locale('es');
+          let fechaCapturaMostrar = moment(fechaCaptura).format('LL');
+          row += '<tr><td>' + fechaCapturaMostrar +" "+ped.ruta +" "+ ped.tienda+'</td></tr>';
         }
-      });
-      //console.log(historialPedidos.val());
-      //let div = $('<div/>', {'class': 'panel-body no-padding'});
-      //let tr = $('<tr/>');
-      //let td = $('<td/>');
-
-
-
-      //let div1 = '<div class="input-group-addon btn btn-primary"><span class="glyphicon glyphicon-calendar"></span></div>';
-
-      //div.append(tr);
+      }
       $('#historialPedidos').html(row);
-
-    }
-
+    });
   });
 }
 
-mostrarHistorialPedidos();
+//mostrarHistorialPedidos();
 
 //$('#historialPedidos').empty().append(mostrarHistorialPedidos());
       /*row += '<tr>' +
