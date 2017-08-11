@@ -64,7 +64,7 @@ function llenarSelectTiendas() {
             break;
         }
 
-        row += '<option value="'+tiendas[tienda].consorcio+'" data-image="'+imagen+'">'+tiendas[tienda].nombre+'</option>';
+        row += '<option value="'+tienda+'" data-image="'+imagen+'">'+tiendas[tienda].nombre+'</option>';
       }
 
       $('#tiendas').show();
@@ -193,7 +193,8 @@ function llenarSelectTiendas() {
 }*/
 
 function llenarSelectProductos() {
-  let consorcio = $('#tiendas').val();
+  let consorcio = $('#consorcio').val();
+  console.log(consorcio);
 
   let productosRef = db.ref('productos/'+consorcio);
   productosRef.on('value', function(snapshot) {
@@ -227,7 +228,6 @@ function llenarSelectProductos() {
 //llenarSelectProductos();
 
 $('#tiendas').change(function(){
-  llenarSelectProductos();
   let idTienda = $("#tiendas").val();
 
   let uid = auth.currentUser.uid;
@@ -240,6 +240,9 @@ $('#tiendas').change(function(){
       let tienda = snapshot.val();
       $('#tienda').val(tienda.nombre);
       $('#region').val(region);
+      $('#consorcio').val(tienda.consorcio);
+
+      llenarSelectProductos();
     });
   });
 });
@@ -263,7 +266,7 @@ $('#tiendas').change(function(){
 });*/
 
 $('#productos').change(function() {
-  let consorcio = $('#tiendas').val();
+  let consorcio = $('#consorcio').val();
   let idProducto = $('#productos').val();
 
   let productoActualRef = db.ref('productos/'+consorcio+'/'+idProducto);
@@ -272,6 +275,8 @@ $('#productos').change(function() {
     $('#clave').val(idProducto);
     $('#nombre').val(producto.nombre);
     $('#empaque').val(producto.empaque);
+    $('#precioUnitario').val(producto.precioUnitario);
+    $('#unidad').val(producto.unidad);
   });
 });
 
@@ -324,6 +329,8 @@ function agregarProducto() {
   let cambioFisico = $('#cambioFisico').val();
   let totalPz = $('#totalPz').val();
   let totalKg = $('#totalKg').val();
+  let precioUnitario = $('#precioUnitario').val();
+  let unidad = $('#unidad').val();
 
   let row = '<tr>' +
               '<td>'+clave+'</td>'+
@@ -343,7 +350,9 @@ function agregarProducto() {
     degusPz: Number(degusPz),
     cambioFisico: Number(cambioFisico),
     totalPz: Number(totalPz),
-    totalKg: Number(totalKg)
+    totalKg: Number(totalKg),
+    precioUnitario: Number(precioUnitario),
+    unidad: unidad
   };
   listaProductosPedido.push(datosProducto);
 
@@ -353,6 +362,8 @@ function agregarProducto() {
   $('#cambioFisico').val('');
   $('#totalPz').val('');
   $('#totalKg').val('')
+  $('#precioUnitario').val('');
+  $('#unidad').val('');
 }
 
 function guardarPedido() {
