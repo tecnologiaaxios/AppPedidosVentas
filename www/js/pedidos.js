@@ -26,7 +26,7 @@ function mostrarNotificaciones() {
       trs += '<tr><td>'+arrayNotificaciones[i].mensaje +' '+fecha+'</td></tr>'
     }
 
-    $('#notificaciones').html(trs);
+    $('#notificaciones').empty().append(trs);
   });
 }
 
@@ -419,7 +419,6 @@ function guardarPedido() {
   let ruta = $('#region').val();
   let fechaCaptura = moment().format('DD/MM/YYYY');
   let uid = auth.currentUser.uid;
-  console.log(uid);
 
   let encabezado = {
     encabezado: {
