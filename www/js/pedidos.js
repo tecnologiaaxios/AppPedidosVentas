@@ -524,7 +524,7 @@ function mostrarHistorialPedidos() {
 
 function enviarTicketCalidadProducto() {
   let producto = $('#productosTicket').val();
-  let cantidad = $('#cantidadMalEstado').val();
+  let cantidad = Number($('#cantidadMalEstado').val());
   let fechaCaducidad = $('#fechaCaducidad').val();
   let lote = $('#loteProducto').val();
   let problema = $('input:radio[name=problemasProductos]:checked').val();
@@ -532,7 +532,7 @@ function enviarTicketCalidadProducto() {
   let fecha = moment().format('DD/MM/YYYY');
   let tienda = $('#tienda').val();
 
-  let ticketsRef = db.('tickets');
+  let ticketsRef = db.ref('tickets/calidadProducto');
   ticketsRef.once('value', function(snapshot) {
     let tickets = snapshot.val();
 
@@ -540,8 +540,7 @@ function enviarTicketCalidadProducto() {
     let last = keys[keys.length-1];
     let ultimoTicket = tickets[last];
     let lastclave = ultimoTicket.clave;
-
-    let ticketsCalidadProductoRef = db.('tickets/calidadProducto');
+    console.log(lastclave);
 
     let datosTicket = {
       producto: producto,
@@ -557,7 +556,7 @@ function enviarTicketCalidadProducto() {
       respuesta: ""
     }
 
-    ticketsCalidadProductoRef.push(datosTicket);
+    ticketsRef.push(datosTicket);
   });
 }
 
