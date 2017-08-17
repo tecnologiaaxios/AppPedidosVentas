@@ -251,7 +251,7 @@ function llenarSelectProductos() {
       options += '<option value="'+producto+'">'+ producto + '  ' + productos[producto].nombre + '  ' + productos[producto].empaque +'</option>';
     }
     $('#productos').html(options);
-    $('#productosReporte').html(options);
+    $('#productosTicket').html(options);
   });
 }
 
@@ -328,14 +328,14 @@ $('#productos').change(function() {
   });
 });
 
-$('#productosReporte').change(function() {
+$('#productosTicket').change(function() {
   let consorcio = $('#consorcio').val();
   let idProducto = $('#productos').val();
 
   let productoActualRef = db.ref('productos/'+consorcio+'/'+idProducto);
   productoActualRef.on('value', function(snapshot) {
     let producto = snapshot.val();
-
+    $('#productoTicket').val(idProducto);
   });
 });
 
@@ -379,6 +379,7 @@ $(document).ready(function() {
   //llenarSelectTiendas();
   //llenarSelectProductos();
   $('.input-group.date').datepicker({
+    autoclose: true,
     format: "dd/mm/yyyy",
     startDate: "today",
     language: "es"
@@ -518,6 +519,45 @@ function mostrarHistorialPedidos() {
       }
       $('#historialPedidos').html(row);
     });
+  });
+}
+
+function enviarTicketCalidadProducto() {
+  let producto = $('#productosTicket').val();
+  let cantidad = $('#cantidadMalEstado').val();
+  let fechaCaducidad = $('#fechaCaducidad').val();
+  let lote = $('#loteProducto').val();
+  let problema = $('input:radio[name=problemasProductos]:checked').val();
+  let descripcion = $('#descripcionTicket').val();
+  let fecha = moment().format('DD/MM/YYYY');
+  let tienda = $('#tienda').val();
+
+  let ticketsRef = db.('tickets');
+  ticketsRef.once('value', function(snapshot) {
+    let tickets = snapshot.val();
+
+    let keys = Object.keys(tickets);
+    let last = keys[keys.length-1];
+    let ultimoTicket = tickets[last];
+    let lastclave = ultimoTicket.clave;
+
+    let ticketsCalidadProductoRef = db.('tickets/calidadProducto');
+
+    let datosTicket = {
+      producto: producto,
+      fechaCaducidad: fechaCaducidad,
+      cantidad: cantidad,
+      lote: lote,
+      problema: problema,
+      descripcion: descripcion,
+      tienda: tienda,
+      fecha: fecha,
+      clave: lastclave+1,
+      estado: "Pendiente",
+      respuesta: ""
+    }
+
+    ticketsCalidadProductoRef.push(datosTicket);
   });
 }
 
