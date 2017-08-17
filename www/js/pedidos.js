@@ -73,6 +73,7 @@ function llenarSelectTiendas() {
   let usuariosRef = db.ref('usuarios/tiendas/supervisoras/'+uid);
   usuariosRef.once('value', function(snapshot) {
     let region = snapshot.val().region;
+    $('.region p').html('Pedidos Región '+region);
 
     let tiendasRef = db.ref('regiones/'+region);
     tiendasRef.on('value', function(snapshot) {
@@ -241,7 +242,6 @@ function llenarSelectTiendas() {
 
 function llenarSelectProductos() {
   let consorcio = $('#consorcio').val();
-  console.log(consorcio);
 
   let productosRef = db.ref('productos/'+consorcio);
   productosRef.on('value', function(snapshot) {
@@ -251,6 +251,7 @@ function llenarSelectProductos() {
       options += '<option value="'+producto+'">'+ producto + '  ' + productos[producto].nombre + '  ' + productos[producto].empaque +'</option>';
     }
     $('#productos').html(options);
+    $('#productosReporte').html(options);
   });
 }
 
@@ -327,6 +328,17 @@ $('#productos').change(function() {
   });
 });
 
+$('#productosReporte').change(function() {
+  let consorcio = $('#consorcio').val();
+  let idProducto = $('#productos').val();
+
+  let productoActualRef = db.ref('productos/'+consorcio+'/'+idProducto);
+  productoActualRef.on('value', function(snapshot) {
+    let producto = snapshot.val();
+
+  });
+});
+
 $('#pedidoPz').keyup(function(){
   let pedidoPz = Number($('#pedidoPz').val());
   let degusPz = Number($('#degusPz').val());
@@ -363,10 +375,15 @@ $('#cambioFisico').keyup(function(){
   $('#totalKg').val(totalKg);
 });
 
-/*$(document).ready(function() {
-  llenarSelectTiendas();
+$(document).ready(function() {
+  //llenarSelectTiendas();
   //llenarSelectProductos();
-});*/
+  $('.input-group.date').datepicker({
+    format: "dd/mm/yyyy",
+    startDate: "today",
+    language: "es"
+  });
+});
 
 function agregarProducto() {
   let clave = $('#clave').val();
@@ -563,3 +580,11 @@ function mostrarHistorialPedidos() {
       });
     }
   });*/
+
+  $('#formCalidadProducto').on('show.bs.collapse', function () {
+    $('#formRetrasoPedido').collapse('hide');
+  });
+
+  $('#formRetrasoPedido').on('show.bs.collapse', function () {
+    $('#formCalidadProducto').collapse('hide');
+  });
