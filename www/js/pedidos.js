@@ -540,7 +540,6 @@ function enviarTicketCalidadProducto() {
     let last = keys[keys.length-1];
     let ultimoTicket = tickets[last];
     let lastclave = ultimoTicket.clave;
-    console.log(lastclave);
 
     let datosTicket = {
       producto: producto,
@@ -558,6 +557,14 @@ function enviarTicketCalidadProducto() {
 
     ticketsRef.push(datosTicket);
   });
+
+  $('#productosTicket').val('');
+  $('#cantidadMalEstado').val('')
+  $('#fechaCaducidad').val('');
+  $('#loteProducto').val('');
+  $('input:radio[name=problemasProductos]:checked').val('');
+  $('#descripcionTicket').val('');
+  $('#tienda').val('');
 }
 
 //mostrarHistorialPedidos();
