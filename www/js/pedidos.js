@@ -6,6 +6,30 @@ function logout() {
   auth.signOut();
 }
 
+function mostrarTicketsCalidadProducto() {
+  let uid = auth.currentUser.uid;
+
+  let ticketsRef = db.ref('tickets/calidadProducto');
+  ticketsRef.orderByChild("promotora").equalTo(uid).on("value", function(snapshot) {
+    let tickets = snapshot.val();
+    let trs = "";
+    for(let ticket in tickets) {
+      let datos = tickets[ticket];
+
+      let dia = datos.fecha.substr(0,2);
+      let mes = datos.fecha.substr(3,2);
+      let año = datos.fecha.substr(6,4);
+      let fecha = mes + '/' + dia + '/' + año;
+      moment.locale('es');
+      let fechaMostrar = moment(fecha).format('LL');
+
+        trs += '<tr><td><a data-toggle="modal" data-target="#modalTicket">Clave: ' + datos.clave + ' Producto: ' + datos.producto + ' Problema: ' + datos.problema + ' Fecha: ' + fechaMostrar +'</a></td></tr>';
+    }
+
+    $('#ticketsCalidadProducto tbody').html(trs);
+  });
+}
+
 function mostrarNotificaciones() {
   let usuario = auth.currentUser.uid;
   let notificacionesRef = db.ref('notificaciones/tiendas/'+usuario+'/lista');
@@ -17,6 +41,8 @@ function mostrarNotificaciones() {
     for(let notificacion in lista) {
       arrayNotificaciones.push(lista[notificacion]);
     }
+
+    arrayNotificaciones.reverse();
 
     for(let i in arrayNotificaciones) {
       let date = arrayNotificaciones[i].fecha;
@@ -55,6 +81,7 @@ function haySesion() {
   auth.onAuthStateChanged(function (user) {
     //si hay un usuario
     if (user) {
+      mostrarTicketsCalidadProducto();
       llenarSelectTiendas();
       mostrarHistorialPedidos();
       mostrarNotificaciones();
@@ -381,7 +408,6 @@ $(document).ready(function() {
   $('.input-group.date').datepicker({
     autoclose: true,
     format: "dd/mm/yyyy",
-    startDate: "today",
     language: "es"
   });
 });
@@ -535,6 +561,7 @@ function enviarTicketCalidadProducto() {
   let ticketsRef = db.ref('tickets/calidadProducto');
   ticketsRef.once('value', function(snapshot) {
     let tickets = snapshot.val();
+    let uid = auth.currentUser.uid;
 
     let keys = Object.keys(tickets);
     let last = keys[keys.length-1];
@@ -552,7 +579,8 @@ function enviarTicketCalidadProducto() {
       fecha: fecha,
       clave: lastclave+1,
       estado: "Pendiente",
-      respuesta: ""
+      respuesta: "",
+      promotora: uid
     }
 
     ticketsRef.push(datosTicket);
@@ -627,10 +655,10 @@ function enviarTicketCalidadProducto() {
     }
   });*/
 
-  $('#formCalidadProducto').on('show.bs.collapse', function () {
-    $('#formRetrasoPedido').collapse('hide');
-  });
+$('#formCalidadProducto').on('show.bs.collapse', function () {
+  $('#formRetrasoPedido').collapse('hide');
+});
 
-  $('#formRetrasoPedido').on('show.bs.collapse', function () {
-    $('#formCalidadProducto').collapse('hide');
-  });
+$('#formRetrasoPedido').on('show.bs.collapse', function () {
+  $('#formCalidadProducto').collapse('hide');
+});

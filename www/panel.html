@@ -83,7 +83,7 @@
                 <div class="panel-heading" style="height:46px; background-color:white;" role="tab" id="headingThree">
                   <h4 class="panel-title">
                     <a class="collapsed" role="button"  data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                      <span class="glyphicon glyphicon-menu-down"></span>Historial de Existencias
+                      <span class="glyphicon glyphicon-menu-down"></span> Historial de Existencias
                     </a>
                   </h4>
                 </div>
@@ -174,20 +174,15 @@
                     <button class="btn btn-danger btn-lg" style="width:100%;" onclick="agregarProducto()" type="button">Agregar Producto</button>
                   </div>
                 </div>
-
                 <div class="contenedor-productos-pedido">
-
-                           <div class="chip-producto-pedido">
-                               <span style="background-color:grey; width:20px; margin:0 auto; text-aling:center; float:right; color:white; border-radius:50px; padding:3px;" class="glyphicon glyphicon-remove"></span>
-                               <div class="contenido-chip" style="padding:10px;">
-                                 <p>Clave: <span style="margin-left:90px;">Nombre:CHIL_JOCOQUE_TARRO_650ML	</span></p>
-                                 <p>Pedido Pz: <span style="margin-left:60px;">Degustación Pz:</span></p>
-                                 <p class="no-padding">Total Pz: <span style="margin-left:60px;">Total Kg:</span></p>
-
-                               </div>
-
-                           </div>
-
+                  <div class="chip-producto-pedido">
+                    <span style="background-color:grey; width:20px; margin:0 auto; text-aling:center; float:right; color:white; border-radius:50px; padding:3px;" class="glyphicon glyphicon-remove"></span>
+                    <div class="contenido-chip" style="padding:10px;">
+                      <p>Clave: <span style="margin-left:90px;">Nombre:CHIL_JOCOQUE_TARRO_650ML	</span></p>
+                      <p>Pedido Pz: <span style="margin-left:60px;">Degustación Pz:</span></p>
+                      <p class="no-padding">Total Pz: <span style="margin-left:60px;">Total Kg:</span></p>
+                    </div>
+                  </div>
                 </div>
                 <!--<div class="form-group">
                 <table id="productosPedido" class="table">
@@ -213,7 +208,7 @@
             </form>
           </div>
           <div class="tab-pane fade" id="reporte">
-            <legend style="padding:10px 10px 10px; background-color:#29b6f6; color:white;" class="text-center header"> <a style="float:left; margin-top:2px; font-size:18px; color:white;" href="#m1" data-toggle="tab"><span class="glyphicon glyphicon-menu-left"></span> Volver</a><span style="margin-left:-50px;">Área de tickets</span></legend>
+            <legend style="padding:10px 10px 10px; background-color:#29b6f6; color:white;" class="text-center header"> <a style="float:left; margin-top:2px; font-size:18px; color:white;" href="#m1" data-toggle="tab"><span class="glyphicon glyphicon-menu-left"></span> Volver</a><span style="margin-left:-50px;">Área de tickets</span><a style="float: right; margin-top:2px; font-size:18px; color:white;" href="#tickets" data-toggle="tab">Ver tickets <span class="glyphicon glyphicon-menu-right"></span></a></legend>
             <form class="form-horizontal">
               <fieldset style="padding-right: 5%; padding-left: 5%; padding-top: 5%; margin-top:-30px;" class="text-left">
                 <div class="form-group">
@@ -375,6 +370,45 @@
                 </div>
               </fieldset>
             </form>
+          </div>
+          <div class="tab-pane fade in" id="tickets">
+            <legend style="padding:10px 10px 10px; background-color:#29b6f6; color:white;" class="text-center header"> <a style="float:left; margin-top:2px; font-size:18px; color:white;" href="#reporte" data-toggle="tab"><span class="glyphicon glyphicon-menu-left"></span> Volver</a><span style="margin-left:-50px;">Lista de tickets</span></legend>
+            <div class="panel-group"  style="border:none;"role="tablist" aria-multiselectable="true">
+              <div class="panel panel-default" >
+                <div class="panel-heading" role="tab" id="headingTwo" style="height:46px; background-color:white;">
+                  <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTicketsCalidadProducto" aria-expanded="false" aria-controls="collapseTwo">
+                      <span class="glyphicon glyphicon-menu-down"></span> Calidad de producto
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseTicketsCalidadProducto"  class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                  <div class="panel-body no-padding">
+                    <table id="ticketsCalidadProducto" class="table table-striped">
+                      <tbody>
+
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-default">
+                <div class="panel-heading" style="height:46px; background-color:white;" role="tab" id="headingThree">
+                  <h4 class="panel-title">
+                    <a class="collapsed" role="button"  data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                      <span class="glyphicon glyphicon-menu-down"></span> Retraso de pedido
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                  <div class="panel-body no-padding">
+                    <table id="ticketsRetrasoPedido" class="table table-striped">
+
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div id="footer-panel">
