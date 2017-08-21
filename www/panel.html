@@ -12,7 +12,7 @@
 
     <!-- <msdropdown> -->
     <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="css/creative.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
@@ -20,7 +20,9 @@
     <link rel="stylesheet" type="text/css" href="css/msdropdown/flags.css" />
     <link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css"/>
     <link rel="stylesheet" type="text/css" href="css/msdropdown/dd.css" />
-
+    <link rel="stylesheet" href="css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker3.standalone.css">
     <script src="js/msdropdown/jquery.dd.js"></script>
   </head>
   <body>
@@ -31,7 +33,7 @@
             <img width="60px" style="margin-top:-10px;" src="assets/logo.svg" alt="">
           </a>
           <div class="region">
-            <p>Pedidos Región Centro</p>
+            <p></p>
           </div>
         </div>
       </nav>
@@ -52,70 +54,66 @@
             </select>-->
             <div class="menu-1" style="height:120px; width:100%; padding:1%; border-top:solid 1px #eee;">
               <ul style="margin-left:-40px; margin-top:5px;">
-                <li class="col-xs-4" style="list-style:none;"><a href="#pedido" data-toggle="tab"><img href="#pedido" data-toggle="tab" src="assets/icon-1.svg" alt=""><span style="font-size:9px; color:grey;"><br>Generar Pedido</a></li>
-                  <li class="col-xs-4" style="list-style:none;"><img src="assets/icon-2.svg" alt=""><p><span style="font-size:9px; color:grey;">Revisar Existencias</span></p></li>
-                  <li class="col-xs-4" style="list-style:none;"><img src="assets/icon-3.svg" alt=""><p><span style="font-size:9px; color:grey;">Reporte de Calidad</span></p></li>
-                </ul>
-              </div>
-              <div class="panel-group"  style="border:none;"role="tablist" aria-multiselectable="true">
-                <div class="panel panel-default" >
-                  <div class="panel-heading" role="tab" id="headingTwo" style="height:46px; background-color:white;">
-                    <h4 class="panel-title">
-                      <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        <span class="glyphicon glyphicon-menu-down"></span> Mis pedidos
-                      </a>
-                    </h4>
-                  </div>
-                  <div id="collapseTwo"  class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                    <div class="panel-body no-padding">
-                      <table class="table table-striped">
+                <li class="col-xs-3" style="list-style:none;"><a href="#pedido" data-toggle="tab"><img href="#pedido" data-toggle="tab" src="assets/icon-1.svg" alt=""><span style="font-size:9px; color:grey;"><br>Generar pedido</a></li>
+                <li class="col-xs-3" style="list-style:none;"><a href="#reporte" data-toggle="tab"><img href="#reporte" data-toggle="tab" src="assets/icon-4.svg" alt=""><span style="font-size:9px; color:grey;"><br>Generar ticket</a></li>
+                <li class="col-xs-3" style="list-style:none;"><img src="assets/icon-2.svg" alt=""><p><span style="font-size:9px; color:grey;">Revisar existencias</span></p></li>
+                <li class="col-xs-3" style="list-style:none;"><img src="assets/icon-3.svg" alt=""><p><span style="font-size:9px; color:grey;">Reporte de calidad</span></p></li>
+              </ul>
+            </div>
+            <div class="panel-group"  style="border:none;"role="tablist" aria-multiselectable="true">
+              <div class="panel panel-default" >
+                <div class="panel-heading" role="tab" id="headingTwo" style="height:46px; background-color:white;">
+                  <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                      <span class="glyphicon glyphicon-menu-down"></span> Mis pedidos
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseTwo"  class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                  <div class="panel-body no-padding">
+                    <table class="table table-striped">
                       <tbody id="historialPedidos">
 
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-                <div class="panel panel-default">
-                  <div class="panel-heading" style="height:46px; background-color:white;" role="tab" id="headingThree">
-                    <h4 class="panel-title">
-                      <a class="collapsed" role="button"  data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        <span class="glyphicon glyphicon-menu-down"></span>Historial de Existencias
-                      </a>
-                    </h4>
-                  </div>
-                  <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                    <div class="panel-body no-padding">
-                      <table class="table table-striped">
-                        <tr><td>Existencias 12 de Noviembre 2017 #099q09</td></tr>
-                        <tr><td>Existencias 12 de Noviembre 2017 #099q09</td></tr>
-                        <tr><td>Existencias 12 de Noviembre 2017 #099q09</td></tr>
-                        <tr><td>Existencias 12 de Noviembre 2017 #099q09</td></tr>
-                      </table>
-                    </div>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
-
-              <button onclick="logout();" class="btn btn-lg btn-danger">Cerrar sesión</button>
-            </div>
-            <div class="tab-pane fade" id="m2">
-
-            </div>
-            <div class="tab-pane fade" id="pedido">
-              <legend style="padding:10px 10px 10px; background-color:#29b6f6; color:white;" class="text-center header"> <a style="float:left; margin-top:2px; font-size:18px; color:white;" href="#m1" data-toggle="tab"><span class="glyphicon glyphicon-menu-left"></span> volver</a><span style="margin-left:-50px;">Area de Pedidos</span></legend>
-
-              <form class="form-horizontal">
-
-              <fieldset style="padding:5%; margin-top:-30px;" class="text-left">
-              <!--<div class="form-group">
-                  <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
-                  <div class="col-md-8">
-                    <label for="tiendas">Tienda:</label>
-                    <select id="tiendas" class="form-control tech" style="width:200px" name="tech" onchange="showValue(this)" required></select>
+              <div class="panel panel-default">
+                <div class="panel-heading" style="height:46px; background-color:white;" role="tab" id="headingThree">
+                  <h4 class="panel-title">
+                    <a class="collapsed" role="button"  data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                      <span class="glyphicon glyphicon-menu-down"></span>Historial de Existencias
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                  <div class="panel-body no-padding">
+                    <table class="table table-striped">
+                      <tr><td>Existencias 12 de Noviembre 2017 #099q09</td></tr>
+                      <tr><td>Existencias 12 de Noviembre 2017 #099q09</td></tr>
+                      <tr><td>Existencias 12 de Noviembre 2017 #099q09</td></tr>
+                      <tr><td>Existencias 12 de Noviembre 2017 #099q09</td></tr>
+                    </table>
                   </div>
-                </div>-->
+                </div>
+              </div>
+            </div>
+            <button onclick="logout();" class="btn btn-lg btn-danger">Cerrar sesión</button>
+          </div>
+          <div class="tab-pane fade" id="m2">
+            <table class="table table-striped">
+              <tbody id="notificaciones">
+
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-pane fade" id="pedido">
+            <legend style="padding:10px 10px 10px; background-color:#29b6f6; color:white;" class="text-center header"> <a style="float:left; margin-top:2px; font-size:18px; color:white;" href="#m1" data-toggle="tab"><span class="glyphicon glyphicon-menu-left"></span> Volver</a><span style="margin-left:-50px;">Área de pedidos</span></legend>
+            <form class="form-horizontal">
+              <fieldset style="padding:5%; margin-top:-30px;" class="text-left">
                 <input class="form-control" id="tienda" name="tienda" style="display:none"></input>
+                <input class="form-control" id="consorcio" name="consorcio" style="display:none"></input>
                 <div class="form-group">
                   <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
                   <div class="col-md-8">
@@ -128,7 +126,7 @@
                 <div class="form-group">
                   <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
                   <div class="col-md-8">
-                    <label for="region">Región:</label><input class="form-control" id="region" name="region" placeholder="Región" disabled></input>
+                    <label for="region">Región:</label><input class="form-control" id="region" name="region" placeholder="Región" readonly></input>
                   </div>
                 </div>
                 <div class="form-group">
@@ -146,16 +144,24 @@
                 <div class="form-group">
                   <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>
                   <div class="col-md-8">
-                    <label for="totalPz">Total Pz:</label><input id="totalPz" type="number" placeholder="Total Pz" class="form-control" required disabled>
+                    <label for="cambioFisico">Cambio físico:</label><input id="cambioFisico" type="number" placeholder="Cambio físico" class="form-control" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>
+                  <div class="col-md-8">
+                    <label for="totalPz">Total Pz:</label><input id="totalPz" type="number" placeholder="Total Pz" class="form-control" required readonly>
                   </div>
                 </div>
                 <input class="form-control" id="clave" name="clave" style="display:none"></input>
                 <input class="form-control" id="nombre" name="nombre" style="display:none"></input>
                 <input class="form-control" id="empaque" name="empaque" style="display:none"></input>
+                <input class="form-control" id="precioUnitario" name="precioUnitario" style="display:none"></input>
+                <input class="form-control" id="unidad" name="unidad" style="display:none"></input>
                 <div class="form-group">
                   <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>
                   <div class="col-md-8">
-                    <label for="totalKg">Total Kg:</label><input id="totalKg" type="number" placeholder="Total Kg" class="form-control" required disabled>
+                    <label for="totalKg">Total Kg:</label><input id="totalKg" type="number" placeholder="Total Kg" class="form-control" required readonly>
                   </div>
                 </div>
                 <div class="form-group">
@@ -163,7 +169,7 @@
                     <button class="btn btn-danger btn-lg" style="width:100%;" onclick="agregarProducto()" type="button">Agregar Producto</button>
                   </div>
                 </div>
-                 <h3>Resumen del pedido</h3>
+
                 <div class="contenedor-productos-pedido">
 
                            <div class="chip-producto-pedido">
@@ -177,10 +183,8 @@
 
                            </div>
 
-
                 </div>
-                <hr>
-            <div class="form-group">
+                <!--<div class="form-group">
                 <table id="productosPedido" class="table">
                   <thead>
                     <th>Clave</th>
@@ -194,7 +198,7 @@
 
                   </tbody>
                 </table>
-              </div>
+              </div>-->
                 <div class="form-group">
                   <div class="col-md-12 text-center">
                     <button class="btn btn-success btn-lg" style="width:100%; color:#1a237e; background-color:#aeea00;" onclick="guardarPedido()" type="button">Guardar Pedido</button>
@@ -202,21 +206,186 @@
                 </div>
               </fieldset>
             </form>
-            </div>
+          </div>
+          <div class="tab-pane fade" id="reporte">
+            <legend style="padding:10px 10px 10px; background-color:#29b6f6; color:white;" class="text-center header"> <a style="float:left; margin-top:2px; font-size:18px; color:white;" href="#m1" data-toggle="tab"><span class="glyphicon glyphicon-menu-left"></span> Volver</a><span style="margin-left:-50px;">Área de tickets</span></legend>
+            <form class="form-horizontal">
+              <fieldset style="padding-right: 5%; padding-left: 5%; padding-top: 5%; margin-top:-30px;" class="text-left">
+                <div class="form-group">
+                  <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                  <div class="col-md-8 drop">
+                    <label for="asuntos">Elige un asunto:</label>
+                    <!--<div class="dropdown">
+                      <button style="width: 100% !important;" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Seleccionar <span class="caret"></span>
+                      </button>
+                      <ul role="tablist" style="width: 100% !important;" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li role="presentation"><a href="#formCalidadProducto" aria-controls="formCalidadProducto" role="tab" data-toggle="tab">Calidad de producto</a></li>
+                        <li role="presentation"><a href="#formRetrasoPedido" aria-controls="formRetrasoPedido" role="tab" data-toggle="tab">Retraso de pedido</a></li>
+                      </ul>
+                    </div>-->
+                    <ul class="nav nav-pills">
+                      <li style="width: 100% !important; text-align: center;" class="dropdown active">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Seleccionar
+                        <span class="caret"></span></a>
+                        <ul style="width: 100% !important;" class="dropdown-menu">
+                          <li role="presentation"><a href="#formCalidadProducto" aria-controls="formCalidadProducto" role="tab" data-toggle="tab">Calidad de producto</a></li>
+                          <li role="presentation"><a href="#formRetrasoPedido" aria-controls="formRetrasoPedido" role="tab" data-toggle="tab">Retraso de pedido</a></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="tab-content">
+                  <div role="tabpanel" class="tab-pane" id="formCalidadProducto">
+                    <input class="form-control" id="consorcio" name="consorcio" style="display:none"></input>
+                    <div class="form-group">
+                      <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                      <div class="col-md-8">
+                        <label for="productosTicket">Elige un pedido:</label>
+                        <select id="productosTicket" class="form-control" required>
+                          <option value="" disabled selected>Seleccionar</option>
+                        </select>
+                      </div>
+                    </div>
+                    <input type="text" id="productoTicket" style="display: none;" required>
+                    <div class="form-group">
+                      <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+                      <div class="col-md-8">
+                        <label for="cantidadMalEstado">Cantidad de productos en mal estado:</label><input class="form-control" id="cantidadMalEstado" name="cantidadMalEstado" placeholder="Cantidad de productos en mal estado" required>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>
+                      <div class="col-md-8">
+                        <label for="fechaCaducidad">Fecha de caducidad:</label>
+                        <div class="input-group date">
+                          <input class="form-control" type="text" placeholder="Fecha de caducidad" id="fechaCaducidad" required>
+                          <span class="input-group-addon btn-primary"><i class="glyphicon glyphicon-calendar"></i></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>
+                      <div class="col-md-8">
+                        <label for="loteProducto">Lote:</label><input id="loteProducto" type="text" placeholder="Lote" class="form-control" required>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>
+                      <div class="col-md-8">
+                        <label for="opciones">Problemas:</label>
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="problemasProductos" id="cambioColor" value="Cambio de color" checked required> Cambio de color (se pone verde o se decolora)
+                          </label>
+                        </div>
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="problemasProductos" id="cambioTextura" value="Cambio de textura" required> Cambio de textura (aguado, masudo, se infla, se despedaza)
+                          </label>
+                        </div>
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="problemasProductos" id="lechosidad" value="Lechosidad" required> Lechosidad (líquido, se pone blanco en ocasiones amarillo)
+                          </label>
+                        </div>
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="problemasProductos" id="etiquetas" value="Etiquetas" required> Etiquetas (se caen, se borra o se registró mal la fecha/lote)
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>
+                      <div class="col-md-8">
+                        <label for="descripcionTicket">Descripción:</label><textarea id="descripcionTicket" placeholder="Descripción" class="form-control" rows="5" required></textarea>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-12 text-center">
+                        <button class="btn btn-danger btn-lg" style="width:100%; color:#FFFFFF; background-color:#FF453A;" onclick="enviarTicketCalidadProducto()" type="button">Enviar ticket</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div role="tabpanel" class="tab-pane" id="formRetrasoPedido">
+                    <input class="form-control" id="consorcio" name="consorcio" style="display:none"></input>
+                    <div class="form-group">
+                      <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                      <div class="col-md-8">
+                        <label for="pedidosTicket">Elige un pedido:</label>
+                        <select id="pedidosTicket" class="form-control" required>
+                          <option value="" disabled selected>Seleccionar</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+                      <div class="col-md-8">
+                        <label for="region">Cantidad de productos en mal estado:</label><input class="form-control" id="cantidad" name="cantidad" placeholder="Cantidad de productos en mal estado"></input>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>
+                      <div class="col-md-8">
+                        <label for="fechaCaducidad">Fecha de caducidad:</label>
+                        <div class="input-group date">
+                          <input class="form-control" type="text" placeholder="Fecha de caducidad" id="fechaCaducidad" required>
+                          <span class="input-group-addon btn-primary"><i class="glyphicon glyphicon-calendar"></i></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>
+                      <div class="col-md-8">
+                        <label for="loteProducto">Lote:</label><input id="loteProducto" type="number" placeholder="Lote" class="form-control" required>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>
+                      <div class="col-md-8">
+                        <label for="opciones">Problemas:</label>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox"> Cambio de color (se pone verde o se decolora)
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>
+                      <div class="col-md-8">
+                        <label for="descripcionReporte">Descripción:</label><textarea id="descripcionReporte" placeholder="Descripción" class="form-control" required></textarea>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-12 text-center">
+                        <button class="btn btn-danger btn-lg" style="width:100%; color:#FFFFFF; background-color:#4FDE87;" onclick="enviarReporte()" type="button">Enviar ticket</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div role="tabpanel" class="tab-pane" id="messages">...</div>
+                  <div role="tabpanel" class="tab-pane" id="settings">...</div>
+                </div>
+              </fieldset>
+            </form>
           </div>
         </div>
         <div id="footer-panel">
           <ul class="nav nav-tabs" style="width:100%; border:none !important;">
             <li style="width:33%;"class="active"><a id="tabsemana" href="#m1" data-toggle="tab" aria-label="Left Align"><i class="material-icons no-padding">home</i></a></li>
-            <li style="width:33%;"><a id="tabordenes" href="#m2" data-toggle="tab"><i class="material-icons no-padding">notifications</i></a></li>
+            <li onclick="verNotificaciones()" style="width:33%;"><a id="tabordenes" href="#m2" data-toggle="tab"><i class="material-icons no-padding">notifications</i><span id="spanNotificaciones" style="background-color: red; display: none;" class="badge"></span></a></li>
             <li style="width:33%;"><a id="tabproyectos" href="#m3" data-toggle="tab"><i class="material-icons no-padding">menu</i></a></li>
           </ul>
         </div>
       </section>
     </header>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="js/bootstrap-tooltip.js"></script>
     <!--<script type="text/javascript" src="js/bootstrap-multiselect.js"></script>-->
+    <script type="text/javascript" src="js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
     <script>
       // Initialize Firebase

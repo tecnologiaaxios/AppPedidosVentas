@@ -6,11 +6,59 @@ function logout() {
   auth.signOut();
 }
 
+function mostrarNotificaciones() {
+  let usuario = auth.currentUser.uid;
+  let notificacionesRef = db.ref('notificaciones/tiendas/'+usuario+'/lista');
+  notificacionesRef.on('value', function(snapshot) {
+    let lista = snapshot.val();
+    let trs = "";
+
+    let arrayNotificaciones = [];
+    for(let notificacion in lista) {
+      arrayNotificaciones.push(lista[notificacion]);
+    }
+
+    for(let i in arrayNotificaciones) {
+      let date = arrayNotificaciones[i].fecha;
+      moment.locale('es');
+      let fecha = moment(date, "MMMM DD YYYY, HH:mm:ss").fromNow();
+
+      trs += '<tr><td>'+arrayNotificaciones[i].mensaje +' '+fecha+'</td></tr>'
+    }
+
+    $('#notificaciones').empty().append(trs);
+  });
+}
+
+function mostrarContador() {
+  let uid = auth.currentUser.uid;
+  let notificacionesRef = db.ref('notificaciones/tiendas/'+uid);
+  notificacionesRef.on('value', function(snapshot) {
+    let cont = snapshot.val().cont;
+
+    if(cont > 0) {
+      $('#spanNotificaciones').html(cont).show();
+    }
+    else {
+      $('#spanNotificaciones').hide();
+    }
+  });
+}
+
+function verNotificaciones() {
+  let uid = auth.currentUser.uid;
+  let notificacionesRef = db.ref('notificaciones/tiendas/'+uid);
+  notificacionesRef.update({cont: 0});
+}
+
 function haySesion() {
   auth.onAuthStateChanged(function (user) {
     //si hay un usuario
     if (user) {
       llenarSelectTiendas();
+      mostrarHistorialPedidos();
+      mostrarNotificaciones();
+      mostrarContador();
     }
     else {
       $(location).attr("href", "index.html");
@@ -25,6 +73,7 @@ function llenarSelectTiendas() {
   let usuariosRef = db.ref('usuarios/tiendas/supervisoras/'+uid);
   usuariosRef.once('value', function(snapshot) {
     let region = snapshot.val().region;
+    $('.region p').html('Pedidos Región '+region);
 
     let tiendasRef = db.ref('regiones/'+region);
     tiendasRef.on('value', function(snapshot) {
@@ -170,8 +219,8 @@ function llenarSelectTiendas() {
 }*/
 
 
-function llenarSelectProductos() {
-  let idTienda = $("#tiendas").val();
+/*function llenarSelectProductos() {
+  let consorcio= $("#tiendas").val();
 
   let uid = auth.currentUser.uid;
   let usuarioRef = db.ref('usuarios/tiendas/supervisoras/'+uid);
@@ -183,11 +232,26 @@ function llenarSelectProductos() {
       let productos = snapshot.val();
       let row = "";
       for(let producto in productos) {
-        row += '<option value="'+producto+'">'+productos[producto].clave + ' ' + productos[producto].nombre +' ' + productos[producto].empaque +'</option>';
+        row += '<option value="'+producto+'">'+productos[producto].clave + ' ' + productos[producto].nombre + ' ' + productos[producto].empaque +'</option>';
       }
       $('#productos').empty().append('<option value="Productos" disabled selected>Productos</option>');
       $('#productos').append(row);
     });
+  });
+}*/
+
+function llenarSelectProductos() {
+  let consorcio = $('#consorcio').val();
+
+  let productosRef = db.ref('productos/'+consorcio);
+  productosRef.on('value', function(snapshot) {
+    let productos = snapshot.val();
+    let options = '<option value="Productos" disabled selected>Productos</option>';
+    for(let producto in productos) {
+      options += '<option value="'+producto+'">'+ producto + '  ' + productos[producto].nombre + '  ' + productos[producto].empaque +'</option>';
+    }
+    $('#productos').html(options);
+    $('#productosTicket').html(options);
   });
 }
 
@@ -212,7 +276,6 @@ function llenarSelectProductos() {
 //llenarSelectProductos();
 
 $('#tiendas').change(function(){
-  llenarSelectProductos();
   let idTienda = $("#tiendas").val();
 
   let uid = auth.currentUser.uid;
@@ -225,11 +288,14 @@ $('#tiendas').change(function(){
       let tienda = snapshot.val();
       $('#tienda').val(tienda.nombre);
       $('#region').val(region);
+      $('#consorcio').val(tienda.consorcio);
+
+      llenarSelectProductos();
     });
   });
 });
 
-$('#productos').change(function(){
+/*$('#productos').change(function(){
   let idTienda = $('#tiendas').val();
   let idProducto = $('#productos').val();
   let uid = auth.currentUser.uid;
@@ -245,13 +311,40 @@ $('#productos').change(function(){
       $('#empaque').val(producto.empaque);
     });
   });
+});*/
+
+$('#productos').change(function() {
+  let consorcio = $('#consorcio').val();
+  let idProducto = $('#productos').val();
+
+  let productoActualRef = db.ref('productos/'+consorcio+'/'+idProducto);
+  productoActualRef.on('value', function(snapshot) {
+    let producto = snapshot.val();
+    $('#clave').val(idProducto);
+    $('#nombre').val(producto.nombre);
+    $('#empaque').val(producto.empaque);
+    $('#precioUnitario').val(producto.precioUnitario);
+    $('#unidad').val(producto.unidad);
+  });
+});
+
+$('#productosTicket').change(function() {
+  let consorcio = $('#consorcio').val();
+  let idProducto = $('#productos').val();
+
+  let productoActualRef = db.ref('productos/'+consorcio+'/'+idProducto);
+  productoActualRef.on('value', function(snapshot) {
+    let producto = snapshot.val();
+    $('#productoTicket').val(idProducto);
+  });
 });
 
 $('#pedidoPz').keyup(function(){
   let pedidoPz = Number($('#pedidoPz').val());
   let degusPz = Number($('#degusPz').val());
+  let cambioFisico = Number($('#cambioFisico').val());
   let empaque = Number($('#empaque').val());
-  let totalPz = pedidoPz+degusPz;
+  let totalPz = pedidoPz+degusPz+cambioFisico;
   let totalKg = (totalPz*empaque).toFixed(4);
 
   $('#totalPz').val(totalPz);
@@ -261,26 +354,48 @@ $('#pedidoPz').keyup(function(){
 $('#degusPz').keyup(function(){
   let pedidoPz = Number($('#pedidoPz').val());
   let degusPz = Number($('#degusPz').val());
+  let cambioFisico = Number($('#cambioFisico').val());
   let empaque = Number($('#empaque').val());
-  let totalPz = pedidoPz+degusPz;
+  let totalPz = pedidoPz+degusPz+cambioFisico;
   let totalKg = (totalPz*empaque).toFixed(4);
 
   $('#totalPz').val(totalPz);
   $('#totalKg').val(totalKg);
 });
 
-/*$(document).ready(function() {
-  llenarSelectTiendas();
+$('#cambioFisico').keyup(function(){
+  let pedidoPz = Number($('#pedidoPz').val());
+  let degusPz = Number($('#degusPz').val());
+  let cambioFisico = Number($('#cambioFisico').val());
+  let empaque = Number($('#empaque').val());
+  let totalPz = pedidoPz+degusPz+cambioFisico;
+  let totalKg = (totalPz*empaque).toFixed(4);
+
+  $('#totalPz').val(totalPz);
+  $('#totalKg').val(totalKg);
+});
+
+$(document).ready(function() {
+  //llenarSelectTiendas();
   //llenarSelectProductos();
-});*/
+  $('.input-group.date').datepicker({
+    autoclose: true,
+    format: "dd/mm/yyyy",
+    startDate: "today",
+    language: "es"
+  });
+});
 
 function agregarProducto() {
   let clave = $('#clave').val();
   let nombre = $('#nombre').val();
   let pedidoPz = $('#pedidoPz').val();
   let degusPz = $('#degusPz').val();
+  let cambioFisico = $('#cambioFisico').val();
   let totalPz = $('#totalPz').val();
   let totalKg = $('#totalKg').val();
+  let precioUnitario = $('#precioUnitario').val();
+  let unidad = $('#unidad').val();
 
   let row = '<tr>' +
               '<td>'+clave+'</td>'+
@@ -298,16 +413,22 @@ function agregarProducto() {
     nombre: nombre,
     pedidoPz: Number(pedidoPz),
     degusPz: Number(degusPz),
+    cambioFisico: Number(cambioFisico),
     totalPz: Number(totalPz),
-    totalKg: Number(totalKg)
+    totalKg: Number(totalKg),
+    precioUnitario: Number(precioUnitario),
+    unidad: unidad
   };
   listaProductosPedido.push(datosProducto);
 
   $('#productos').focus();
   $('#pedidoPz').val('');
   $('#degusPz').val('');
+  $('#cambioFisico').val('');
   $('#totalPz').val('');
   $('#totalKg').val('')
+  $('#precioUnitario').val('');
+  $('#unidad').val('');
 }
 
 function guardarPedido() {
@@ -316,7 +437,6 @@ function guardarPedido() {
   let ruta = $('#region').val();
   let fechaCaptura = moment().format('DD/MM/YYYY');
   let uid = auth.currentUser.uid;
-  console.log(uid);
 
   let encabezado = {
     encabezado: {
@@ -372,48 +492,75 @@ function guardarPedido() {
 }
 
 function mostrarHistorialPedidos() {
-  let historialPedidosEntradaRef = db.ref('historialPedidosEntrada');
-  historialPedidosEntradaRef.on('value', function(snapshot) {
-    let historialPedidos = snapshot.val();
-    //console.log(historialPedidos);
-    let row = "";
-    //$('#tablaPedidosEnProceso tbody').empty();
-    for(pedido in historialPedidos) {
-      let histRef = db.ref('historialPedidosEntrada/'+pedido);
-      histRef.on('value', function(snapshot) {
-        let hola = snapshot.val();
-        for(i in hola){
-          let pedidoActual = db.ref('historialPedidosEntrada/'+pedido+'/'+i+'/encabezado');
-          //console.log(pedidoActual);
-          pedidoActual.once('value', function(snapshot) {
-          let ped = snapshot.val();
-          //console.log(ped)
-          //$('#tienda').val(tienda.nombre);
-          //$('#region').val(tienda.region);
-          //console.log(i);
-          row += '<tr><td>' +
-              ped.fechaCaptura +" "+ped.ruta +" "+ ped.tienda+'</td></tr>';
-           });
+  let uid = auth.currentUser.uid
+
+  let usuarioRef = db.ref('usuarios/tiendas/supervisoras/'+uid);
+  usuarioRef.once('value', function(snapshot) {
+    let region = snapshot.val().region;
+
+    let historialPedidosEntradaRef = db.ref('regiones/'+region);
+    historialPedidosEntradaRef.once('value', function(snapshot) {
+      let tiendas = snapshot.val();
+      let row = "";
+
+      for(let tienda in tiendas) {
+        let historialPedidos = tiendas[tienda].historialPedidos;
+        for(let pedido in historialPedidos) {
+          let ped = historialPedidos[pedido].encabezado;
+
+          let diaCaptura = ped.fechaCaptura.substr(0,2);
+          let mesCaptura = ped.fechaCaptura.substr(3,2);
+          let añoCaptura = ped.fechaCaptura.substr(6,4);
+          let fechaCaptura = mesCaptura + '/' + diaCaptura + '/' + añoCaptura;
+          moment.locale('es');
+          let fechaCapturaMostrar = moment(fechaCaptura).format('LL');
+          row += '<tr><td>' + fechaCapturaMostrar +" "+ped.ruta +" "+ ped.tienda+'</td></tr>';
         }
-      });
-      //console.log(historialPedidos.val());
-      //let div = $('<div/>', {'class': 'panel-body no-padding'});
-      //let tr = $('<tr/>');
-      //let td = $('<td/>');
-
-
-
-      //let div1 = '<div class="input-group-addon btn btn-primary"><span class="glyphicon glyphicon-calendar"></span></div>';
-
-      //div.append(tr);
+      }
       $('#historialPedidos').html(row);
-
-    }
-
+    });
   });
 }
 
-mostrarHistorialPedidos();
+function enviarTicketCalidadProducto() {
+  let producto = $('#productosTicket').val();
+  let cantidad = Number($('#cantidadMalEstado').val());
+  let fechaCaducidad = $('#fechaCaducidad').val();
+  let lote = $('#loteProducto').val();
+  let problema = $('input:radio[name=problemasProductos]:checked').val();
+  let descripcion = $('#descripcionTicket').val();
+  let fecha = moment().format('DD/MM/YYYY');
+  let tienda = $('#tienda').val();
+
+  let ticketsRef = db.ref('tickets/calidadProducto');
+  ticketsRef.once('value', function(snapshot) {
+    let tickets = snapshot.val();
+
+    let keys = Object.keys(tickets);
+    let last = keys[keys.length-1];
+    let ultimoTicket = tickets[last];
+    let lastclave = ultimoTicket.clave;
+    console.log(lastclave);
+
+    let datosTicket = {
+      producto: producto,
+      fechaCaducidad: fechaCaducidad,
+      cantidad: cantidad,
+      lote: lote,
+      problema: problema,
+      descripcion: descripcion,
+      tienda: tienda,
+      fecha: fecha,
+      clave: lastclave+1,
+      estado: "Pendiente",
+      respuesta: ""
+    }
+
+    ticketsRef.push(datosTicket);
+  });
+}
+
+//mostrarHistorialPedidos();
 
 //$('#historialPedidos').empty().append(mostrarHistorialPedidos());
       /*row += '<tr>' +
@@ -472,3 +619,11 @@ mostrarHistorialPedidos();
       });
     }
   });*/
+
+  $('#formCalidadProducto').on('show.bs.collapse', function () {
+    $('#formRetrasoPedido').collapse('hide');
+  });
+
+  $('#formRetrasoPedido').on('show.bs.collapse', function () {
+    $('#formCalidadProducto').collapse('hide');
+  });

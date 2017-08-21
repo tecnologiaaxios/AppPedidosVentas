@@ -375,3 +375,11 @@ img::-moz-selection {
 .btn:hover{ background-color: #0d47a1; color: white;}
 .btn:focus,
 .btn:active{ background-color: #1565c0; color: white;}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
+    background-color: #1A2383;
+}
+
+/*.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus, .dropdown-menu>.active>a:hover {
+    background-color: #1A2383;
+}*/
