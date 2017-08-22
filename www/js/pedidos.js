@@ -12,7 +12,7 @@ function mostrarTicketsCalidadProducto() {
   let ticketsRef = db.ref('tickets/calidadProducto');
   ticketsRef.orderByChild("promotora").equalTo(uid).on("value", function(snapshot) {
     let tickets = snapshot.val();
-    let trs = "";
+
     for(let ticket in tickets) {
       let datos = tickets[ticket];
 
@@ -23,10 +23,31 @@ function mostrarTicketsCalidadProducto() {
       moment.locale('es');
       let fechaMostrar = moment(fecha).format('LL');
 
-        trs += '<tr><td><a data-toggle="modal" data-target="#modalTicket">Clave: ' + datos.clave + ' Producto: ' + datos.producto + ' Problema: ' + datos.problema + ' Fecha: ' + fechaMostrar +'</a></td></tr>';
+      let tr = $('<tr/>');
+      let td = $('<td/>');
+      let a = $('<a/>', {
+        'onclick': 'abrirModalTicket("'+ticket+'")',
+        text: 'Clave: ' + datos.clave + ' Producto: ' + datos.producto + ' Problema: ' + datos.problema + ' Fecha: ' + fechaMostrar
+      })
+      td.append(a);
+      tr.append(td);
+      $('#ticketsCalidadProducto tbody').append(tr);
     }
 
-    $('#ticketsCalidadProducto tbody').html(trs);
+    //$('#ticketsCalidadProducto tbody').html(trs);
+  });
+}
+
+function abrirModalTicket(idTicket) {
+  $('#modalTicket').modal('show');
+
+  let ticketRef = db.ref('tickets/calidadProducto/'+idTicket);
+  ticketRef.once('value', function(snapshot) {
+    let datos = snapshot.val();
+    $('#claveTicket').val(datos.clave);
+    $('#claveProducto').val(datos.producto);
+    $('#fechaTicket').val(datos.fecha);
+    $('#respuesta').val(datos.respuesta);
   });
 }
 
@@ -486,8 +507,9 @@ function guardarPedido() {
   //$('#tiendas option').first().attr('selected', true);
   //$('#productos option').first().attr('selected', true);
   $("#tiendas").val('Tiendas')
-  $("#productos").val('Productos')
-  $('#productosPedido tbody').empty();
+  $("#productos").val('');
+  $("#productos option[value=Seleccionar]").attr('selected', true);
+  //$('#productosPedido tbody').empty();
   listaProductosPedido.length = 0;
 
   //Envío de notificación al almacen
@@ -587,6 +609,7 @@ function enviarTicketCalidadProducto() {
   });
 
   $('#productosTicket').val('');
+  $("#productosTicket option[value=Seleccionar]").attr('selected', true);
   $('#cantidadMalEstado').val('')
   $('#fechaCaducidad').val('');
   $('#loteProducto').val('');
