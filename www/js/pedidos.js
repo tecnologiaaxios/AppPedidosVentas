@@ -382,6 +382,14 @@ $('#productos').change(function() {
     $('#precioUnitario').val(producto.precioUnitario);
     $('#unidad').val(producto.unidad);
   });
+
+  if(this.value != null || this.value != undefined) {
+    $('#productos').parent().removeClass('has-error');
+    $('#helpblockProductos').hide();
+  } else {
+    $('#productos').parent().addClass('has-error');
+    $('#helpblockProductos').show();
+  }
 });
 
 $('#productosTicket').change(function() {
@@ -393,6 +401,15 @@ $('#productosTicket').change(function() {
     let producto = snapshot.val();
     $('#productoTicket').val(idProducto);
   });
+
+  if(this.value != null || this.value != undefined) {
+    $('#productosTicket').parent().parent().removeClass('has-error');
+    $('#helpblockProductoTicket').hide();
+  }
+  else {
+    $('#productosTicket').parent().parent().addClass('has-error');
+    $('#helpblockProductoTicket').show();
+  }
 });
 
 $('#pedidoPz').keyup(function(){
@@ -405,6 +422,15 @@ $('#pedidoPz').keyup(function(){
 
   $('#totalPz').val(totalPz);
   $('#totalKg').val(totalKg);
+
+  if(this.value.length < 1) {
+    $('#pedidoPz').parent().addClass('has-error');
+    $('#helpblockPedidoPz').show();
+  }
+  else {
+    $('#pedidoPz').parent().removeClass('has-error');
+    $('#helpblockPedidoPz').hide();
+  }
 });
 
 $('#degusPz').keyup(function(){
@@ -417,6 +443,15 @@ $('#degusPz').keyup(function(){
 
   $('#totalPz').val(totalPz);
   $('#totalKg').val(totalKg);
+
+  if(this.value.length < 1) {
+    $('#degusPz').parent().addClass('has-error');
+    $('#helpblockDegusPz').show();
+  }
+  else {
+    $('#degusPz').parent().removeClass('has-error');
+    $('#helpblockDegusPz').hide();
+  }
 });
 
 $('#cambioFisico').keyup(function(){
@@ -429,6 +464,15 @@ $('#cambioFisico').keyup(function(){
 
   $('#totalPz').val(totalPz);
   $('#totalKg').val(totalKg);
+
+  if(this.value.length < 1) {
+    $('#cambioFisico').parent().addClass('has-error');
+    $('#helpblockCambioFisico').show();
+  }
+  else {
+    $('#cambioFisico').parent().removeClass('has-error');
+    $('#helpblockCambioFisico').hide();
+  }
 });
 
 $(document).ready(function() {
@@ -491,6 +535,14 @@ function agregarProducto() {
     $('#unidad').val('');
   }
   else {
+    if(productoSeleccionado == null || productoSeleccionado == undefined) {
+      $('#productos').parent().addClass('has-error');
+      $('#helpblockProductos').show();
+    }
+    else {
+      $('#productos').parent().removeClass('has-error');
+      $('#helpblockProductos').hide();
+    }
     if(pedidoPz.length < 1) {
       $('#pedidoPz').parent().addClass('has-error');
       $('#helpblockPedidoPz').show();
@@ -517,42 +569,6 @@ function agregarProducto() {
     }
   }
 }
-
-$('#pedidoPz').keyup(function() {
-  let pedidoPz = $('#pedidoPz').val();
-  if(pedidoPz.length < 1) {
-    $('#pedidoPz').parent().addClass('has-error');
-    $('#helpblockPedidoPz').show();
-  }
-  else {
-    $('#pedidoPz').parent().removeClass('has-error');
-    $('#helpblockPedidoPz').hide();
-  }
-});
-
-$('#degusPz').keyup(function() {
-  let degusPz = $('#degusPz').val();
-  if(degusPz.length < 1) {
-    $('#degusPz').parent().addClass('has-error');
-    $('#helpblockDegusPz').show();
-  }
-  else {
-    $('#degusPz').parent().removeClass('has-error');
-    $('#helpblockDegusPz').hide();
-  }
-});
-
-$('#cambioFisico').keyup(function() {
-  let cambioFisico = $('#cambioFisico').val();
-  if(cambioFisico.length < 1) {
-    $('#cambioFisico').parent().addClass('has-error');
-    $('#helpblockCambioFisico').show();
-  }
-  else {
-    $('#cambioFisico').parent().removeClass('has-error');
-    $('#helpblockCambioFisico').hide();
-  }
-});
 
 function guardarPedido() {
 
@@ -654,7 +670,7 @@ function mostrarHistorialPedidos() {
 
 function enviarTicketCalidadProducto() {
   let producto = $('#productosTicket').val();
-  let cantidad = Number($('#cantidadMalEstado').val());
+  let cantidad = $('#cantidadMalEstado').val();
   let fechaCaducidad = $('#fechaCaducidad').val();
   let lote = $('#loteProducto').val();
   let problema = $('input:radio[name=problemasProductos]:checked').val();
@@ -676,7 +692,7 @@ function enviarTicketCalidadProducto() {
       let datosTicket = {
         producto: producto,
         fechaCaducidad: fechaCaducidad,
-        cantidad: cantidad,
+        cantidad: Number(cantidad),
         lote: lote,
         problema: problema,
         descripcion: descripcion,
@@ -708,6 +724,38 @@ function enviarTicketCalidadProducto() {
     else {
       $('#productosTicket').parent().parent().removeClass('has-error');
       $('#helpblockProductoTicket').hide();
+    }
+    if(cantidad.length < 1) {
+      $('#cantidadMalEstado').parent().parent().addClass('has-error');
+      $('#helpblockCantidadMalEstado').show();
+    }
+    else {
+      $('#cantidadMalEstado').parent().parent().removeClass('has-error');
+      $('#helpblockCantidadMalEstado').hide();
+    }
+    if(fechaCaducidad.length < 1) {
+      $('#fechaCaducidad').parent().parent().addClass('has-error');
+      $('#helpblockFechaCaducidad').show();
+    }
+    else {
+      $('#fechaCaducidad').parent().parent().removeClass('has-error');
+      $('#helpblockFechaCaducidad').hide();
+    }
+    if(lote.length < 1) {
+      $('#loteProducto').parent().parent().addClass('has-error');
+      $('#helpblockLoteProducto').show();
+    }
+    else {
+      $('#loteProducto').parent().parent().removeClass('has-error');
+      $('#helpblockLoteProducto').hide();
+    }
+    if(descripcion.length < 1) {
+      $('#descripcionTicket').parent().parent().addClass('has-error');
+      $('#helpblockDescripcion').show();
+    }
+    else {
+      $('#descripcionTicket').parent().parent().removeClass('has-error');
+      $('#helpblockDescripcion').hide();
     }
   }
 }

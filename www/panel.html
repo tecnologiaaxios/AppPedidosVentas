@@ -115,13 +115,13 @@
                 <input class="form-control" id="tienda" name="tienda" style="display:none"></input>
                 <input class="form-control" id="consorcio" name="consorcio" style="display:none"></input>
                 <div class="form-group">
-                  <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                  <!--<span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>-->
                   <div class="col-md-8">
                     <label for="productos">Elige un Producto:</label>
                     <select id="productos" class="form-control input-lg" required>
                       <option value="Seleccionar" disabled selected>Seleccionar</option>
                     </select>
-                    <!-- <span style="display: none;" id="helpblockProductos" class="help-block">Campo obligatorio</span> -->
+                    <span style="display: none;" id="helpblockProductos" class="help-block">Campo obligatorio</span>
                   </div>
                 </div>
                 <div class="form-group">
@@ -214,13 +214,13 @@
                 <input class="form-control" id="tienda" name="tienda" style="display:none"></input>
                 <input class="form-control" id="consorcio" name="consorcio" style="display:none"></input>
                 <div class="form-group">
-                  <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                  <!--<span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>-->
                   <div class="col-md-8">
                     <label for="productos">Elige un Producto:</label>
                     <select id="productos" class="form-control input-lg" required>
                       <option value="Seleccionar" disabled selected>Seleccionar</option>
                     </select>
-                    <!-- <span style="display: none;" id="helpblockProductos" class="help-block">Campo obligatorio</span> -->
+                    <span style="display: none;" id="helpblock" class="help-block">Campo obligatorio</span>
                   </div>
                 </div>
                 <div class="form-group">
@@ -336,39 +336,43 @@
                   </div>
                 </div>
                 <div class="tab-content">
-                  <div role="tabpanel" class="tab-pane" id="formCalidadProducto">
+                  <div role="tabpanel" class="tab-pane center-block" id="formCalidadProducto">
                     <input class="form-control" id="consorcio" name="consorcio" style="display:none"></input>
                     <div class="form-group">
-                      <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
                       <div class="col-md-8">
                         <label for="productosTicket">Elige un producto:</label>
                         <select id="productosTicket" class="form-control" required>
                           <option value="Seleccionar" disabled selected>Seleccionar</option>
                         </select>
+                        <span style="display: none;" id="helpblockProductoTicket" class="help-block">Campo obligatorio</span>
                       </div>
-                      <span style="display: none;" id="helpblockProductoTicket" class="help-block">Campo obligatorio</span>
                     </div>
                     <input type="text" id="productoTicket" style="display: none;" required>
                     <div class="form-group">
-                      <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+                      <!--<span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>-->
                       <div class="col-md-8">
-                        <label for="cantidadMalEstado">Cantidad de productos en mal estado:</label><input type="number" class="form-control" id="cantidadMalEstado" name="cantidadMalEstado" placeholder="Cantidad de productos en mal estado" required>
+                        <label for="cantidadMalEstado">Cantidad de productos en mal estado:</label>
+                        <input type="number" class="form-control" id="cantidadMalEstado" name="cantidadMalEstado" placeholder="Cantidad de productos en mal estado" required>
+                        <span style="display: none;" id="helpblockCantidadMalEstado" class="help-block">Campo obligatorio</span>
                       </div>
                     </div>
                     <div class="form-group">
-                      <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>
+                      <!--<span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>-->
                       <div class="col-md-8">
                         <label for="fechaCaducidad">Fecha de caducidad:</label>
                         <div class="input-group date">
                           <input class="form-control" type="text" placeholder="Fecha de caducidad" id="fechaCaducidad" required>
                           <span class="input-group-addon btn-primary"><i class="glyphicon glyphicon-calendar"></i></span>
                         </div>
+                        <span style="display: none;" id="helpblockFechaCaducidad" class="help-block">Campo obligatorio</span>
                       </div>
                     </div>
                     <div class="form-group">
-                      <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>
+                      <!--<span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>-->
                       <div class="col-md-8">
-                        <label for="loteProducto">Lote:</label><input id="loteProducto" type="text" placeholder="Lote" class="form-control" required>
+                        <label for="loteProducto">Lote:</label>
+                        <input id="loteProducto" type="text" placeholder="Lote" class="form-control" required>
+                        <span style="display: none;" id="helpblockLoteProducto" class="help-block">Campo obligatorio</span>
                       </div>
                     </div>
                     <div class="form-group">
@@ -400,7 +404,9 @@
                     <div class="form-group">
                       <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>
                       <div class="col-md-8">
-                        <label for="descripcionTicket">Descripción:</label><textarea id="descripcionTicket" placeholder="Descripción" class="form-control" rows="5" required></textarea>
+                        <label for="descripcionTicket">Descripción:</label>
+                        <textarea id="descripcionTicket" placeholder="Descripción" class="form-control" rows="5" required></textarea>
+                        <span style="display: none;" id="helpblockDescripcion" class="help-block">Campo obligatorio</span>
                       </div>
                     </div>
                     <div class="form-group">
