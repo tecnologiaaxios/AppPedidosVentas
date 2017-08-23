@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="css/creative.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+    <script src="vendor/jquery/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="css/msdropdown/skin2.css" />
     <link rel="stylesheet" type="text/css" href="css/msdropdown/flags.css" />
     <link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css"/>
@@ -339,13 +339,14 @@
                   <div role="tabpanel" class="tab-pane" id="formCalidadProducto">
                     <input class="form-control" id="consorcio" name="consorcio" style="display:none"></input>
                     <div class="form-group">
-                      <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
-                      <div class="col-md-8">
+                      <!--<span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                      <div class="col-md-8">-->
                         <label for="productosTicket">Elige un producto:</label>
                         <select id="productosTicket" class="form-control" required>
                           <option value="Seleccionar" disabled selected>Seleccionar</option>
                         </select>
-                      </div>
+                      <!--</div>-->
+                      <span style="display: none;" id="helpblockProductoTicket" class="help-block">Campo obligatorio</span>
                     </div>
                     <input type="text" id="productoTicket" style="display: none;" required>
                     <div class="form-group">

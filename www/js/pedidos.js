@@ -617,7 +617,7 @@ function guardarPedido() {
     });
   }
   else {
-    
+
   }
 }
 
@@ -662,103 +662,55 @@ function enviarTicketCalidadProducto() {
   let fecha = moment().format('DD/MM/YYYY');
   let tienda = $('#tienda').val();
 
-  let ticketsRef = db.ref('tickets/calidadProducto');
-  ticketsRef.once('value', function(snapshot) {
-    let tickets = snapshot.val();
-    let uid = auth.currentUser.uid;
+  if((producto != null || producto != undefined) && cantidad.length > 0 && fechaCaducidad.length > 0 && lote.length > 0 && problema.length > 0 && descripcion.length > 0  && (tienda != null || tienda != undefined)) {
+    let ticketsRef = db.ref('tickets/calidadProducto');
+    ticketsRef.once('value', function(snapshot) {
+      let tickets = snapshot.val();
+      let uid = auth.currentUser.uid;
 
-    let keys = Object.keys(tickets);
-    let last = keys[keys.length-1];
-    let ultimoTicket = tickets[last];
-    let lastclave = ultimoTicket.clave;
+      let keys = Object.keys(tickets);
+      let last = keys[keys.length-1];
+      let ultimoTicket = tickets[last];
+      let lastclave = ultimoTicket.clave;
 
-    let datosTicket = {
-      producto: producto,
-      fechaCaducidad: fechaCaducidad,
-      cantidad: cantidad,
-      lote: lote,
-      problema: problema,
-      descripcion: descripcion,
-      tienda: tienda,
-      fecha: fecha,
-      clave: lastclave+1,
-      estado: "Pendiente",
-      respuesta: "",
-      promotora: uid
-    }
-
-    ticketsRef.push(datosTicket);
-  });
-
-  $('#productosTicket').val('');
-  $("#productosTicket option[value=Seleccionar]").attr('selected', true);
-  $('#cantidadMalEstado').val('')
-  $('#fechaCaducidad').val('');
-  $('#loteProducto').val('');
-  $('input:radio[name=problemasProductos]:checked').val('');
-  $('#descripcionTicket').val('');
-  $('#tienda').val('');
-}
-
-//mostrarHistorialPedidos();
-
-//$('#historialPedidos').empty().append(mostrarHistorialPedidos());
-      /*row += '<tr>' +
-              '<td>' + pedidoPadre + '</td>' +
-              '<td>' + pedidosPadre[pedidoPadre].fechaCreacionPadre + '</td>' +
-              '<td>' + pedidosPadre[pedidoPadre].fechaRuta + '</td>' +
-              '<td><input type="text" class="form-control" style="width: 100px; display:inline-block padding-right: 10px;" placeholder="Nueva fecha de ruta"><button class="btn btn-primary" type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i></button></td>' +
-              '<td>' + pedidosPadre[pedidoPadre].ruta + '</td>' +
-              '<td></td>' +
-             '</tr>';*/
-
-      /*let diaCaptura = pedidosPadre[pedidoPadre].fechaCreacionPadre.substr(0,2);
-      let mesCaptura = pedidosPadre[pedidoPadre].fechaCreacionPadre.substr(3,2);
-      let añoCaptura = pedidosPadre[pedidoPadre].fechaCreacionPadre.substr(6,4);
-      let fechaCaptura = mesCaptura + '/' + diaCaptura + '/' + añoCaptura;
-      moment.locale('es');
-      let fechaCapturaMostrar = moment(fechaCaptura).format('DD MMMM YYYY');
-
-      let fechaRutaMostrar;
-      if(pedidosPadre[pedidoPadre].fechaRuta.length > 0) {
-        let diaRuta = pedidosPadre[pedidoPadre].fechaRuta.substr(0,2);
-        let mesRuta = pedidosPadre[pedidoPadre].fechaRuta.substr(3,2);
-        let añoRuta = pedidosPadre[pedidoPadre].fechaRuta.substr(6,4);
-        let fechaRuta = mesRuta + '/' + diaRuta + '/' + añoRuta;
-
-        fechaRutaMostrar = moment(fechaRuta).format('DD MMMM YYYY');
-      } else {
-        fechaRutaMostrar = "Fecha pendiente";
+      let datosTicket = {
+        producto: producto,
+        fechaCaducidad: fechaCaducidad,
+        cantidad: cantidad,
+        lote: lote,
+        problema: problema,
+        descripcion: descripcion,
+        tienda: tienda,
+        fecha: fecha,
+        clave: lastclave+1,
+        estado: "Pendiente",
+        respuesta: "",
+        promotora: uid
       }
 
-      row = '<td>' + pedidoPadre + '</td>' +
-            '<td>' + fechaCapturaMostrar + '</td>' +
-            '<td>' + fechaRutaMostrar + '</td>';
+      ticketsRef.push(datosTicket);
+    });
 
-      div.append(input);
-      div.append('<span class="input-group-addon btn-primary"><i class="glyphicon glyphicon-calendar"></i></span>');
-      //div.append(button);
-      td.append(div);
-      td.append(button);
-      tr.append(row);
-      tr.append(td);
-      tr.append('<td>' + pedidosPadre[pedidoPadre].ruta + '</td>');
-      div2.append(input2);
-      span2.append(button2);
-      div2.append(span2);
-      td2.append(div2);
-      tr.append(td2);
-      tr.append('<td><a class="btn btn-info" href="pedidoPadre.html?id='+pedidoPadre+'">Ver más</a></td>');
-
-      $('#tablaPedidosEnProceso tbody').append(tr);
-
-      $('.input-group.date').datepicker({
-        format: "dd/mm/yyyy",
-        startDate: "today",
-        language: "es"
-      });
+    $('#productosTicket').val('');
+    $("#productosTicket option[value=Seleccionar]").attr('selected', true);
+    $('#cantidadMalEstado').val('')
+    $('#fechaCaducidad').val('');
+    $('#loteProducto').val('');
+    $('input:radio[name=problemasProductos]:checked').val('');
+    $('#descripcionTicket').val('');
+    $('#tienda').val('');
+  }
+  else {
+    if(producto == undefined || producto == null) {
+      $('#productosTicket').parent().parent().addClass('has-error');
+      $('#helpblockProductoTicket').show();
     }
-  });*/
+    else {
+      $('#productosTicket').parent().parent().removeClass('has-error');
+      $('#helpblockProductoTicket').hide();
+    }
+  }
+}
 
 $('#formCalidadProducto').on('show.bs.collapse', function () {
   $('#formRetrasoPedido').collapse('hide');
