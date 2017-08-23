@@ -668,6 +668,21 @@ function mostrarHistorialPedidos() {
   });
 }
 
+function tomarFoto() {
+  navigator.camera.getPicture(
+    function(imageUrl) {
+      let image = document.getElementById('foto');
+      image.src = imageURI;
+    },
+    function(message) {
+      alert('Falló debido a: ' + message);
+    },
+    {
+      quality: 50,
+      destinationType: Camera.DestinationType.FILE_URI
+    });
+}
+
 function enviarTicketCalidadProducto() {
   let producto = $('#productosTicket').val();
   let cantidad = $('#cantidadMalEstado').val();
