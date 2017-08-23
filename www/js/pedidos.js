@@ -12,6 +12,7 @@ function mostrarTicketsCalidadProducto() {
   let ticketsRef = db.ref('tickets/calidadProducto');
   ticketsRef.orderByChild("promotora").equalTo(uid).on("value", function(snapshot) {
     let tickets = snapshot.val();
+    $('#ticketsCalidadProducto tbody').empty();
 
     for(let ticket in tickets) {
       let datos = tickets[ticket];
@@ -46,8 +47,15 @@ function abrirModalTicket(idTicket) {
     let datos = snapshot.val();
     $('#claveTicket').val(datos.clave);
     $('#claveProducto').val(datos.producto);
-    $('#fechaTicket').val(datos.fecha);
+
+    let dia = datos.fecha.substr(0,2);
+    let mes = datos.fecha.substr(3,2);
+    let año = datos.fecha.substr(6,4);
+    let fechaMostrar = año + '-' + mes + '-' + dia;
+
+    $('#fechaTicket').val(fechaMostrar);
     $('#respuesta').val(datos.respuesta);
+    $('#problemaTicket').val(datos.problema);
   });
 }
 
@@ -443,100 +451,174 @@ function agregarProducto() {
   let totalKg = $('#totalKg').val();
   let precioUnitario = $('#precioUnitario').val();
   let unidad = $('#unidad').val();
+  let productoSeleccionado = $('#productos').val();
 
-  let row = '<tr>' +
-              '<td>'+clave+'</td>'+
-              '<td>'+nombre+'</td>'+
-              '<td>'+pedidoPz+'</td>'+
-              '<td>'+degusPz+'</td>'+
-              '<td>'+totalPz+'</td>'+
-              '<td>'+totalKg+'</td>'+
-            '</tr>';
+  console.log(pedidoPz.length>0);
 
-  $('#productosPedido tbody').append(row);
+  if((productoSeleccionado != null || productoSeleccionado != undefined) && pedidoPz.length > 0  && degusPz.length > 0 && cambioFisico.length > 0) {
+    console.log('if');
+    let row = '<tr>' +
+                '<td>'+clave+'</td>'+
+                '<td>'+nombre+'</td>'+
+                '<td>'+pedidoPz+'</td>'+
+                '<td>'+degusPz+'</td>'+
+                '<td>'+totalPz+'</td>'+
+                '<td>'+totalKg+'</td>'+
+              '</tr>';
 
-  let datosProducto = {
-    clave: clave,
-    nombre: nombre,
-    pedidoPz: Number(pedidoPz),
-    degusPz: Number(degusPz),
-    cambioFisico: Number(cambioFisico),
-    totalPz: Number(totalPz),
-    totalKg: Number(totalKg),
-    precioUnitario: Number(precioUnitario),
-    unidad: unidad
-  };
-  listaProductosPedido.push(datosProducto);
+    $('#productosPedido tbody').append(row);
 
-  $('#productos').focus();
-  $('#pedidoPz').val('');
-  $('#degusPz').val('');
-  $('#cambioFisico').val('');
-  $('#totalPz').val('');
-  $('#totalKg').val('')
-  $('#precioUnitario').val('');
-  $('#unidad').val('');
+    let datosProducto = {
+      clave: clave,
+      nombre: nombre,
+      pedidoPz: Number(pedidoPz),
+      degusPz: Number(degusPz),
+      cambioFisico: Number(cambioFisico),
+      totalPz: Number(totalPz),
+      totalKg: Number(totalKg),
+      precioUnitario: Number(precioUnitario),
+      unidad: unidad
+    };
+    listaProductosPedido.push(datosProducto);
+
+    $('#productos').focus();
+    $('#pedidoPz').val('');
+    $('#degusPz').val('');
+    $('#cambioFisico').val('');
+    $('#totalPz').val('');
+    $('#totalKg').val('')
+    $('#precioUnitario').val('');
+    $('#unidad').val('');
+  }
+  else {
+    if(pedidoPz.length < 1) {
+      $('#pedidoPz').parent().addClass('has-error');
+      $('#helpblockPedidoPz').show();
+    }
+    else {
+      $('#pedidoPz').parent().removeClass('has-error');
+      $('#helpblockPedidoPz').hide();
+    }
+    if(degusPz.length < 1) {
+      $('#degusPz').parent().addClass('has-error');
+      $('#helpblockDegusPz').show();
+    }
+    else {
+      $('#degusPz').parent().removeClass('has-error');
+      $('#helpblockDegusPz').hide();
+    }
+    if(cambioFisico.length < 1) {
+      $('#cambioFisico').parent().addClass('has-error');
+      $('#helpblockCambioFisico').show();
+    }
+    else {
+      $('#cambioFisico').parent().removeClass('has-error');
+      $('#helpblockCambioFisico').hide();
+    }
+  }
 }
 
-function guardarPedido() {
-  let pedidoRef = db.ref('pedidoEntrada/');
-  let tienda = $('#tienda').val();
-  let ruta = $('#region').val();
-  let fechaCaptura = moment().format('DD/MM/YYYY');
-  let uid = auth.currentUser.uid;
-
-  let encabezado = {
-    encabezado: {
-      fechaCaptura: fechaCaptura,
-      tienda: tienda,
-      ruta: ruta,
-      fechaRuta: "",
-      estado: "Pendiente",
-      promotora: uid
-    }
-  };
-
-  let key = pedidoRef.push(encabezado).getKey();
-
-  let pedidoDetalleRef = db.ref('pedidoEntrada/'+key+'/detalle');
-
-  for(let producto in listaProductosPedido) {
-    pedidoDetalleRef.push(listaProductosPedido[producto]);
+$('#pedidoPz').keyup(function() {
+  let pedidoPz = $('#pedidoPz').val();
+  if(pedidoPz.length < 1) {
+    $('#pedidoPz').parent().addClass('has-error');
+    $('#helpblockPedidoPz').show();
   }
+  else {
+    $('#pedidoPz').parent().removeClass('has-error');
+    $('#helpblockPedidoPz').hide();
+  }
+});
 
-  //$('#tiendas option').first().attr('selected', true);
-  //$('#productos option').first().attr('selected', true);
-  $("#tiendas").val('Tiendas')
-  $("#productos").val('');
-  $("#productos option[value=Seleccionar]").attr('selected', true);
-  //$('#productosPedido tbody').empty();
-  listaProductosPedido.length = 0;
+$('#degusPz').keyup(function() {
+  let degusPz = $('#degusPz').val();
+  if(degusPz.length < 1) {
+    $('#degusPz').parent().addClass('has-error');
+    $('#helpblockDegusPz').show();
+  }
+  else {
+    $('#degusPz').parent().removeClass('has-error');
+    $('#helpblockDegusPz').hide();
+  }
+});
 
-  //Envío de notificación al almacen
-  let usuariosAlmacenRef = db.ref('usuarios/planta/almacen');
-  usuariosAlmacenRef.once('value', function(snapshot) {
-    let usuarios = snapshot.val();
-    for(let usuario in usuarios) {
-      let notificacionesListaRef = db.ref('notificaciones/almacen/'+usuario+'/lista');
-      moment.locale('es');
-      let formato = moment().format("MMMM DD YYYY, HH:mm:ss");
-      let fecha = formato.toString();
-      let notificacion = {
-        fecha: fecha,
-        leida: false,
-        mensaje: "Se ha generado un pedido: Clave: " + key
-      };
-      notificacionesListaRef.push(notificacion);
+$('#cambioFisico').keyup(function() {
+  let cambioFisico = $('#cambioFisico').val();
+  if(cambioFisico.length < 1) {
+    $('#cambioFisico').parent().addClass('has-error');
+    $('#helpblockCambioFisico').show();
+  }
+  else {
+    $('#cambioFisico').parent().removeClass('has-error');
+    $('#helpblockCambioFisico').hide();
+  }
+});
 
-      let notificacionesRef = db.ref('notificaciones/almacen/'+usuario);
-      notificacionesRef.once('value', function(snapshot) {
-        let notusuario = snapshot.val();
-        let cont = notusuario.cont + 1;
+function guardarPedido() {
 
-        notificacionesRef.update({cont: cont});
-      });
+  if(listaProductosPedido.length > 0) {
+    let pedidoRef = db.ref('pedidoEntrada/');
+    let tienda = $('#tienda').val();
+    let ruta = $('#region').val();
+    let fechaCaptura = moment().format('DD/MM/YYYY');
+    let uid = auth.currentUser.uid;
+
+    let encabezado = {
+      encabezado: {
+        fechaCaptura: fechaCaptura,
+        tienda: tienda,
+        ruta: ruta,
+        fechaRuta: "",
+        estado: "Pendiente",
+        promotora: uid
+      }
+    };
+
+    let key = pedidoRef.push(encabezado).getKey();
+
+    let pedidoDetalleRef = db.ref('pedidoEntrada/'+key+'/detalle');
+
+    for(let producto in listaProductosPedido) {
+      pedidoDetalleRef.push(listaProductosPedido[producto]);
     }
-  });
+
+    //$('#tiendas option').first().attr('selected', true);
+    //$('#productos option').first().attr('selected', true);
+    $("#tiendas").val('Tiendas')
+    $("#productos").val('');
+    $("#productos option[value=Seleccionar]").attr('selected', true);
+    //$('#productosPedido tbody').empty();
+    listaProductosPedido.length = 0;
+
+    //Envío de notificación al almacen
+    let usuariosAlmacenRef = db.ref('usuarios/planta/almacen');
+    usuariosAlmacenRef.once('value', function(snapshot) {
+      let usuarios = snapshot.val();
+      for(let usuario in usuarios) {
+        let notificacionesListaRef = db.ref('notificaciones/almacen/'+usuario+'/lista');
+        moment.locale('es');
+        let formato = moment().format("MMMM DD YYYY, HH:mm:ss");
+        let fecha = formato.toString();
+        let notificacion = {
+          fecha: fecha,
+          leida: false,
+          mensaje: "Se ha generado un pedido: Clave: " + key
+        };
+        notificacionesListaRef.push(notificacion);
+
+        let notificacionesRef = db.ref('notificaciones/almacen/'+usuario);
+        notificacionesRef.once('value', function(snapshot) {
+          let notusuario = snapshot.val();
+          let cont = notusuario.cont + 1;
+
+          notificacionesRef.update({cont: cont});
+        });
+      }
+    });
+  }
+  else {
+    
+  }
 }
 
 function mostrarHistorialPedidos() {
