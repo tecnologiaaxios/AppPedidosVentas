@@ -669,7 +669,7 @@ function mostrarHistorialPedidos() {
   });
 }
 
-var fotoFile;
+//var fotoFile;
 
 function tomarFoto() {
   navigator.camera.getPicture(
@@ -680,13 +680,17 @@ function tomarFoto() {
       $('#fileFoto').val(imageUrl);
       window.resolveLocalFileSystemURL(imageUrl, function(fileEntry) {
         fileEntry.file(function(file) {
-           let reader = new FileReader();
+          let reader = new FileReader();
+          reader.onloadend = function(e) {
+            let content = this.result;
+            callback(content);
+          };
 
-           reader.readAsDataURL(file);
-           alert(file);
-           alert(reader);
-           fotoFile = file;
-         });
+          reader.readAsText(file);
+          alert(file);
+          alert(reader);
+          fotoFile = file;
+        });
       });
     },
     function(message) {
@@ -699,7 +703,7 @@ function tomarFoto() {
     });
 }
 
-/*$('#fileFoto').change(function(evt) {
+$('#fotoProducto').change(function(evt) {
     let tgt = evt.target || window.event.srcElement,
         files = tgt.files;
 
@@ -719,21 +723,19 @@ function tomarFoto() {
     }
 });
 
-$('#fileFoto').click(function() {
-
-});*/
-
 function enviarTicketCalidadProducto() {
   let producto = $('#productosTicket').val();
   let cantidad = $('#cantidadMalEstado').val();
   let fechaCaducidad = $('#fechaCaducidad').val();
+  let date = new Date(fechaCaducidad);
+  let fCad = moment(date).format('DD/MM/YYYY');
   let lote = $('#loteProducto').val();
   let problema = $('input:radio[name=problemasProductos]:checked').val();
   let descripcion = $('#descripcionTicket').val();
   let fecha = moment().format('DD/MM/YYYY');
   let tienda = $('#tienda').val();
-  //let foto = $('#fileFoto').val();
   let uid = auth.currentUser.uid;
+  let foto = $('#fotoProducto')[0].files[0]
 
   if((producto != null || producto != undefined) && cantidad.length > 0 && fechaCaducidad.length > 0 && lote.length > 0 && problema.length > 0 && descripcion.length > 0  && (tienda != null || tienda != undefined)) {
     let ticketsRef = db.ref('tickets/calidadProducto');
@@ -747,7 +749,7 @@ function enviarTicketCalidadProducto() {
 
       let datosTicket = {
         producto: producto,
-        fechaCaducidad: fechaCaducidad,
+        fechaCaducidad: fCad,
         cantidad: Number(cantidad),
         lote: lote,
         problema: problema,
@@ -758,12 +760,13 @@ function enviarTicketCalidadProducto() {
         estado: "Pendiente",
         respuesta: "",
         promotora: uid,
-        foto: ""
+        fotoUrl: ""
       }
 
       let ticketKey = ticketsRef.push(datosTicket).getKey();
-      let storageRef = storage.ref(uid+'/');
-      let uploadTask = storageRef.child('fotosCalidadProductos').put(fotoFile);
+      let storageRef = storage.ref(uid+'/fotosCalidadProductos/');
+      let nameFoto = "Foto " + moment().format('DD-MM-YYYY hh:mm:ss a');
+      let uploadTask = storageRef.child(nameFoto).put(foto);
 
       uploadTask.on('state_changed', function(snapshot){
 
@@ -772,7 +775,7 @@ function enviarTicketCalidadProducto() {
       }, function() {
         let refTicket = db.ref('tickets/calidadProducto/'+ticketKey);
         let downloadURL = uploadTask.snapshot.downloadURL;
-        refTicket.update({foto: downloadURL});
+        refTicket.update({fotoUrl: downloadURL});
       });
     });
 
@@ -784,6 +787,7 @@ function enviarTicketCalidadProducto() {
     $('input:radio[name=problemasProductos]:checked').val('');
     $('#descripcionTicket').val('');
     $('#tienda').val('');
+    $('#foto').attr('src', "");
 
   }
   else {

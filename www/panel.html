@@ -359,10 +359,11 @@
                       <!--<span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>-->
                       <div class="col-md-8">
                         <label for="fechaCaducidad">Fecha de caducidad:</label>
-                        <div class="input-group date">
+                        <input type="date" placeholder="Fecha de caducidad" class="form-control" id="fechaCaducidad" required>
+                        <!--<div class="input-group date">
                           <input class="form-control" type="text" placeholder="Fecha de caducidad" id="fechaCaducidad" required>
                           <span class="input-group-addon btn-primary"><i class="glyphicon glyphicon-calendar"></i></span>
-                        </div>
+                        </div>-->
                         <span style="display: none;" id="helpblockFechaCaducidad" class="help-block">Campo obligatorio</span>
                       </div>
                     </div>
@@ -408,9 +409,15 @@
                         <span style="display: none;" id="helpblockDescripcion" class="help-block">Campo obligatorio</span>
                       </div>
                     </div>
-                    <!--<div class="form-group">-->
                     <div class="thumbnail">
                       <img id="foto" src="" alt="">
+                    </div>
+                    <div class="form-group">
+                      <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>
+                      <div class="col-md-8">
+                        <input type="file" class="form-control" required placeholder="" id="fotoProducto">
+                        <span style="display: none;" id="helpblockFotoProducto" class="help-block">Campo obligatorio</span>
+                      </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-12 text-center">
