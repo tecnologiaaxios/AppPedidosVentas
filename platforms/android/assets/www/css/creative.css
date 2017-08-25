@@ -34,6 +34,8 @@ body {
   width: 100%;
    font-family: 'intelobold';
    background-color: white;
+   overflow-x: hidden;
+   max-height: 100%;
 }
 hr {
   border-color: #CBCBCB;
@@ -88,14 +90,13 @@ p {
                        margin: 0 auto !important;}
 
                        #footer-login{
-                         position: absolute;
-                         bottom: 0;
+
                          width: 100%;
                          height: 50px;
                          color: white;}
 #footer-panel{
   background-color:#fafafa;
-  position: absolute;
+  position:fixed;
   bottom: 0;
   width: 100%;
   height: 50px;
@@ -103,34 +104,42 @@ p {
 overflow: hidden;}
 
   /***** ESTILOS DE LA APP / PANEL***/
-  .region{ color: white; float: right;transform: translate(-20px,15px);}
-  #nav-panel{ margin: 0 auto; text-align: center;}
-  .nav-tabs{
+  .region{ color: white; float: right; margin-top:15px;}
+  #nav-panel{ margin: 0 auto; text-align: center; height: 30px;max-height:30px;}
 
-}
 .nav-tabs>li>a {
   margin-top: 0px;
   padding: 0px;
-
+  border: none !important;
   color:#bdbdbd;
+  top: 10px;
+}
+.contenedor-productos-pedido{
+  padding:8px; width:100%; background-color:#fafafa; max-height:200px; overflow-y:scroll; margin-bottom:20px;
+}
+.chip-producto-pedido{
+  height:100px; width:100%; margin-top:5px; background-color: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 }
 
 /* active tab color */
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
   color: #1a237e;
   background-color: transparent;
-  border: none;
+    border: none !important;
   margin-top: 0px;
   padding: 0px;
+
 
 
 }
 
 /* hover tab color */
 .nav-tabs>li>a:hover {
-
+  border: none !important;
 background-color: transparent;
-border: none;
+
 
 margin-top: 0px;
 padding: 0px;
@@ -154,6 +163,7 @@ aside {
 .navbar{
   background-color:#1a237e;
   border: none;
+  max-height: 20px;
 }
 
 
@@ -230,10 +240,13 @@ header .header-content .header-content-inner p {
 @media (min-width: 992px) {
   .service-box {
     margin: 20px auto 0;
+
   }
+
 }
 
 @media (min-width: 768px) {
+
 
 
 }
@@ -246,6 +259,14 @@ header .header-content .header-content-inner p {
 @media (max-width: 992px) {
 
 
+
+}
+@media (max-heigth:400px) {
+  body{
+
+  background-color: red;
+
+  }
 
 }
 @media (min-width: 908px) {
@@ -354,3 +375,11 @@ img::-moz-selection {
 .btn:hover{ background-color: #0d47a1; color: white;}
 .btn:focus,
 .btn:active{ background-color: #1565c0; color: white;}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
+    background-color: #1A2383;
+}
+
+/*.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus, .dropdown-menu>.active>a:hover {
+    background-color: #1A2383;
+}*/

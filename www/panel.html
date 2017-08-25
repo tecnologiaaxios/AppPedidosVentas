@@ -9,7 +9,6 @@
     <title>Pedidos Xico</title>
     <link rel="stylesheet" href="css/sample.css" />
 
-
     <!-- <msdropdown> -->
     <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">-->
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -410,10 +409,9 @@
                       </div>
                     </div>
                     <!--<div class="form-group">-->
-                      <div class="thumbnail">
-                        <img src="http://lorempixel.com/350/350" alt="">
-                      </div>
-
+                    <div class="thumbnail">
+                      <img id="foto" src="" alt="">
+                    </div>
                     <div class="form-group">
                       <div class="col-md-12 text-center">
                         <button class="btn btn-success btn-lg" style="width:100%; color:#FFFFFF; background-color:#008080;" onclick="tomarFoto()" type="button"><span class="glyphicon glyphicon-camera"></span></button>
@@ -597,6 +595,7 @@
       firebase.initializeApp(config);
     </script>
     <script src="js/moment-with-locales.js"></script>
+    <script src="cordova.js"></script>
     <script src="js/pedidos.js"></script>
   </body>
 </html>

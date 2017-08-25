@@ -1,5 +1,6 @@
 const db = firebase.database();
 const auth = firebase.auth();
+const storage = firebase.storage();
 var listaProductosPedido = [];
 
 function logout() {
@@ -668,20 +669,59 @@ function mostrarHistorialPedidos() {
   });
 }
 
+var fotoFile;
+
 function tomarFoto() {
   navigator.camera.getPicture(
     function(imageUrl) {
       let image = document.getElementById('foto');
-      image.src = imageURI;
+      image.src = imageUrl;
+
+      $('#fileFoto').val(imageUrl);
+      window.resolveLocalFileSystemURL(imageUrl, function(fileEntry) {
+        fileEntry.file(function(file) {
+           let reader = new FileReader();
+
+           reader.readAsDataURL(file);
+           alert(file);
+           alert(reader);
+           fotoFile = file;
+         });
+      });
     },
     function(message) {
       alert('Falló debido a: ' + message);
     },
     {
       quality: 50,
-      destinationType: Camera.DestinationType.FILE_URI
+      destinationType: Camera.DestinationType.FILE_URI,
+      correctOrientation: true
     });
 }
+
+/*$('#fileFoto').change(function(evt) {
+    let tgt = evt.target || window.event.srcElement,
+        files = tgt.files;
+
+    // FileReader support
+    if (FileReader && files && files.length) {
+        var fr = new FileReader();
+        fr.onload = function () {
+            document.getElementById('foto').src = fr.result;
+        }
+        fr.readAsDataURL(files[0]);
+    }
+
+    // Not supported
+    else {
+        // fallback -- perhaps submit the input to an iframe and temporarily store
+        // them on the server until the user's session ends.
+    }
+});
+
+$('#fileFoto').click(function() {
+
+});*/
 
 function enviarTicketCalidadProducto() {
   let producto = $('#productosTicket').val();
@@ -692,12 +732,13 @@ function enviarTicketCalidadProducto() {
   let descripcion = $('#descripcionTicket').val();
   let fecha = moment().format('DD/MM/YYYY');
   let tienda = $('#tienda').val();
+  //let foto = $('#fileFoto').val();
+  let uid = auth.currentUser.uid;
 
   if((producto != null || producto != undefined) && cantidad.length > 0 && fechaCaducidad.length > 0 && lote.length > 0 && problema.length > 0 && descripcion.length > 0  && (tienda != null || tienda != undefined)) {
     let ticketsRef = db.ref('tickets/calidadProducto');
     ticketsRef.once('value', function(snapshot) {
       let tickets = snapshot.val();
-      let uid = auth.currentUser.uid;
 
       let keys = Object.keys(tickets);
       let last = keys[keys.length-1];
@@ -716,10 +757,23 @@ function enviarTicketCalidadProducto() {
         clave: lastclave+1,
         estado: "Pendiente",
         respuesta: "",
-        promotora: uid
+        promotora: uid,
+        foto: ""
       }
 
-      ticketsRef.push(datosTicket);
+      let ticketKey = ticketsRef.push(datosTicket).getKey();
+      let storageRef = storage.ref(uid+'/');
+      let uploadTask = storageRef.child('fotosCalidadProductos').put(fotoFile);
+
+      uploadTask.on('state_changed', function(snapshot){
+
+      }, function(error) {
+
+      }, function() {
+        let refTicket = db.ref('tickets/calidadProducto/'+ticketKey);
+        let downloadURL = uploadTask.snapshot.downloadURL;
+        refTicket.update({foto: downloadURL});
+      });
     });
 
     $('#productosTicket').val('');
@@ -730,6 +784,7 @@ function enviarTicketCalidadProducto() {
     $('input:radio[name=problemasProductos]:checked').val('');
     $('#descripcionTicket').val('');
     $('#tienda').val('');
+
   }
   else {
     if(producto == undefined || producto == null) {
