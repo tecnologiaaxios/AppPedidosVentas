@@ -684,57 +684,14 @@ function ImprimirObjeto(o) {
   alert(salida);
 }
 
+var fotoProducto;
+
 function tomarFoto() {
   navigator.camera.getPicture(
     function(imageData) {
       let image = document.getElementById('foto');
       image.src = "data:image/jpeg;base64," + imageData;;
-
-      //$('#fileFoto').val(imageUrl);
-
-      /*let reader = new FileReader();
-      reader.onloadend = function(evt) {
-        $('#txtarea').val("evt triggered");
-      }
-      reader.readAsDataURL(imageUrl);
-
-      alert(reader);
-      ImprimirObjeto(reader);*/
-
-      let storageRef = storage.ref('foto').child('fotoNueva');
-      //var imageRef = db.ref('fotosCalidadProductos');
-
-      /*storageRef.getDownloadURL().then(function(url) {
-          imageRef.child('imagen').set(url);
-      });*/
-
-      let uploadTask = storageRef.putString(imageData, 'base64', {contentType:'image/jpg'});
-      uploadTask.on('state_changed', function(snapshot){
-
-      }, function(error) {
-
-      }, function() {
-        let refTicket = db.ref('fotosCalidadProductos');
-        let downloadURL = uploadTask.snapshot.downloadURL;
-        refTicket.push({imagen: downloadURL});
-
-        $('#txtarea').val(url);
-      });
-
-      /*window.resolveLocalFileSystemURL(imageUrl, function(fileEntry) {
-        fileEntry.file(function(file) {
-          let reader = new FileReader();
-          reader.onloadend = function(e) {
-            let content = this.result;
-            callback(content);
-          };
-
-          reader.readAsText(file);
-          alert(file);
-          alert(reader);
-          fotoFile = file;
-        });
-      });*/
+      fotoProducto = imageData;
     },
     function(message) {
       alert('Falló debido a: ' + message);
@@ -745,26 +702,6 @@ function tomarFoto() {
       correctOrientation: true
     });
 }
-
-$('#fotoProducto').change(function(evt) {
-    let tgt = evt.target || window.event.srcElement,
-        files = tgt.files;
-
-    // FileReader support
-    if (FileReader && files && files.length) {
-        var fr = new FileReader();
-        fr.onload = function () {
-            document.getElementById('foto').src = fr.result;
-        }
-        fr.readAsDataURL(files[0]);
-    }
-
-    // Not supported
-    else {
-        // fallback -- perhaps submit the input to an iframe and temporarily store
-        // them on the server until the user's session ends.
-    }
-});
 
 function enviarTicketCalidadProducto() {
   let producto = $('#productosTicket').val();
@@ -778,7 +715,6 @@ function enviarTicketCalidadProducto() {
   let fecha = moment().format('DD/MM/YYYY');
   let tienda = $('#tienda').val();
   let uid = auth.currentUser.uid;
-  let foto = $('#fotoProducto')[0].files[0]
 
   if((producto != null || producto != undefined) && cantidad.length > 0 && fechaCaducidad.length > 0 && lote.length > 0 && problema.length > 0 && descripcion.length > 0  && (tienda != null || tienda != undefined)) {
     let ticketsRef = db.ref('tickets/calidadProducto');
@@ -807,18 +743,18 @@ function enviarTicketCalidadProducto() {
       }
 
       let ticketKey = ticketsRef.push(datosTicket).getKey();
-      let storageRef = storage.ref(uid+'/fotosCalidadProductos/');
       let nameFoto = "Foto " + moment().format('DD-MM-YYYY hh:mm:ss a');
-      let uploadTask = storageRef.child(nameFoto).put(foto);
-
+      let storageRef = storage.ref(uid+'/fotosCalidadProductos/').child(nameFoto);
+      let uploadTask = storageRef.putString(fotoProducto, 'base64', {contentType:'image/jpg'});
       uploadTask.on('state_changed', function(snapshot){
 
       }, function(error) {
-
+        //alert('Error: '+error);
       }, function() {
         let refTicket = db.ref('tickets/calidadProducto/'+ticketKey);
         let downloadURL = uploadTask.snapshot.downloadURL;
         refTicket.update({fotoUrl: downloadURL});
+        //alert('Foto enviada');
       });
     });
 
@@ -831,7 +767,6 @@ function enviarTicketCalidadProducto() {
     $('#descripcionTicket').val('');
     $('#tienda').val('');
     $('#foto').attr('src', "");
-
   }
   else {
     if(producto == undefined || producto == null) {
