@@ -303,7 +303,7 @@ function llenarSelectProductos() {
   let productosRef = db.ref('productos/'+consorcio);
   productosRef.on('value', function(snapshot) {
     let productos = snapshot.val();
-    let options = '<option value="Productos" disabled selected>Productos</option>';
+    let options = '<option value="Seleccionar" readonly selected>Productos</option>';
     for(let producto in productos) {
       options += '<option value="'+producto+'">'+ producto + '  ' + productos[producto].nombre + '  ' + productos[producto].empaque +'</option>';
     }
@@ -458,22 +458,16 @@ $('#degusPz').keyup(function(){
 $('#cambioFisico').keyup(function(){
   let pedidoPz = Number($('#pedidoPz').val());
   let degusPz = Number($('#degusPz').val());
-  let cambioFisico = Number($('#cambioFisico').val());
+  let cambioFisico = Number($(this).val());
+  if(cambioFisico == undefined || cambioFisico == null) {
+    cambioFisico = 0;
+  }
   let empaque = Number($('#empaque').val());
   let totalPz = pedidoPz+degusPz+cambioFisico;
   let totalKg = (totalPz*empaque).toFixed(4);
 
   $('#totalPz').val(totalPz);
   $('#totalKg').val(totalKg);
-
-  if(this.value.length < 1) {
-    $('#cambioFisico').parent().addClass('has-error');
-    $('#helpblockCambioFisico').show();
-  }
-  else {
-    $('#cambioFisico').parent().removeClass('has-error');
-    $('#helpblockCambioFisico').hide();
-  }
 });
 
 $(document).ready(function() {
@@ -484,6 +478,13 @@ $(document).ready(function() {
     format: "dd/mm/yyyy",
     language: "es"
   });
+
+  $.toaster({
+    settings: {
+      'timeout': 2000
+    }
+  });
+
 });
 
 function agregarProducto() {
@@ -498,10 +499,11 @@ function agregarProducto() {
   let unidad = $('#unidad').val();
   let productoSeleccionado = $('#productos').val();
 
-  console.log(pedidoPz.length>0);
+  if((productoSeleccionado != null || productoSeleccionado != undefined) && pedidoPz.length > 0  && degusPz.length > 0) {
+    if(cambioFisico.length < 1) {
+      cambioFisico = 0;
+    }
 
-  if((productoSeleccionado != null || productoSeleccionado != undefined) && pedidoPz.length > 0  && degusPz.length > 0 && cambioFisico.length > 0) {
-    console.log('if');
     let row = '<tr>' +
                 '<td>'+clave+'</td>'+
                 '<td>'+nombre+'</td>'+
@@ -509,6 +511,7 @@ function agregarProducto() {
                 '<td>'+degusPz+'</td>'+
                 '<td>'+totalPz+'</td>'+
                 '<td>'+totalKg+'</td>'+
+                '<td>'+cambioFisico+'</td>'+
               '</tr>';
 
     $('#productosPedido tbody').append(row);
@@ -526,6 +529,7 @@ function agregarProducto() {
     };
     listaProductosPedido.push(datosProducto);
 
+    $('#productos option[value="Seleccionar"]').attr("selected", true);
     $('#productos').focus();
     $('#pedidoPz').val('');
     $('#degusPz').val('');
@@ -534,6 +538,8 @@ function agregarProducto() {
     $('#totalKg').val('')
     $('#precioUnitario').val('');
     $('#unidad').val('');
+
+    $.toaster({ priority : 'info', title : 'Mensaje de producto', message : 'Se agregó el producto '+ clave + ' a la lista'});
   }
   else {
     if(productoSeleccionado == null || productoSeleccionado == undefined) {
@@ -560,81 +566,81 @@ function agregarProducto() {
       $('#degusPz').parent().removeClass('has-error');
       $('#helpblockDegusPz').hide();
     }
-    if(cambioFisico.length < 1) {
-      $('#cambioFisico').parent().addClass('has-error');
-      $('#helpblockCambioFisico').show();
-    }
-    else {
-      $('#cambioFisico').parent().removeClass('has-error');
-      $('#helpblockCambioFisico').hide();
-    }
   }
 }
 
 function guardarPedido() {
-
   if(listaProductosPedido.length > 0) {
-    let pedidoRef = db.ref('pedidoEntrada/');
-    let tienda = $('#tienda').val();
-    let ruta = $('#region').val();
-    let fechaCaptura = moment().format('DD/MM/YYYY');
-    let uid = auth.currentUser.uid;
+    let confirm = confirm("¿Está seguro(a) de enviar el pedido?");
+    if(confirm) {
 
-    let encabezado = {
-      encabezado: {
-        fechaCaptura: fechaCaptura,
-        tienda: tienda,
-        ruta: ruta,
-        fechaRuta: "",
-        estado: "Pendiente",
-        promotora: uid
+      let pedidoRef = db.ref('pedidoEntrada/');
+      let tienda = $('#tienda').val();
+      let ruta = $('#region').val();
+      let fechaCaptura = moment().format('DD/MM/YYYY');
+      let uid = auth.currentUser.uid;
+
+      let encabezado = {
+        encabezado: {
+          fechaCaptura: fechaCaptura,
+          tienda: tienda,
+          ruta: ruta,
+          fechaRuta: "",
+          estado: "Pendiente",
+          promotora: uid
+        }
+      };
+
+      let key = pedidoRef.push(encabezado).getKey();
+
+      let pedidoDetalleRef = db.ref('pedidoEntrada/'+key+'/detalle');
+
+      for(let producto in listaProductosPedido) {
+        pedidoDetalleRef.push(listaProductosPedido[producto]);
       }
-    };
 
-    let key = pedidoRef.push(encabezado).getKey();
+      //$('#tiendas option').first().attr('selected', true);
+      //$('#productos option').first().attr('selected', true);
+      $("#tiendas").val('Tiendas')
+      $("#productos").val('');
+      $("#productos option[value=Seleccionar]").attr('selected', true);
+      //$('#productosPedido tbody').empty();
+      listaProductosPedido.length = 0;
 
-    let pedidoDetalleRef = db.ref('pedidoEntrada/'+key+'/detalle');
+      //Envío de notificación al almacen
+      let usuariosAlmacenRef = db.ref('usuarios/planta/almacen');
+      usuariosAlmacenRef.once('value', function(snapshot) {
+        let usuarios = snapshot.val();
+        for(let usuario in usuarios) {
+          let notificacionesListaRef = db.ref('notificaciones/almacen/'+usuario+'/lista');
+          moment.locale('es');
+          let formato = moment().format("MMMM DD YYYY, HH:mm:ss");
+          let fecha = formato.toString();
+          let notificacion = {
+            fecha: fecha,
+            leida: false,
+            mensaje: "Se ha generado un pedido: Clave: " + key
+          };
+          notificacionesListaRef.push(notificacion);
 
-    for(let producto in listaProductosPedido) {
-      pedidoDetalleRef.push(listaProductosPedido[producto]);
+          let notificacionesRef = db.ref('notificaciones/almacen/'+usuario);
+          notificacionesRef.once('value', function(snapshot) {
+            let notusuario = snapshot.val();
+            let cont = notusuario.cont + 1;
+
+            notificacionesRef.update({cont: cont});
+          });
+        }
+      });
+
+      $.toaster({ priority : 'success', title : 'Mensaje de pedido', message : 'Tu pedido se ha enviado con éxito'});
     }
+    else {
 
-    //$('#tiendas option').first().attr('selected', true);
-    //$('#productos option').first().attr('selected', true);
-    $("#tiendas").val('Tiendas')
-    $("#productos").val('');
-    $("#productos option[value=Seleccionar]").attr('selected', true);
-    //$('#productosPedido tbody').empty();
-    listaProductosPedido.length = 0;
-
-    //Envío de notificación al almacen
-    let usuariosAlmacenRef = db.ref('usuarios/planta/almacen');
-    usuariosAlmacenRef.once('value', function(snapshot) {
-      let usuarios = snapshot.val();
-      for(let usuario in usuarios) {
-        let notificacionesListaRef = db.ref('notificaciones/almacen/'+usuario+'/lista');
-        moment.locale('es');
-        let formato = moment().format("MMMM DD YYYY, HH:mm:ss");
-        let fecha = formato.toString();
-        let notificacion = {
-          fecha: fecha,
-          leida: false,
-          mensaje: "Se ha generado un pedido: Clave: " + key
-        };
-        notificacionesListaRef.push(notificacion);
-
-        let notificacionesRef = db.ref('notificaciones/almacen/'+usuario);
-        notificacionesRef.once('value', function(snapshot) {
-          let notusuario = snapshot.val();
-          let cont = notusuario.cont + 1;
-
-          notificacionesRef.update({cont: cont});
-        });
-      }
-    });
+    }
   }
   else {
-
+    $.toaster({ priority : 'danger', title : 'Mensaje de error', message : 'No se puede enviar un pedido sin productos'});
   }
 }
 
@@ -670,15 +676,52 @@ function mostrarHistorialPedidos() {
 }
 
 //var fotoFile;
+function ImprimirObjeto(o) {
+  var salida = "";
+  for (var p in o) {
+    salida += p + ': ' + o[p] + 'n';
+  }
+  alert(salida);
+}
 
 function tomarFoto() {
   navigator.camera.getPicture(
-    function(imageUrl) {
+    function(imageData) {
       let image = document.getElementById('foto');
-      image.src = imageUrl;
+      image.src = "data:image/jpeg;base64," + imageData;;
 
-      $('#fileFoto').val(imageUrl);
-      window.resolveLocalFileSystemURL(imageUrl, function(fileEntry) {
+      //$('#fileFoto').val(imageUrl);
+
+      /*let reader = new FileReader();
+      reader.onloadend = function(evt) {
+        $('#txtarea').val("evt triggered");
+      }
+      reader.readAsDataURL(imageUrl);
+
+      alert(reader);
+      ImprimirObjeto(reader);*/
+
+      let storageRef = storage.ref('foto').child('fotoNueva');
+      //var imageRef = db.ref('fotosCalidadProductos');
+
+      /*storageRef.getDownloadURL().then(function(url) {
+          imageRef.child('imagen').set(url);
+      });*/
+
+      let uploadTask = storageRef.putString(imageData, 'base64', {contentType:'image/jpg'});
+      uploadTask.on('state_changed', function(snapshot){
+
+      }, function(error) {
+
+      }, function() {
+        let refTicket = db.ref('fotosCalidadProductos');
+        let downloadURL = uploadTask.snapshot.downloadURL;
+        refTicket.push({imagen: downloadURL});
+
+        $('#txtarea').val(url);
+      });
+
+      /*window.resolveLocalFileSystemURL(imageUrl, function(fileEntry) {
         fileEntry.file(function(file) {
           let reader = new FileReader();
           reader.onloadend = function(e) {
@@ -691,14 +734,14 @@ function tomarFoto() {
           alert(reader);
           fotoFile = file;
         });
-      });
+      });*/
     },
     function(message) {
       alert('Falló debido a: ' + message);
     },
     {
       quality: 50,
-      destinationType: Camera.DestinationType.FILE_URI,
+      destinationType: Camera.DestinationType.DATA_URL,
       correctOrientation: true
     });
 }
