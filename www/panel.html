@@ -185,15 +185,17 @@
                 </div>-->
                 <div class="form-group">
                   <div class="table-responsive">
-                    <table id="productosPedido" class="table">
+                    <table id="productosPedido" class="table table-condensed">
                       <thead>
                         <th>Clave</th>
                         <th>Nombre</th>
                         <th>Pedido Pz</th>
                         <th>Degustación Pz</th>
+                        <th>Cambio físico</th>
                         <th>Total Pz</th>
                         <th>Total Kg</th>
-                        <th>Cambio físico</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
                       </thead>
                       <tbody>
 
@@ -286,7 +288,7 @@
                   </div>
                 </div>-->
                 <div class="form-group">
-                <table id="productosPedido" class="table">
+                <table id="" class="table">
                   <thead>
                     <th>Clave</th>
                     <th>Nombre</th>
@@ -294,6 +296,8 @@
                     <th>Degustación Pz</th>
                     <th>Total Pz</th>
                     <th>Total Kg</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
                   </thead>
                   <tbody>
 
@@ -544,6 +548,58 @@
         </div>
       </section>
     </header>
+    <div id="modalEditarProducto" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Editar datos del producto</h4>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="claveProductoEditar" class="control-label">Producto:</label>
+                <input id="claveProductoEditar" type="text" class="form-control input-sm" name="claveProductoEditar" readonly>
+              </div>
+              <div class="form-group">
+                <label for="nombreProductoEditar" class="control-label">Nombre:</label>
+                <input id="nombreProductoEditar" type="text" class="form-control input-sm" name="nombreProductoEditar" readonly>
+              </div>
+              <div class="form-group">
+                <label for="pedidoPzEditar" class="control-label">PedidoPz:</label>
+                <input id="pedidoPzEditar" type="number" name="pedidoPzEditar" class="form-control input-sm">
+                <span style="display: none;" id="helpblockPedidoPzEditar" class="help-block">Campo obligatorio</span>
+              </div>
+              <div class="form-group">
+                <label for="degusPzEditar" class="control-label">Degustación Pz:</label>
+                <input id="degusPzEditar" type="number" name="degusPzEditar" class="form-control input-sm">
+                <span style="display: none;" id="helpblockDegusPzEditar" class="help-block">Campo obligatorio</span>
+              </div>
+              <div class="form-group">
+                <label for="cambioFisicoEditar" class="control-label">Cambio físico:</label>
+                <input id="cambioFisicoEditar" type="number" name="cambioFisicoEditar" class="form-control input-sm">
+              </div>
+              <div class="hidden" class="form-group">
+                <label for="empaqueEditar" class="control-label">Empaque:</label>
+                <input id="empaqueEditar" type="number" name="empaqueEditar" class="form-control input-sm" readonly>
+              </div>
+              <div class="form-group">
+                <label for="totalPzEditar" class="control-label">Total Pz:</label>
+                <input id="totalPzEditar" type="number" name="totalPzEditar" class="form-control input-sm" readonly>
+              </div>
+              <div class="form-group">
+                <label for="totalKgEditar" class="control-label">Total Kg:</label>
+                <input id="totalKgEditar" type="number" name="totalKgEditar" class="form-control input-sm" readonly>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button style="background-color: red;" type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+            <button style="background-color: #00BC80;" type="button" class="btn btn-default" onclick="guardarCambiosProducto()" data-dismiss="modal">Guardar cambios</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     <div id="modalTicket" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">

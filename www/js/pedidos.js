@@ -487,12 +487,157 @@ $(document).ready(function() {
 
 });
 
+function eliminarProductoDePedido(claveProducto) {
+  let mensajeConfirmacion = confirm("¿Realmente desea quitar este producto?");
+  if(mensajeConfirmacion) {
+
+    $("#productosPedido tbody tr").each(function (i) {
+      if($(this).children("td")[0].outerText == claveProducto) {
+        $(this).remove();
+        listaProductosPedido.splice(i,1);
+      }
+    });
+  }
+}
+
+$('#pedidoPzEditar').keyup(function(){
+  let pedidoPz = Number($('#pedidoPzEditar').val());
+  let degusPz = Number($('#degusPzEditar').val());
+  let cambioFisico = Number($('#cambioFisicoEditar').val());
+  let empaque = Number($('#empaqueEditar').val());
+  let totalPz = pedidoPz+degusPz+cambioFisico;
+  let totalKg = (totalPz*empaque).toFixed(4);
+
+  $('#totalPzEditar').val(totalPz);
+  $('#totalKgEditar').val(totalKg);
+
+  if(this.value.length < 1) {
+    $('#pedidoPzEditar').parent().addClass('has-error');
+    $('#helpblockPedidoPzEditar').show();
+  }
+  else {
+    $('#pedidoPzEditar').parent().removeClass('has-error');
+    $('#helpblockPedidoPzEditar').hide();
+  }
+});
+
+$('#degusPzEditar').keyup(function(){
+  let pedidoPz = Number($('#pedidoPzEditar').val());
+  let degusPz = Number($('#degusPzEditar').val());
+  let cambioFisico = Number($('#cambioFisicoEditar').val());
+  let empaque = Number($('#empaqueEditar').val());
+  let totalPz = pedidoPz+degusPz+cambioFisico;
+  let totalKg = (totalPz*empaque).toFixed(4);
+
+  $('#totalPzEditar').val(totalPz);
+  $('#totalKgEditar').val(totalKg);
+
+  if(this.value.length < 1) {
+    $('#degusPzEditar').parent().addClass('has-error');
+    $('#helpblockDegusPzEditar').show();
+  }
+  else {
+    $('#degusPzEditar').parent().removeClass('has-error');
+    $('#helpblockDegusPzEditar').hide();
+  }
+});
+
+$('#cambioFisicoEditar').keyup(function(){
+  let pedidoPz = Number($('#pedidoPzEditar').val());
+  let degusPz = Number($('#degusPzEditar').val());
+  let cambioFisico = Number($(this).val());
+  if(cambioFisico == undefined || cambioFisico == null) {
+    cambioFisico = 0;
+  }
+  let empaque = Number($('#empaqueEditar').val());
+  let totalPz = pedidoPz+degusPz+cambioFisico;
+  let totalKg = (totalPz*empaque).toFixed(4);
+
+  $('#totalPzEditar').val(totalPz);
+  $('#totalKgEditar').val(totalKg);
+});
+
+function modalEditarProducto(claveProducto) {
+  $('#modalEditarProducto').modal('show');
+
+  $('#productosPedido tbody tr').each(function(i) {
+    let columnas = $(this).children('td');
+
+    if(columnas[0].outerText == claveProducto) {
+      $('#modalEditarProducto').attr('data-i', i);
+      $('#claveProductoEditar').val(columnas[0].outerText);
+      $('#nombreProductoEditar').val(columnas[1].outerText);
+      $('#pedidoPzEditar').val(columnas[2].outerText);
+      $('#degusPzEditar').val(columnas[3].outerText);
+      $('#cambioFisicoEditar').val(columnas[4].outerText);
+      $('#empaqueEditar').val(columnas[5].outerText);
+      $('#totalPzEditar').val(columnas[6].outerText);
+      $('#totalKgEditar').val(columnas[7].outerText);
+    }
+  });
+}
+
+function guardarCambiosProducto() {
+  let pedidoPz = $('#pedidoPzEditar').val();
+  let degusPz = $('#degusPzEditar').val();
+  let cambioFisico = $('#cambioFisicoEditar').val();
+  let totalPz = $('#totalPzEditar').val();
+  let totalKg = $('#totalKgEditar').val();
+  let i = Number($('#modalEditarProducto').attr('data-i'));
+
+  if(pedidoPz.length > 0 && degusPz.length > 0) {
+    listaProductosPedido[i].pedidoPz = Number(pedidoPz);
+    listaProductosPedido[i].degusPz = Number(degusPz);
+    listaProductosPedido[i].cambioFisico = Number(cambioFisico);
+    listaProductosPedido[i].totalPz = Number(totalPz);
+    listaProductosPedido[i].totalKg = Number(totalKg);
+
+    let fila = $('#productosPedido tbody tr')[i];
+    let columnas = fila.children;
+    columnas[2].innerHTML = pedidoPz;
+    columnas[3].innerHTML = degusPz;
+    columnas[4].innerHTML = cambioFisico;
+    columnas[6].innerHTML = totalPz;
+    columnas[7].innerHTML = totalKg;
+
+    /*$('#productosPedido tbody tr').each(function(j) {
+      if(j == i) {
+        let columnas = $(this).children('td');
+        columnas[2].innerHTML = pedidoPz;
+        columnas[3].innerHTML = degusPz;
+        columnas[4].innerHTML = cambioFisico;
+        columnas[6].innerHTML = totalPz;
+        columnas[7].innerHTML = totalKg;
+      }
+    });*/
+  }
+  else {
+    if(pedidoPz.length < 1) {
+      $('#pedidoPzEditar').parent().addClass('has-error');
+      $('#helpblockPedidoPzEditar').show();
+    }
+    else {
+      $('#pedidoPzEditar').parent().removeClass('has-error');
+      $('#helpblockPedidoPzEditar').hide();
+    }
+    if(degusPz.length < 1) {
+      $('#degusPzEditar').parent().addClass('has-error');
+      $('#helpblockDegusPzEditar').show();
+    }
+    else {
+      $('#degusPzEditar').parent().removeClass('has-error');
+      $('#helpblockDegusPzEditar').hide();
+    }
+  }
+}
+
 function agregarProducto() {
   let clave = $('#clave').val();
   let nombre = $('#nombre').val();
   let pedidoPz = $('#pedidoPz').val();
   let degusPz = $('#degusPz').val();
   let cambioFisico = $('#cambioFisico').val();
+  let empaque = $('#empaque').val();
   let totalPz = $('#totalPz').val();
   let totalKg = $('#totalKg').val();
   let precioUnitario = $('#precioUnitario').val();
@@ -504,16 +649,39 @@ function agregarProducto() {
       cambioFisico = 0;
     }
 
-    let row = '<tr>' +
-                '<td>'+clave+'</td>'+
-                '<td>'+nombre+'</td>'+
-                '<td>'+pedidoPz+'</td>'+
-                '<td>'+degusPz+'</td>'+
-                '<td>'+totalPz+'</td>'+
-                '<td>'+totalKg+'</td>'+
-                '<td>'+cambioFisico+'</td>'+
-              '</tr>';
+    let row = $('<tr/>', {
+      'html': '<td>'+clave+'</td>'+
+              '<td>'+nombre+'</td>'+
+              '<td>'+pedidoPz+'</td>'+
+              '<td>'+degusPz+'</td>'+
+              '<td>'+cambioFisico+'</td>'+
+              '<td style="display:none;">'+empaque+'</td>'+
+              '<td>'+totalPz+'</td>'+
+              '<td>'+totalKg+'</td>'
+    });
 
+    let td = $('<td/>');
+    let button = $('<button/>', {
+      'class': 'btn btn-warning',
+      'type': 'button',
+      'onclick': 'modalEditarProducto("'+clave+'")',
+      'style': 'background-color: #FFAA35;',
+      'html': '<span class="glyphicon glyphicon-pencil"></span>'
+    });
+
+    let td2 = $('<td/>');
+    let button2 = $('<button/>', {
+      'class': 'btn btn-danger',
+      'type': 'button',
+      'onclick': 'eliminarProductoDePedido("'+clave+'")',
+      'style': 'background-color: #FF0000;',
+      'html': '<span class="glyphicon glyphicon-trash"></span>'
+    });
+
+    td.append(button);
+    td2.append(button2);
+    row.append(td);
+    row.append(td2);
     $('#productosPedido tbody').append(row);
 
     let datosProducto = {
@@ -571,8 +739,8 @@ function agregarProducto() {
 
 function guardarPedido() {
   if(listaProductosPedido.length > 0) {
-    let confirm = confirm("¿Está seguro(a) de enviar el pedido?");
-    if(confirm) {
+    let confirmar = confirm("¿Está seguro(a) de enviar el pedido?");
+    if(confirmar) {
 
       let pedidoRef = db.ref('pedidoEntrada/');
       let tienda = $('#tienda').val();
@@ -604,7 +772,7 @@ function guardarPedido() {
       $("#tiendas").val('Tiendas')
       $("#productos").val('');
       $("#productos option[value=Seleccionar]").attr('selected', true);
-      //$('#productosPedido tbody').empty();
+      $('#productosPedido tbody').empty();
       listaProductosPedido.length = 0;
 
       //Envío de notificación al almacen
