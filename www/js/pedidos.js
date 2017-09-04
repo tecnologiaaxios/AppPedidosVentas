@@ -1,7 +1,8 @@
-const db = firebase.database();
-const auth = firebase.auth();
-const storage = firebase.storage();
-var listaProductosPedido = [];
+const db = firebase.database(),
+      auth = firebase.auth(),
+      storage = firebase.storage();
+var listaProductosPedido = [],
+    listaClavesProductos = [];
 
 function logout() {
   auth.signOut();
@@ -303,7 +304,7 @@ function llenarSelectProductos() {
   let productosRef = db.ref('productos/'+consorcio);
   productosRef.on('value', function(snapshot) {
     let productos = snapshot.val();
-    let options = '<option value="Seleccionar" readonly selected>Productos</option>';
+    let options = '<option id="SeleccionarProducto" value="Seleccionar" disabled selected>Seleccionar</option>';
     for(let producto in productos) {
       options += '<option value="'+producto+'">'+ producto + '  ' + productos[producto].nombre + '  ' + productos[producto].empaque +'</option>';
     }
@@ -481,7 +482,7 @@ $(document).ready(function() {
 
   $.toaster({
     settings: {
-      'timeout': 2000
+      'timeout': 3000
     }
   });
 
@@ -649,65 +650,144 @@ function agregarProducto() {
       cambioFisico = 0;
     }
 
-    let row = $('<tr/>', {
-      'html': '<td>'+clave+'</td>'+
-              '<td>'+nombre+'</td>'+
-              '<td>'+pedidoPz+'</td>'+
-              '<td>'+degusPz+'</td>'+
-              '<td>'+cambioFisico+'</td>'+
-              '<td style="display:none;">'+empaque+'</td>'+
-              '<td>'+totalPz+'</td>'+
-              '<td>'+totalKg+'</td>'
-    });
+    if(listaClavesProductos.length > 0) {
+      if(listaClavesProductos.includes(clave)) {
+        $('#productos option[value=Seleccionar]').attr("selected", true);
+        $('#productos').focus();
+        $('#pedidoPz').val('');
+        $('#degusPz').val('');
+        $('#cambioFisico').val('');
+        $('#totalPz').val('');
+        $('#totalKg').val('')
+        $('#precioUnitario').val('');
+        $('#unidad').val('');
+        $.toaster({ priority : 'warning', title : 'Mensaje de información', message : 'El producto '+ clave + ' ya fue agregado'});
+      }
+      else {
+        let row = $('<tr/>', {
+          'html': '<td>'+clave+'</td>'+
+          '<td>'+nombre+'</td>'+
+          '<td>'+pedidoPz+'</td>'+
+          '<td>'+degusPz+'</td>'+
+          '<td>'+cambioFisico+'</td>'+
+          '<td style="display:none;">'+empaque+'</td>'+
+          '<td>'+totalPz+'</td>'+
+          '<td>'+totalKg+'</td>'
+        });
 
-    let td = $('<td/>');
-    let button = $('<button/>', {
-      'class': 'btn btn-warning',
-      'type': 'button',
-      'onclick': 'modalEditarProducto("'+clave+'")',
-      'style': 'background-color: #FFAA35;',
-      'html': '<span class="glyphicon glyphicon-pencil"></span>'
-    });
+        let td = $('<td/>');
+        let button = $('<button/>', {
+          'class': 'btn btn-warning',
+          'type': 'button',
+          'onclick': 'modalEditarProducto("'+clave+'")',
+          'style': 'background-color: #FFAA35;',
+          'html': '<span class="glyphicon glyphicon-pencil"></span>'
+        });
 
-    let td2 = $('<td/>');
-    let button2 = $('<button/>', {
-      'class': 'btn btn-danger',
-      'type': 'button',
-      'onclick': 'eliminarProductoDePedido("'+clave+'")',
-      'style': 'background-color: #FF0000;',
-      'html': '<span class="glyphicon glyphicon-trash"></span>'
-    });
+        let td2 = $('<td/>');
+        let button2 = $('<button/>', {
+          'class': 'btn btn-danger',
+          'type': 'button',
+          'onclick': 'eliminarProductoDePedido("'+clave+'")',
+          'style': 'background-color: #FF0000;',
+          'html': '<span class="glyphicon glyphicon-trash"></span>'
+        });
 
-    td.append(button);
-    td2.append(button2);
-    row.append(td);
-    row.append(td2);
-    $('#productosPedido tbody').append(row);
+        td.append(button);
+        td2.append(button2);
+        row.append(td);
+        row.append(td2);
+        $('#productosPedido tbody').append(row);
 
-    let datosProducto = {
-      clave: clave,
-      nombre: nombre,
-      pedidoPz: Number(pedidoPz),
-      degusPz: Number(degusPz),
-      cambioFisico: Number(cambioFisico),
-      totalPz: Number(totalPz),
-      totalKg: Number(totalKg),
-      precioUnitario: Number(precioUnitario),
-      unidad: unidad
-    };
-    listaProductosPedido.push(datosProducto);
+        let datosProducto = {
+          clave: clave,
+          nombre: nombre,
+          pedidoPz: Number(pedidoPz),
+          degusPz: Number(degusPz),
+          cambioFisico: Number(cambioFisico),
+          totalPz: Number(totalPz),
+          totalKg: Number(totalKg),
+          precioUnitario: Number(precioUnitario),
+          unidad: unidad
+        };
+        listaProductosPedido.push(datosProducto);
+        listaClavesProductos.push(clave);
 
-    $('#productos option[value="Seleccionar"]').attr("selected", true);
-    $('#productos').focus();
-    $('#pedidoPz').val('');
-    $('#degusPz').val('');
-    $('#cambioFisico').val('');
-    $('#totalPz').val('');
-    $('#totalKg').val('')
-    $('#precioUnitario').val('');
-    $('#unidad').val('');
+        $('#productos option[value="Seleccionar"]').attr("selected", true);
+        $('#productos').focus();
+        $('#pedidoPz').val('');
+        $('#degusPz').val('');
+        $('#cambioFisico').val('');
+        $('#totalPz').val('');
+        $('#totalKg').val('')
+        $('#precioUnitario').val('');
+        $('#unidad').val('');
 
-    $.toaster({ priority : 'info', title : 'Mensaje de producto', message : 'Se agregó el producto '+ clave + ' a la lista'});
+        $.toaster({ priority : 'info', title : 'Mensaje de producto', message : 'Se agregó el producto '+ clave + ' a la lista'});
+      }
+    }
+    else {
+      let row = $('<tr/>', {
+        'html': '<td>'+clave+'</td>'+
+                '<td>'+nombre+'</td>'+
+                '<td>'+pedidoPz+'</td>'+
+                '<td>'+degusPz+'</td>'+
+                '<td>'+cambioFisico+'</td>'+
+                '<td style="display:none;">'+empaque+'</td>'+
+                '<td>'+totalPz+'</td>'+
+                '<td>'+totalKg+'</td>'
+      });
+
+      let td = $('<td/>');
+      let button = $('<button/>', {
+        'class': 'btn btn-warning',
+        'type': 'button',
+        'onclick': 'modalEditarProducto("'+clave+'")',
+        'style': 'background-color: #FFAA35;',
+        'html': '<span class="glyphicon glyphicon-pencil"></span>'
+      });
+
+      let td2 = $('<td/>');
+      let button2 = $('<button/>', {
+        'class': 'btn btn-danger',
+        'type': 'button',
+        'onclick': 'eliminarProductoDePedido("'+clave+'")',
+        'style': 'background-color: #FF0000;',
+        'html': '<span class="glyphicon glyphicon-trash"></span>'
+      });
+
+      td.append(button);
+      td2.append(button2);
+      row.append(td);
+      row.append(td2);
+      $('#productosPedido tbody').append(row);
+
+      let datosProducto = {
+        clave: clave,
+        nombre: nombre,
+        pedidoPz: Number(pedidoPz),
+        degusPz: Number(degusPz),
+        cambioFisico: Number(cambioFisico),
+        totalPz: Number(totalPz),
+        totalKg: Number(totalKg),
+        precioUnitario: Number(precioUnitario),
+        unidad: unidad
+      };
+      listaProductosPedido.push(datosProducto);
+      listaClavesProductos.push(clave);
+
+      $('#productos option[value="Seleccionar"]').attr("selected", true);
+      $('#productos').focus();
+      $('#pedidoPz').val('');
+      $('#degusPz').val('');
+      $('#cambioFisico').val('');
+      $('#totalPz').val('');
+      $('#totalKg').val('')
+      $('#precioUnitario').val('');
+      $('#unidad').val('');
+
+      $.toaster({ priority : 'info', title : 'Mensaje de producto', message : 'Se agregó el producto '+ clave + ' a la lista'});
+    }
   }
   else {
     if(productoSeleccionado == null || productoSeleccionado == undefined) {
