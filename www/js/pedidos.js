@@ -347,6 +347,7 @@ $('#tiendas').change(function(){
       $('#tienda').val(tienda.nombre);
       $('#region').val(region);
       $('#consorcio').val(tienda.consorcio);
+      $('#consorcioTicket').val(tienda.consorcio);
 
       llenarSelectProductos();
     });
@@ -379,6 +380,7 @@ $('#productos').change(function() {
   productoActualRef.on('value', function(snapshot) {
     let producto = snapshot.val();
     $('#clave').val(idProducto);
+    $('#claveConsorcio').val(producto.claveConsorcio);
     $('#nombre').val(producto.nombre);
     $('#empaque').val(producto.empaque);
     $('#precioUnitario').val(producto.precioUnitario);
@@ -395,7 +397,7 @@ $('#productos').change(function() {
 });
 
 $('#productosTicket').change(function() {
-  let consorcio = $('#consorcio').val();
+  let consorcio = $('#consorcioTicket').val();
   let idProducto = $('#productos').val();
 
   let productoActualRef = db.ref('productos/'+consorcio+'/'+idProducto);
@@ -486,6 +488,11 @@ $(document).ready(function() {
     }
   });
 
+  $('#head-blog').xpull({
+    'callback': function () {
+      location.reload();
+    }
+  });
 });
 
 function eliminarProductoDePedido(claveProducto) {
@@ -526,21 +533,16 @@ $('#degusPzEditar').keyup(function(){
   let pedidoPz = Number($('#pedidoPzEditar').val());
   let degusPz = Number($('#degusPzEditar').val());
   let cambioFisico = Number($('#cambioFisicoEditar').val());
+  if(degusPz == undefined || degusPz == null) {
+    degusPz = 0;
+  }
+
   let empaque = Number($('#empaqueEditar').val());
   let totalPz = pedidoPz+degusPz+cambioFisico;
   let totalKg = (totalPz*empaque).toFixed(4);
 
   $('#totalPzEditar').val(totalPz);
   $('#totalKgEditar').val(totalKg);
-
-  if(this.value.length < 1) {
-    $('#degusPzEditar').parent().addClass('has-error');
-    $('#helpblockDegusPzEditar').show();
-  }
-  else {
-    $('#degusPzEditar').parent().removeClass('has-error');
-    $('#helpblockDegusPzEditar').hide();
-  }
 });
 
 $('#cambioFisicoEditar').keyup(function(){
@@ -645,9 +647,12 @@ function agregarProducto() {
   let unidad = $('#unidad').val();
   let productoSeleccionado = $('#productos').val();
 
-  if((productoSeleccionado != null || productoSeleccionado != undefined) && pedidoPz.length > 0  && degusPz.length > 0) {
+  if((productoSeleccionado != null || productoSeleccionado != undefined) && pedidoPz.length > 0) {
     if(cambioFisico.length < 1) {
       cambioFisico = 0;
+    }
+    if(degusPz.length < 1) {
+      degusPz = 0;
     }
 
     if(listaClavesProductos.length > 0) {
@@ -661,7 +666,7 @@ function agregarProducto() {
         $('#totalKg').val('')
         $('#precioUnitario').val('');
         $('#unidad').val('');
-        $.toaster({ priority : 'warning', title : 'Mensaje de información', message : 'El producto '+ clave + ' ya fue agregado'});
+        $.toaster({priority: 'warning', title: 'Mensaje de información', message: `El producto ${clave} ya fue agregado`});
       }
       else {
         let row = $('<tr/>', {
@@ -723,7 +728,7 @@ function agregarProducto() {
         $('#precioUnitario').val('');
         $('#unidad').val('');
 
-        $.toaster({ priority : 'info', title : 'Mensaje de producto', message : 'Se agregó el producto '+ clave + ' a la lista'});
+        $.toaster({priority: 'info', title: 'Mensaje de producto', message: `Se agregó el producto ${clave} a la lista`});
       }
     }
     else {
@@ -806,14 +811,6 @@ function agregarProducto() {
       $('#pedidoPz').parent().removeClass('has-error');
       $('#helpblockPedidoPz').hide();
     }
-    if(degusPz.length < 1) {
-      $('#degusPz').parent().addClass('has-error');
-      $('#helpblockDegusPz').show();
-    }
-    else {
-      $('#degusPz').parent().removeClass('has-error');
-      $('#helpblockDegusPz').hide();
-    }
   }
 }
 
@@ -824,6 +821,7 @@ function guardarPedido() {
 
       let pedidoRef = db.ref('pedidoEntrada/');
       let tienda = $('#tienda').val();
+      let consorcio = $('#consorcioTicket').val();
       let ruta = $('#region').val();
       let fechaCaptura = moment().format('DD/MM/YYYY');
       let uid = auth.currentUser.uid;
@@ -832,6 +830,7 @@ function guardarPedido() {
         encabezado: {
           fechaCaptura: fechaCaptura,
           tienda: tienda,
+          consorcio: consorcio,
           ruta: ruta,
           fechaRuta: "",
           estado: "Pendiente",

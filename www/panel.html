@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="css/bootstrap-datepicker3.min.css">
     <link rel="stylesheet" href="css/bootstrap-datepicker3.standalone.css">
     <script src="js/msdropdown/jquery.dd.js"></script>
+    <link rel="stylesheet" href="css/xpull.css">
   </head>
   <body>
     <header>
@@ -40,7 +41,12 @@
         <!-- Nav tabs -->
         <!-- Tab Semana-->
         <div  class="tab-content" style="margin-top:-70px;">
-          <div class="tab-pane fade in active" id="m1">
+          <div class="xpull">
+            <div class="xpull__spinner">
+              <div class="xpull__spinner-circle"></div>
+            </div>
+          </div>
+          <div class="tab-pane fade in active" id="panel">
             <!--<div id="tiendas"></div>-->
             <select id="tiendas" style="width:90%; display: none;" required></select>
             <!--<select id="tiendas2" style="width:auto;">
@@ -53,13 +59,18 @@
             </select>-->
             <div class="menu-1" style="height:120px; width:100%; padding:1%; border-top:solid 1px #eee;">
               <ul style="margin-left:-40px; margin-top:5px;">
-                <li class="col-xs-3" style="list-style:none;"><a href="#pedido" data-toggle="tab"><img src="assets/icon-1.svg" alt=""><span style="font-size:9px; color:grey;"><br>Generar pedido</span></a></li>
+                <li href="#pedido" aria-controls="pedido" role="tab" data-toggle="tab" class="col-xs-3" style="list-style: none;"><a><img src="assets/icon-1.svg" alt=""><p style="font-size:9px; color:grey;">Generar pedido</p></a></li>
+                <li href="#reporte" aria-controls="reporte" role="tab" data-toggle="tab" class="col-xs-3" style="list-style: none;"><a><img src="assets/icon-4.svg" alt=""><p style="font-size:9px; color:grey;">Generar ticket</p></a></li>
+                <li href="#existencias" aria-controls="existencias" role="tab" data-toggle="tab" class="col-xs-3" style="list-style: none;"><a><img src="assets/icon-2.svg" alt=""><p style="font-size:9px; color:grey;">Revisar existencias</p></a></li>
+                <li href="#" aria-controls="" role="tab" data-toggle="tab" class="col-xs-3" style="list-style: none;"><a><img src="assets/icon-3.svg" alt=""><p style="font-size:9px; color:grey;">Reporte de calidad</p></a></li>
+
+                <!--<li class="col-xs-3" style="list-style:none;"><a onclick="" aria-controls="#pedido" href="#pedido" data-toggle="tab"><img src="assets/icon-1.svg" alt=""><span style="font-size:9px; color:grey;"><br>Generar pedido</span></a></li>
                 <li class="col-xs-3" style="list-style:none;"><a href="#reporte" data-toggle="tab"><img src="assets/icon-4.svg" alt=""><span style="font-size:9px; color:grey;"><br>Generar ticket</span></a></li>
-                <li class="col-xs-3" style="list-style:none;"><a href="#existencias" data-toggle="tab"><img src="assets/icon-2.svg" alt=""><span style="font-size:9px; color:grey;"><br>Revisar existencias</span></a></li>
-                <li class="col-xs-3" style="list-style:none;"><img src="assets/icon-3.svg" alt=""><p><span style="font-size:9px; color:grey;">Reporte de calidad</span></p></li>
+                <li class="col-xs-3" style="list-style:none;"><a onclick="mostrarAreaExistencias()" href="#existencias" data-toggle="tab"><img src="assets/icon-2.svg" alt=""><span style="font-size:9px; color:grey;"><br>Revisar existencias</span></a></li>
+                <li class="col-xs-3" style="list-style:none;"><img src="assets/icon-3.svg" alt=""><p><span style="font-size:9px; color:grey;">Reporte de calidad</span></p></li>-->
               </ul>
             </div>
-            <div class="panel-group"  style="border:none;"role="tablist" aria-multiselectable="true">
+            <div class="panel-group" style="border:none;" role="tablist" aria-multiselectable="true">
               <div class="panel panel-default" >
                 <div class="panel-heading" role="tab" id="headingTwo" style="height:46px; background-color:white;">
                   <h4 class="panel-title">
@@ -108,7 +119,7 @@
             </table>
           </div>
           <div class="tab-pane fade" id="pedido">
-            <legend style="padding:10px 10px 10px; background-color:#29b6f6; color:white;" class="text-center header"> <a style="float:left; margin-top:2px; font-size:18px; color:white;" href="#m1" data-toggle="tab"><span class="glyphicon glyphicon-menu-left"></span> Volver</a><span style="margin-left:-50px;">Área de pedidos</span></legend>
+            <legend style="padding:10px 10px 10px; background-color:#29b6f6; color:white;" class="text-center header"><a style="float:left; margin-top:2px; font-size:18px; color:white;" href="#panel" data-toggle="tab"><span class="glyphicon glyphicon-menu-left"></span> Volver</a><span style="margin-left:-50px;">Área de pedidos</span></legend>
             <form class="form-horizontal">
               <fieldset style="padding:5%; margin-top:-30px;" class="text-left">
                 <input class="form-control" id="tienda" name="tienda" style="display:none"></input>
@@ -174,12 +185,13 @@
                   </div>
                 </div>
                 <!--<div class="contenedor-productos-pedido">
-                  <div class="chip-producto-pedido">
-                    <span style="background-color:grey; width:20px; margin:0 auto; text-aling:center; float:right; color:white; border-radius:50px; padding:3px;" class="glyphicon glyphicon-remove"></span>
+                  <div class="chip-producto-pedido" style="height: auto;">
+                    <span onclick="borrarProducto()" style="background-color:grey; width:20px; margin:0 auto; text-aling:center; float:right; color:white; border-radius:50px; padding:3px;" class="glyphicon glyphicon-remove"></span>
                     <div class="contenido-chip" style="padding:10px;">
-                      <p>Clave: <span style="margin-left:90px;">Nombre:CHIL_JOCOQUE_TARRO_650ML	</span></p>
-                      <p>Pedido Pz: <span style="margin-left:60px;">Degustación Pz:</span></p>
-                      <p class="no-padding">Total Pz: <span style="margin-left:60px;">Total Kg:</span></p>
+                      <p style="display: inline;"><span  style="color: #737373;">Clave:&#160;&#160;&#160;</span><span>PT-01-01</span></p><br>
+                      <p style="display: inline;"><span style="color: #737373;">Nombre:&#160;&#160;&#160;</span><br><span>CHIL_JOCOQUE_TARRO_650ML</span></p><br>
+                      <p style="display: inline;"><span style="color: #737373;">Pedido Pz:&#160;&#160;&#160;</span><span>Degustación Pz:</span></p><br>
+                      <p style="display: inline;" class="no-padding"><span style="color: #737373;">Total Pz: </span><span>50&#160;&#160;&#160;&#160;&#160;&#160;</span><span style="color: #737373;">Total Kg: </span><span>100</span></p>
                     </div>
                   </div>
                 </div>-->
@@ -212,11 +224,11 @@
             </form>
           </div>
           <div class="tab-pane fade" id="existencias">
-            <legend style="padding:10px 10px 10px; background-color:#29b6f6; color:white;" class="text-center header"> <a style="float:left; margin-top:2px; font-size:18px; color:white;" href="#m1" data-toggle="tab"><span class="glyphicon glyphicon-menu-left"></span> Volver</a><span style="margin-left:-50px;">Existencias</span></legend>
+            <legend style="padding:10px 10px 10px; background-color:#29b6f6; color:white;" class="text-center header"> <a style="float:left; margin-top:2px; font-size:18px; color:white;" href="#panel" data-toggle="tab"><span class="glyphicon glyphicon-menu-left"></span> Volver</a><span style="margin-left:-50px;">Existencias</span></legend>
             <form class="form-horizontal">
               <fieldset style="padding:5%; margin-top:-30px;" class="text-left">
                 <input class="form-control" id="tienda" name="tienda" style="display:none"></input>
-                <input class="form-control" id="consorcio" name="consorcio" style="display:none"></input>
+                <input class="form-control" id="" name="" style="display:none"></input>
                 <div class="form-group">
                   <!--<span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>-->
                   <div class="col-md-8">
@@ -262,6 +274,7 @@
                   </div>
                 </div>
                 <input class="form-control" id="clave" name="clave" style="display:none"></input>
+                <input class="form-control" id="claveConsorcio" name="claveConsorcio" style="display:none"></input>
                 <input class="form-control" id="nombre" name="nombre" style="display:none"></input>
                 <input class="form-control" id="empaque" name="empaque" style="display:none"></input>
                 <input class="form-control" id="precioUnitario" name="precioUnitario" style="display:none"></input>
@@ -312,8 +325,8 @@
               </fieldset>
             </form>
           </div>
-          <div class="tab-pane fade" id="reporte">
-            <legend style="padding:10px 10px 10px; background-color:#29b6f6; color:white;" class="text-center header"><a style="float:left; margin-top:2px; font-size:18px; color:white;" href="#m1" data-toggle="tab"><span class="glyphicon glyphicon-menu-left"></span> Volver</a><span style="">Área de tickets</span><a style="float: right; margin-top:2px; font-size:18px; color:white;" href="#tickets" data-toggle="tab">Ver tickets <span class="glyphicon glyphicon-menu-right"></span></a></legend>
+          <div class="tab-pane fade reporte" id="reporte">
+            <legend style="padding:10px 10px 10px; background-color:#29b6f6; color:white;" class="text-center header"><a style="float:left; margin-top:2px; font-size:18px; color:white;" href="#panel" data-toggle="tab"><span class="glyphicon glyphicon-menu-left"></span> Volver</a><span style="">Área de tickets</span><a style="float: right; margin-top:2px; font-size:18px; color:white;" href="#tickets" data-toggle="tab">Ver tickets <span class="glyphicon glyphicon-menu-right"></span></a></legend>
             <form class="form-horizontal">
               <fieldset style="padding-right: 5%; padding-left: 5%; padding-top: 5%; margin-top:-30px;" class="text-left">
                 <div class="form-group">
@@ -343,7 +356,7 @@
                 </div>
                 <div class="tab-content">
                   <div role="tabpanel" class="tab-pane center-block" id="formCalidadProducto">
-                    <input class="form-control" id="consorcio" name="consorcio" style="display:none"></input>
+                    <input class="form-control" id="consorcioTicket" name="consorcioTicket" style="display:none"></input>
                     <div class="form-group">
                       <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>
                       <div class="col-md-8">
@@ -501,7 +514,7 @@
             </form>
           </div>
           <div class="tab-pane fade in" id="tickets">
-            <legend style="padding:10px 10px 10px; background-color:#29b6f6; color:white;" class="text-center header"> <a style="float:left; margin-top:2px; font-size:18px; color:white;" href="#reporte" data-toggle="tab"><span class="glyphicon glyphicon-menu-left"></span> Volver</a><span style="margin-left:-50px;">Lista de tickets</span></legend>
+            <legend style="padding:10px 10px 10px; background-color:#29b6f6; color:white;" class="text-center header"> <a style="float:left; margin-top:2px; font-size:18px; color:white;" href="" data-toggle="tab"><span class="glyphicon glyphicon-menu-left"></span> Volver</a><span style="margin-left:-50px;">Lista de tickets</span></legend>
             <div class="panel-group"  style="border:none;"role="tablist" aria-multiselectable="true">
               <div class="panel panel-default" >
                 <div class="panel-heading" role="tab" id="headingTwo" style="height:46px; background-color:white;">
@@ -542,7 +555,7 @@
         </div>
         <div id="footer-panel">
           <ul class="nav nav-tabs" style="width:100%; border:none !important;">
-            <li style="width:33%;"class="active"><a id="tabsemana" href="#m1" data-toggle="tab" aria-label="Left Align"><i class="material-icons no-padding">home</i></a></li>
+            <li style="width:33%;"class="active"><a id="tabsemana" href="#panel" data-toggle="tab" aria-label="Left Align"><i class="material-icons no-padding">home</i></a></li>
             <li onclick="verNotificaciones()" style="width:33%;"><a id="tabordenes" href="#m2" data-toggle="tab"><i class="material-icons no-padding">notifications</i><span id="spanNotificaciones" style="background-color: red; display: none;" class="badge"></span></a></li>
             <li style="width:33%;"><a id="tabproyectos" href="#m3" data-toggle="tab"><i class="material-icons no-padding">menu</i></a></li>
           </ul>
@@ -664,6 +677,7 @@
     </script>
     <script src="js/moment-with-locales.js"></script>
     <script src="cordova.js"></script>
+    <script src="js/xpull.js"></script>
     <script src="js/pedidos.js"></script>
   </body>
 </html>

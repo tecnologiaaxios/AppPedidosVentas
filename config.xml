@@ -1,12 +1,20 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="io.cordova.hellocordova" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Xico</name>
+    <name>Pedidos Xico</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        Aplicación para realizar pedidos
     </description>
-    <icon src="res/icon/android/logo.png" platform="ios" width="57" height="57" density="mdpi" />
+    <icon src="res/icon/android/icon.png" platform="ios" width="57" height="57" density="mdpi" />
+    <platform name="android">
+      <icon src="res/icon/android/ldpi.png" density="ldpi" />
+      <icon src="res/icon/android/mdpi.png" density="mdpi" />
+      <icon src="res/icon/android/hdpi.png" density="hdpi" />
+      <icon src="res/icon/android/xhdpi.png" density="xhdpi" />
+      <icon src="res/icon/android/xxhdpi.png" density="xxhdpi" />
+      <icon src="res/icon/android/xxxhdpi.png" density="xxxhdpi" />
+    </platform>
     <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+        Axios Agencia Digital
     </author>
     <content src="index.html" />
     <access origin="*" />
