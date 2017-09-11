@@ -819,32 +819,107 @@ function guardarPedido() {
     let confirmar = confirm("¿Está seguro(a) de enviar el pedido?");
     if(confirmar) {
 
-      let pedidoRef = db.ref('pedidoEntrada/');
-      let tienda = $('#tienda').val();
-      let consorcio = $('#consorcioTicket').val();
-      let ruta = $('#region').val();
-      let fechaCaptura = moment().format('DD/MM/YYYY');
-      let uid = auth.currentUser.uid;
+      let pedidosRef = db.ref('pedidosEntrada');
+      pedidosRef.once('value', function(snapshot) {
+        let existe = (snapshot.val() != null);
+        if(existe) {
+          let listapedidos = snapshot.val();
 
-      let encabezado = {
-        encabezado: {
-          fechaCaptura: fechaCaptura,
-          tienda: tienda,
-          consorcio: consorcio,
-          ruta: ruta,
-          fechaRuta: "",
-          estado: "Pendiente",
-          promotora: uid
+          let keys = Object.keys(listapedidos);
+          let last = keys[keys.length-1];
+          let ultimoPedido = listapedidos[last];
+          let lastclave = ultimoPedido.clave;
+
+          let pedidoRef = db.ref('pedidoEntrada/');
+          let tienda = $('#tienda').val();
+          let consorcio = $('#consorcioTicket').val();
+          let ruta = $('#region').val();
+          let fechaCaptura = moment().format('DD/MM/YYYY');
+          let uid = auth.currentUser.uid;
+
+          let encabezado = {
+            encabezado: {
+              clave: lastclave + 1,
+              fechaCaptura: fechaCaptura,
+              tienda: tienda,
+              consorcio: consorcio,
+              ruta: ruta,
+              fechaRuta: "",
+              estado: "Pendiente",
+              promotora: uid
+            }
+          };
+
+          let key = pedidoRef.push(encabezado).getKey();
+
+          let usuarioRef = db.ref('usuarios/tiendas/supervisoras/'+uid);
+          usuarioRef.once('value', function(snapshot) {
+            let region = snapshot.region;
+            let idTienda = $('#tiendas').val();
+
+            let historialPedidosRef = db.ref('regiones/'+region+'/'+idTienda+'/historialPedidos');
+            let keyHistorial = historialPedidosRef.push(encabezado).getKey();
+
+            let pedidoDetalleHistorialRef = db.ref('regiones/'+region+'/'+idTienda+'/historialPedidos/'+key+'/detalle');
+
+            for(let producto in listaProductosPedido) {
+              pedidoDetalleRef.push(listaProductosPedido[producto]);
+            }
+          });
+          //let historialPedidosRef = db.ref('regiones/');
+
+          let pedidoDetalleRef = db.ref('pedidoEntrada/'+key+'/detalle');
+
+          for(let producto in listaProductosPedido) {
+            pedidoDetalleRef.push(listaProductosPedido[producto]);
+          }
         }
-      };
+        else {
+          let pedidoRef = db.ref('pedidoEntrada/');
+          let tienda = $('#tienda').val();
+          let consorcio = $('#consorcioTicket').val();
+          let ruta = $('#region').val();
+          let fechaCaptura = moment().format('DD/MM/YYYY');
+          let uid = auth.currentUser.uid;
 
-      let key = pedidoRef.push(encabezado).getKey();
+          let encabezado = {
+            encabezado: {
+              clave: 1,
+              fechaCaptura: fechaCaptura,
+              tienda: tienda,
+              consorcio: consorcio,
+              ruta: ruta,
+              fechaRuta: "",
+              estado: "Pendiente",
+              promotora: uid
+            }
+          };
 
-      let pedidoDetalleRef = db.ref('pedidoEntrada/'+key+'/detalle');
+          let key = pedidoRef.push(encabezado).getKey();
 
-      for(let producto in listaProductosPedido) {
-        pedidoDetalleRef.push(listaProductosPedido[producto]);
-      }
+          let usuarioRef = db.ref('usuarios/tiendas/supervisoras/'+uid);
+          usuarioRef.once('value', function(snapshot) {
+            let region = snapshot.region;
+            let idTienda = $('#tiendas').val();
+
+            let historialPedidosRef = db.ref('regiones/'+region+'/'+idTienda+'/historialPedidos');
+            let keyHistorial = historialPedidosRef.push(encabezado).getKey();
+
+            let pedidoDetalleHistorialRef = db.ref('regiones/'+region+'/'+idTienda+'/historialPedidos/'+key+'/detalle');
+
+            for(let producto in listaProductosPedido) {
+              pedidoDetalleRef.push(listaProductosPedido[producto]);
+            }
+          });
+          //let historialPedidosRef = db.ref('regiones/');
+
+          let pedidoDetalleRef = db.ref('pedidoEntrada/'+key+'/detalle');
+
+          for(let producto in listaProductosPedido) {
+            pedidoDetalleRef.push(listaProductosPedido[producto]);
+          }
+        }
+      });
 
       //$('#tiendas option').first().attr('selected', true);
       //$('#productos option').first().attr('selected', true);
@@ -883,7 +958,7 @@ function guardarPedido() {
       $.toaster({ priority : 'success', title : 'Mensaje de pedido', message : 'Tu pedido se ha enviado con éxito'});
     }
     else {
-
+      
     }
   }
   else {
