@@ -488,11 +488,11 @@ $(document).ready(function() {
     }
   });
 
-  $('#head-blog').xpull({
+  /*$('#head-blog').xpull({
     'callback': function () {
       location.reload();
     }
-  });
+  });*/
 });
 
 function eliminarProductoDePedido(claveProducto) {
@@ -819,7 +819,7 @@ function guardarPedido() {
     let confirmar = confirm("¿Está seguro(a) de enviar el pedido?");
     if(confirmar) {
 
-      let pedidosRef = db.ref('pedidosEntrada');
+      let pedidosRef = db.ref('pedidoEntrada');
       pedidosRef.once('value', function(snapshot) {
         let existe = (snapshot.val() != null);
         if(existe) {
@@ -828,7 +828,7 @@ function guardarPedido() {
           let keys = Object.keys(listapedidos);
           let last = keys[keys.length-1];
           let ultimoPedido = listapedidos[last];
-          let lastclave = ultimoPedido.clave;
+          let lastclave = ultimoPedido.encabezado.clave;
 
           let pedidoRef = db.ref('pedidoEntrada/');
           let tienda = $('#tienda').val();
@@ -863,16 +863,51 @@ function guardarPedido() {
             let pedidoDetalleHistorialRef = db.ref('regiones/'+region+'/'+idTienda+'/historialPedidos/'+key+'/detalle');
 
             for(let producto in listaProductosPedido) {
-              pedidoDetalleRef.push(listaProductosPedido[producto]);
+              pedidoDetalleHistorialRef.push(listaProductosPedido[producto]);
             }
           });
           //let historialPedidosRef = db.ref('regiones/');
-
+          console.log(key);
+          console.log("Hola")
           let pedidoDetalleRef = db.ref('pedidoEntrada/'+key+'/detalle');
 
+          console.log(listaProductosPedido);
           for(let producto in listaProductosPedido) {
+            console.log("Hola " + producto)
             pedidoDetalleRef.push(listaProductosPedido[producto]);
           }
+
+          //Envío de notificación al almacen
+          let usuariosAlmacenRef = db.ref('usuarios/planta/almacen');
+          usuariosAlmacenRef.once('value', function(snapshot) {
+            let usuarios = snapshot.val();
+            for(let usuario in usuarios) {
+              let notificacionesListaRef = db.ref('notificaciones/almacen/'+usuario+'/lista');
+              moment.locale('es');
+              let formato = moment().format("MMMM DD YYYY, HH:mm:ss");
+              let fecha = formato.toString();
+              let notificacion = {
+                fecha: fecha,
+                leida: false,
+                mensaje: "Se ha generado un pedido: Clave: " + key
+              };
+              notificacionesListaRef.push(notificacion);
+
+              let notificacionesRef = db.ref('notificaciones/almacen/'+usuario);
+              notificacionesRef.once('value', function(snapshot) {
+                let notusuario = snapshot.val();
+                let cont = notusuario.cont + 1;
+
+                notificacionesRef.update({cont: cont});
+              });
+            }
+          });
+
+          $("#tiendas").val('Tiendas')
+          $("#productos").val('');
+          $("#productos option[value=Seleccionar]").attr('selected', true);
+          $('#productosPedido tbody').empty();
+          listaProductosPedido.length = 0;
         }
         else {
           let pedidoRef = db.ref('pedidoEntrada/');
@@ -908,7 +943,7 @@ function guardarPedido() {
             let pedidoDetalleHistorialRef = db.ref('regiones/'+region+'/'+idTienda+'/historialPedidos/'+key+'/detalle');
 
             for(let producto in listaProductosPedido) {
-              pedidoDetalleRef.push(listaProductosPedido[producto]);
+              pedidoDetalleHistorialRef.push(listaProductosPedido[producto]);
             }
           });
           //let historialPedidosRef = db.ref('regiones/');
@@ -918,40 +953,38 @@ function guardarPedido() {
           for(let producto in listaProductosPedido) {
             pedidoDetalleRef.push(listaProductosPedido[producto]);
           }
-        }
-      });
 
-      //$('#tiendas option').first().attr('selected', true);
-      //$('#productos option').first().attr('selected', true);
-      $("#tiendas").val('Tiendas')
-      $("#productos").val('');
-      $("#productos option[value=Seleccionar]").attr('selected', true);
-      $('#productosPedido tbody').empty();
-      listaProductosPedido.length = 0;
+          //Envío de notificación al almacen
+          let usuariosAlmacenRef = db.ref('usuarios/planta/almacen');
+          usuariosAlmacenRef.once('value', function(snapshot) {
+            let usuarios = snapshot.val();
+            for(let usuario in usuarios) {
+              let notificacionesListaRef = db.ref('notificaciones/almacen/'+usuario+'/lista');
+              moment.locale('es');
+              let formato = moment().format("MMMM DD YYYY, HH:mm:ss");
+              let fecha = formato.toString();
+              let notificacion = {
+                fecha: fecha,
+                leida: false,
+                mensaje: "Se ha generado un pedido: Clave: " + key
+              };
+              notificacionesListaRef.push(notificacion);
 
-      //Envío de notificación al almacen
-      let usuariosAlmacenRef = db.ref('usuarios/planta/almacen');
-      usuariosAlmacenRef.once('value', function(snapshot) {
-        let usuarios = snapshot.val();
-        for(let usuario in usuarios) {
-          let notificacionesListaRef = db.ref('notificaciones/almacen/'+usuario+'/lista');
-          moment.locale('es');
-          let formato = moment().format("MMMM DD YYYY, HH:mm:ss");
-          let fecha = formato.toString();
-          let notificacion = {
-            fecha: fecha,
-            leida: false,
-            mensaje: "Se ha generado un pedido: Clave: " + key
-          };
-          notificacionesListaRef.push(notificacion);
+              let notificacionesRef = db.ref('notificaciones/almacen/'+usuario);
+              notificacionesRef.once('value', function(snapshot) {
+                let notusuario = snapshot.val();
+                let cont = notusuario.cont + 1;
 
-          let notificacionesRef = db.ref('notificaciones/almacen/'+usuario);
-          notificacionesRef.once('value', function(snapshot) {
-            let notusuario = snapshot.val();
-            let cont = notusuario.cont + 1;
-
-            notificacionesRef.update({cont: cont});
+                notificacionesRef.update({cont: cont});
+              });
+            }
           });
+
+          $("#tiendas").val('Tiendas')
+          $("#productos").val('');
+          $("#productos option[value=Seleccionar]").attr('selected', true);
+          $('#productosPedido tbody').empty();
+          listaProductosPedido.length = 0;
         }
       });
 
