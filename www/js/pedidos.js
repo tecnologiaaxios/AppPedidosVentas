@@ -908,6 +908,7 @@ function guardarPedido() {
           $("#productos option[value=Seleccionar]").attr('selected', true);
           $('#productosPedido tbody').empty();
           listaProductosPedido.length = 0;
+          listaClavesProductos.length = 0;
         }
         else {
           let pedidoRef = db.ref('pedidoEntrada/');
@@ -985,13 +986,14 @@ function guardarPedido() {
           $("#productos option[value=Seleccionar]").attr('selected', true);
           $('#productosPedido tbody').empty();
           listaProductosPedido.length = 0;
+          listaClavesProductos.length = 0;
         }
       });
 
       $.toaster({ priority : 'success', title : 'Mensaje de pedido', message : 'Tu pedido se ha enviado con éxito'});
     }
     else {
-      
+
     }
   }
   else {
