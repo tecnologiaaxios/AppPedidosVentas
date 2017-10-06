@@ -178,125 +178,7 @@ function llenarSelectTiendas() {
       $('#tiendas').append(row).msDropdown();
     });
   });
-
-  /*let tiendasRef = db.ref('tiendas');
-  tiendasRef.on('value', function(snapshot) {
-    let tiendas = snapshot.val();
-    let row = "";
-
-    for(let tienda in tiendas) {
-      let imagen = "";
-      switch (tiendas[tienda].consorcio) {
-        case "SORIANA":
-          imagen = "assets/tiendas/soriana.png";
-          break;
-        case "SMART":
-          imagen = "assets/tiendas/smart.png";
-          break;
-        case "GRAND":
-          imagen = "assets/tiendas/grand.png";
-          break;
-        case "IBARRA":
-          imagen = "assets/tiendas/ibarra.png";
-          break;
-        case "CHEDRAUI":
-          imagen = "assets/tiendas/chedraui.png";
-          break;
-        case "STM":
-          imagen = "assets/tiendas/stm.png";
-          break;
-        case "MASBODEGA":
-          imagen = "assets/tiendas/masbodega.png";
-          break;
-        case "CHUPER":
-          imagen = "assets/tiendas/chuper.png";
-          break;
-        case "ARTELI":
-          imagen = "assets/tiendas/arteli.png";
-          break;
-      }
-
-      row += '<option value="'+tienda+'" data-image="'+imagen+'">'+tiendas[tienda].nombre+'</option>';
-    }
-
-    $('#tiendas').show();
-    $('#tiendas').empty().append('<option value="Tiendas" disabled selected>Selecciona una tienda para visitar</option>');
-    $('#tiendas').append(row).msDropdown();
-  });*/
 }
-
-//llenarSelectTiendas();
-
-/*function llenarSelectTiendas() {
-  var jsonData = [
-    {description:'', value:'', text:'Tienda'}
-  ];
-
-  let tiendasRef = db.ref('tiendas');
-  tiendasRef.on('value', function(snapshot) {
-    let tiendas = snapshot.val();
-
-    for(let tienda in tiendas) {
-      let imagen = "";
-      switch (tiendas[tienda].consorcio) {
-        case "SORIANA":
-          imagen = "assets/tiendas/soriana.png";
-          break;
-        case "SMART":
-          imagen = "assets/tiendas/smart.png";
-          break;
-        case "GRAND":
-          imagen = "assets/tiendas/grand.png";
-          break;
-        case "IBARRA":
-          imagen = "assets/tiendas/ibarra.png";
-          break;
-        case "CHEDRAUI":
-          imagen = "assets/tiendas/chedraui.png";
-          break;
-        case "STM":
-          imagen = "assets/tiendas/stm.png";
-          break;
-      }
-
-      let json = {image:imagen, value:tienda, text:tiendas[tienda].nombre};
-      jsonData.push(json);
-    }
-    $("#tiendas").msDropDown({byJson:{data:jsonData, name:'tiendas'}}).data("dd");
-    $("#tiendas").msDropdown().data("dd").on("change", function(res) {
-      let idTienda = $('#tiendas').msDropdown().data('dd').value;
-      let tiendaActualRef = db.ref('tiendas/'+idTienda);
-      tiendaActualRef.once('value', function(snapshot) {
-        let tienda = snapshot.val();
-        $('#tienda').val(tienda.nombre);
-        $('#region').val(tienda.region);
-      });
-    });
-  });
-
-}*/
-
-
-/*function llenarSelectProductos() {
-  let consorcio= $("#tiendas").val();
-
-  let uid = auth.currentUser.uid;
-  let usuarioRef = db.ref('usuarios/tiendas/supervisoras/'+uid);
-  usuarioRef.once('value', function(snapshot) {
-    let region = snapshot.val().region;
-
-    let productosRef = db.ref('regiones/'+region+'/'+idTienda+'/productos');
-    productosRef.on('value', function(snapshot) {
-      let productos = snapshot.val();
-      let row = "";
-      for(let producto in productos) {
-        row += '<option value="'+producto+'">'+productos[producto].clave + ' ' + productos[producto].nombre + ' ' + productos[producto].empaque +'</option>';
-      }
-      $('#productos').empty().append('<option value="Productos" disabled selected>Productos</option>');
-      $('#productos').append(row);
-    });
-  });
-}*/
 
 function llenarSelectProductos() {
   let consorcio = $('#consorcio').val();
@@ -306,32 +188,12 @@ function llenarSelectProductos() {
     let productos = snapshot.val();
     let options = '<option id="SeleccionarProducto" value="Seleccionar" disabled selected>Seleccionar</option>';
     for(let producto in productos) {
-      options += '<option value="'+producto+'">'+ producto + '  ' + productos[producto].nombre + '  ' + productos[producto].empaque +'</option>';
+      options += `<option value="${producto}"> ${producto} ${productos[producto].nombre} ${productos[producto].empaque}</option>`;
     }
     $('#productos').html(options);
     $('#productosTicket').html(options);
   });
 }
-
-/*function llenarSelectProductos() {
-  var jsonData = [
-    {description:'', value:'', text:'Tienda'}
-  ];
-
-  let idTienda = $("#tiendas").msDropdown().data("dd").value;
-  let productosRef = db.ref('tiendas/'+idTienda+'/productos');
-  productosRef.on('value', function(snapshot) {
-    let productos = snapshot.val();
-    //console.log(productos);
-    for(let producto in productos) {
-      let json = {value:producto, text:productos[producto].nombre};
-      jsonData.push(json);
-    }
-    $("#tiendas").msDropDown({byJson:{data:jsonData, name:'productos'}}).data("dd");
-  });
-}*/
-
-//llenarSelectProductos();
 
 $('#tiendas').change(function(){
   let idTienda = $("#tiendas").val();
@@ -353,24 +215,6 @@ $('#tiendas').change(function(){
     });
   });
 });
-
-/*$('#productos').change(function(){
-  let idTienda = $('#tiendas').val();
-  let idProducto = $('#productos').val();
-  let uid = auth.currentUser.uid;
-  let usuariosRef = db.ref('usuarios/tiendas/supervisoras/'+uid);
-  usuariosRef.once('value', function(snapshot) {
-    let region = snapshot.val().region;
-
-    let productoActualRef = db.ref('regiones/'+region+'/'+idTienda+'/productos/'+idProducto);
-    productoActualRef.once('value', function(snapshot){
-      let producto = snapshot.val();
-      $('#clave').val(producto.clave);
-      $('#nombre').val(producto.nombre);
-      $('#empaque').val(producto.empaque);
-    });
-  });
-});*/
 
 $('#productos').change(function() {
   let consorcio = $('#consorcio').val();
@@ -502,7 +346,13 @@ function eliminarProductoDePedido(claveProducto) {
     $("#productosPedido tbody tr").each(function (i) {
       if($(this).children("td")[0].outerText == claveProducto) {
         $(this).remove();
-        listaProductosPedido.splice(i,1);
+        listaProductosPedido.splice(i, 1);
+
+        if(listaClavesProductos.includes(claveProducto)) {
+          let index = listaClavesProductos.indexOf(claveProducto);
+          listaClavesProductos.splice(index, 1);
+        }
+        calcularTotales();
       }
     });
   }
@@ -603,6 +453,8 @@ function guardarCambiosProducto() {
     columnas[6].innerHTML = totalPz;
     columnas[7].innerHTML = totalKg;
 
+    calcularTotales();
+
     /*$('#productosPedido tbody tr').each(function(j) {
       if(j == i) {
         let columnas = $(this).children('td');
@@ -634,8 +486,24 @@ function guardarCambiosProducto() {
   }
 }
 
+function calcularTotales() {
+  let $filaTotales = $('#filaTotales');
+  let hermanos = $filaTotales.siblings();
+
+  let TotalPiezas = 0, TotalKilos = 0;
+
+  hermanos.each(function (){
+    TotalPiezas += Number($(this)[0].cells[6].innerHTML);
+    TotalKilos += Number($(this)[0].cells[7].innerHTML);
+  });
+
+  $filaTotales[0].cells[6].innerHTML = TotalPiezas;
+  $filaTotales[0].cells[7].innerHTML = TotalKilos.toFixed(4);
+}
+
 function agregarProducto() {
   let clave = $('#clave').val();
+  let claveConsorcio = $('#claveConsorcio').val();
   let nombre = $('#nombre').val();
   let pedidoPz = $('#pedidoPz').val();
   let degusPz = $('#degusPz').val();
@@ -647,7 +515,7 @@ function agregarProducto() {
   let unidad = $('#unidad').val();
   let productoSeleccionado = $('#productos').val();
 
-  if((productoSeleccionado != null || productoSeleccionado != undefined) && pedidoPz.length > 0) {
+  if((productoSeleccionado != null || productoSeleccionado != undefined || productoSeleccionado != "SeleccionarProducto") && pedidoPz.length > 0) {
     if(cambioFisico.length < 1) {
       cambioFisico = 0;
     }
@@ -657,7 +525,8 @@ function agregarProducto() {
 
     if(listaClavesProductos.length > 0) {
       if(listaClavesProductos.includes(clave)) {
-        $('#productos option[value=Seleccionar]').attr("selected", true);
+        $('#productos').attr("selected", true);
+        $('#claveConsorcio').val('');
         $('#productos').focus();
         $('#pedidoPz').val('');
         $('#degusPz').val('');
@@ -702,10 +571,16 @@ function agregarProducto() {
         td2.append(button2);
         row.append(td);
         row.append(td2);
-        $('#productosPedido tbody').append(row);
+        $('#productosPedido tbody').prepend(row);
+        calcularTotales();
+
+        let degusKg = degusPz * empaque;
+        let cambioFisicoKg = cambioFisico * empaque;
+        let pedidoKg = pedidoPz * empaque;
 
         let datosProducto = {
           clave: clave,
+          claveConsorcio: claveConsorcio,
           nombre: nombre,
           pedidoPz: Number(pedidoPz),
           degusPz: Number(degusPz),
@@ -713,13 +588,19 @@ function agregarProducto() {
           totalPz: Number(totalPz),
           totalKg: Number(totalKg),
           precioUnitario: Number(precioUnitario),
-          unidad: unidad
+          unidad: unidad,
+          degusKg: Number(degusKg),
+          cambioFisicoKg: Number(cambioFisicoKg),
+          pedidoKg: Number(pedidoKg)
+
         };
         listaProductosPedido.push(datosProducto);
         listaClavesProductos.push(clave);
 
-        $('#productos option[value="Seleccionar"]').attr("selected", true);
+        $('#productos').val($('#productos > option:first').val());
         $('#productos').focus();
+        $('#clave').val('');
+        $('#claveConsorcio').val('');
         $('#pedidoPz').val('');
         $('#degusPz').val('');
         $('#cambioFisico').val('');
@@ -765,10 +646,16 @@ function agregarProducto() {
       td2.append(button2);
       row.append(td);
       row.append(td2);
-      $('#productosPedido tbody').append(row);
+      $('#productosPedido tbody').prepend(row);
+      calcularTotales();
+
+      let degusKg = degusPz * empaque;
+      let cambioFisicoKg = cambioFisico * empaque;
+      let pedidoKg = pedidoPz * empaque;
 
       let datosProducto = {
         clave: clave,
+        claveConsorcio: claveConsorcio,
         nombre: nombre,
         pedidoPz: Number(pedidoPz),
         degusPz: Number(degusPz),
@@ -776,13 +663,18 @@ function agregarProducto() {
         totalPz: Number(totalPz),
         totalKg: Number(totalKg),
         precioUnitario: Number(precioUnitario),
-        unidad: unidad
+        unidad: unidad,
+        degusKg: Number(degusKg),
+        cambioFisicoKg: Number(cambioFisicoKg),
+        pedidoKg: Number(pedidoKg)
       };
       listaProductosPedido.push(datosProducto);
       listaClavesProductos.push(clave);
 
-      $('#productos option[value="Seleccionar"]').attr("selected", true);
+      $('#productos').val($('#productos > option:first').val());
       $('#productos').focus();
+      $('#clave').val('');
+      $('#claveConsorcio').val('');
       $('#pedidoPz').val('');
       $('#degusPz').val('');
       $('#cambioFisico').val('');
@@ -905,7 +797,9 @@ function guardarPedido() {
 
           $("#tiendas").val('Tiendas')
           $("#productos").val('');
-          $("#productos option[value=Seleccionar]").attr('selected', true);
+          $('#productos').attr("selected", true);
+          $('#claveConsorcio').val('');
+          $('#productos').focus();
           $('#productosPedido tbody').empty();
           listaProductosPedido.length = 0;
           listaClavesProductos.length = 0;
@@ -983,7 +877,9 @@ function guardarPedido() {
 
           $("#tiendas").val('Tiendas')
           $("#productos").val('');
-          $("#productos option[value=Seleccionar]").attr('selected', true);
+          $('#productos').attr("selected", true);
+          $('#claveConsorcio').val('');
+          $('#productos').focus();
           $('#productosPedido tbody').empty();
           listaProductosPedido.length = 0;
           listaClavesProductos.length = 0;
