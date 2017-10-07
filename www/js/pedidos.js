@@ -515,7 +515,7 @@ function agregarProducto() {
   let unidad = $('#unidad').val();
   let productoSeleccionado = $('#productos').val();
 
-  if((productoSeleccionado != null || productoSeleccionado != undefined || productoSeleccionado != "SeleccionarProducto") && pedidoPz.length > 0) {
+  if(productoSeleccionado != null && productoSeleccionado != undefined && productoSeleccionado != "SeleccionarProducto" && pedidoPz.length > 0) {
     if(cambioFisico.length < 1) {
       cambioFisico = 0;
     }
