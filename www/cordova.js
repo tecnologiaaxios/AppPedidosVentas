@@ -18,6 +18,7 @@
  specific language governing permissions and limitations
  under the License.
  */
+
 ;(function() {
     var CORDOVA_JS_BUILD_LABEL = '3.6.3';
 // file: src/scripts/require.js

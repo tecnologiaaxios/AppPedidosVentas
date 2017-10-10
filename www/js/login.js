@@ -1,6 +1,11 @@
 const db = firebase.database();
 const auth = firebase.auth();
 
+document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady() {
+  navigator.splashscreen.show();
+}
+
 $('#username').keyup(function () {
   let username = $('#username').val();
   if(username.length < 1) {
