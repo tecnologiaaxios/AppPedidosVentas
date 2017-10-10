@@ -11,7 +11,7 @@
 
     <!-- <msdropdown> -->
     <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">-->
-    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/creative.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="js/jquery-3.2.1.min.js"></script>
@@ -563,12 +563,62 @@
               </div>
             </div>
           </div>
+          <div class="tab-pane fade" id="perfil">
+            <legend style="padding:10px 10px 10px; background-color:#29b6f6; color:white;" class="text-center header"><a style="float:left; margin-top:2px; font-size:18px; color:white;" href="#panel" data-toggle="tab"><span class="glyphicon glyphicon-menu-left"></span> Volver</a><span style="margin-left:-50px;">Editar perfil</span></legend>
+            <form class="form-horizontal">
+              <fieldset style="padding:5%; margin-top:-30px;" class="text-left">
+                <div class="form-group">
+                  <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                  <div class="col-md-8">
+                    <label for="nombrePerfil">Nombre:</label>
+                    <input readonly type="text" id="nombrePerfil" class="form-control" placeholder="">
+                    <span style="display: none;" id="helpblockNombrePerfil" class="help-block">Campo obligatorio</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                  <div class="col-md-8">
+                    <label for="nombreUsuario">Nombre de usuario:</label>
+                    <input readonly type="text" id="nombreUsuario" class="form-control" placeholder="">
+                    <span style="display: none;" id="helpblockNombreUsuario" class="help-block">Campo obligatorio</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                  <div class="col-md-8">
+                    <button id="btnHabilitarEditar" class="btn btn-default">Editar</button>
+                    <button id="btnEditarPerfil" disabled="disabled" class="btn btn-success">Guardar</button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                  <div class="col-md-8">
+                    <label class="control-label">Contraseña</label>
+                    <button class="btn btn-default" type="button" id="btnExpandir" data-toggle="collapse" data-target="#collapseContraseña" aria-expanded="false" aria-controls="collapseContraseña">Expandir</button>
+                  </div>
+                </div>
+                <div class="collapse" id="collapseContraseña">
+                  <div class="well">
+                    <div class="form-group">
+                      <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                      <div class="col-md-8">
+                        <label for="">Nueva contraseña</label>
+                        <input type="text" id="nuevaContraseña" class="form-control">
+                        <span style="display: none;" id="helpblockNuevaContraseña" class="help-block">Campo obligatorio</span>
+                      </div>
+                    </div>
+                    <button onclick="guardarContraseña" class="btn btn-success">Guardar contraseña</button>
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+          </div>
         </div>
         <div id="footer-panel">
           <ul class="nav nav-tabs" style="width:100%; border:none !important;">
             <li style="width:33%;"class="active"><a id="tabsemana" href="#panel" data-toggle="tab" aria-label="Left Align"><i class="material-icons no-padding">home</i></a></li>
             <li onclick="verNotificaciones()" style="width:33%;"><a id="tabordenes" href="#m2" data-toggle="tab"><i class="material-icons no-padding">notifications</i><span id="spanNotificaciones" style="background-color: red; display: none;" class="badge"></span></a></li>
-            <li style="width:33%;"><a id="tabproyectos" href="#m3" data-toggle="tab"><i class="material-icons no-padding">menu</i></a></li>
+            <li style="width:33%;"><a id="tabPerfil" href="#perfil" data-toggle="tab"><i class="material-icons no-padding">menu</i></a></li>
           </ul>
         </div>
       </section>
@@ -667,7 +717,7 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-    <script src="vendor/bootstrap/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="js/jquery.toaster.js"></script>
     <script src="js/bootstrap-tooltip.js"></script>
     <!--<script type="text/javascript" src="js/bootstrap-multiselect.js"></script>-->

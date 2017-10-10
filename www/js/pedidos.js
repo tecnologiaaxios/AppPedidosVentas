@@ -8,6 +8,89 @@ function logout() {
   auth.signOut();
 }
 
+function mostrarDatosPerfil() {
+  let uid = auth.currentUser.uid;
+  let usuariosRef = db.ref(`usuarios/tiendas/supervisoras/${uid}`);
+  usuariosRef.on('value', function(snapshot) {
+    let usuario = snapshot.val();
+    $('#nombrePerfil').val(usuario.nombre);
+    $('#nombreUsuario').val(usuario.username);
+  });
+}
+
+$('#btnHabilitarEditar').click(function(e) {
+  e.preventDefault();
+  $('#nombrePerfil').removeAttr('readonly');
+  $('#nombreUsuario').removeAttr('readonly');
+  $('#btnEditarPerfil').attr('disabled', false);
+  $('#btnHabilitarEditar').attr('disabled', true);
+});
+
+function editarPerfil() {
+  let uid = auth.currentUser.uid, nombre = $('#nombrePerfil').val(), usuario = $('#nombreUsuario').val();
+
+  if(nombre.length > 0 && usuario.length > 0) {
+    let usuariosRef = db.ref(`usuarios/tiends/supervisoras/`);
+    usuariosRef.child(uid).update({
+      nombre: nombre,
+      usuario: usuario
+    }, function() {
+      mostrarDatosPerfil();
+      $('#nombrePerfil').attr('readonly', true);
+      $('#nombreUsuario').attr('readonly', true);
+      $('#btnEditarPerfil').attr('disabled', true);
+      $('#btnHabilitarEditar').attr('disabled', false);
+
+      $.toaster({ priority : 'success', title : 'Mensaje de información', message : 'Se actualizaron sus datos con exito'});
+    });
+  }
+  else {
+    if(nombre.length < 0 ) {
+      $('#nombrePerfil').parent().addClass('has-error');
+      $('#helpblockNombrePerfil').show();
+    }
+    else {
+      $('#nombrePerfil').parent().removeClass('has-error');
+      $('#helpblockNombrePerfil').hide();
+    }
+    if(usuario.length < 0) {
+      $('#nombreUsuario').parent().addClass('has-error');
+      $('#helpblockNombreUsuario').show();
+    }
+    else {
+      $('#nombreUsuario').parent().removeClass('has-error');
+      $('#helpblockNombreUsuario').hide();
+    }
+  }
+}
+
+$('#btnEditarPerfil').click(function (e) {
+  e.preventDefault();
+  editarPerfil();
+})
+
+function cambiarContraseña() {
+  let nuevaContraseña = $('#nuevaContraseña').val();
+
+  if(nuevaContraseña.length > 0) {
+    auth.currentUser.updatePassword(contraseñaNueva)
+    .then(function () {
+      $.toaster({ priority : 'success', title : 'Mensaje de información', message : 'Se actualizó su contraseña exitosamente'});
+      $('#nuevaContraseña').parent().removeClass('has-error');
+      $('#helpblockNuevaContraseña').hide();
+    }, function(error) {
+      $.toaster({ priority : 'danger', title : 'Error al cambiar contraseña', message : 'La contraseña debe ser de 8 caracteres como mínimo y puede contener números y letras'});
+      console.log(error);
+      $('#nuevaContraseña').parent().addClass('has-error');
+      $('#helpblockNuevaContraseña').show();
+    });
+  }
+  else {
+    $('#nuevaContraseña').parent().addClass('has-error');
+    $('#helpblockNuevaContraseña').show();
+  }
+}
+
 function mostrarTicketsCalidadProducto() {
   let uid = auth.currentUser.uid;
 
@@ -335,6 +418,18 @@ $(document).ready(function() {
       location.reload();
     }
   });*/
+
+  $('#tabPerfil').on('shown.bs.tab', function (e) {
+    mostrarDatosPerfil();
+  })
+
+  $('#collapseContraseña').on('show.bs.collapse', function () {
+    $('#btnExpandir').text('Cerrar');
+  })
+
+  $('#collapseContraseña').on('hide.bs.collapse', function () {
+    $('#btnExpandir').text('Expandir');
+  })
 });
 
 function eliminarProductoDePedido(claveProducto) {
