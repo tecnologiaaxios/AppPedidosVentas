@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" href="css/bootstrap-datepicker3.min.css">
     <link rel="stylesheet" href="css/bootstrap-datepicker3.standalone.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <script src="js/msdropdown/jquery.dd.js"></script>
     <link rel="stylesheet" href="css/xpull.css">
   </head>
@@ -30,8 +31,9 @@
       <nav class="navbar navbar-default ">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">
-            <img width="60px" style="margin-top:-10px;" src="assets/logo.svg" alt="">
+            <img width="60px" src="assets/logo.svg" alt="">
           </a>
+
           <div class="region">
             <p></p>
           </div>
@@ -57,19 +59,21 @@
               <option data-image="assets/tiendas/ibarra.png">Palmas</option>
               <option data-image="assets/tiendas/stm.png">Hidalgo</option>
             </select>-->
-            <div class="menu-1" style="height:120px; width:100%; padding:1%; border-top:solid 1px #eee;">
-              <ul style="margin-left:-40px; margin-top:5px;">
-                <li href="#pedido" aria-controls="pedido" role="tab" data-toggle="tab" class="col-xs-3" style="list-style: none;"><a><img src="assets/icon-1.svg" alt=""><p style="font-size:9px; color:grey;">Generar pedido</p></a></li>
-                <li href="#reporte" aria-controls="reporte" role="tab" data-toggle="tab" class="col-xs-3" style="list-style: none;"><a><img src="assets/icon-4.svg" alt=""><p style="font-size:9px; color:grey;">Generar ticket</p></a></li>
-                <li href="#existencias" aria-controls="existencias" role="tab" data-toggle="tab" class="col-xs-3" style="list-style: none;"><a><img src="assets/icon-2.svg" alt=""><p style="font-size:9px; color:grey;">Revisar existencias</p></a></li>
-                <li href="#" aria-controls="" role="tab" data-toggle="tab" class="col-xs-3" style="list-style: none;"><a><img src="assets/icon-3.svg" alt=""><p style="font-size:9px; color:grey;">Reporte de calidad</p></a></li>
+            <ul class="nav justify-content-center no-padding">
 
-                <!--<li class="col-xs-3" style="list-style:none;"><a onclick="" aria-controls="#pedido" href="#pedido" data-toggle="tab"><img src="assets/icon-1.svg" alt=""><span style="font-size:9px; color:grey;"><br>Generar pedido</span></a></li>
-                <li class="col-xs-3" style="list-style:none;"><a href="#reporte" data-toggle="tab"><img src="assets/icon-4.svg" alt=""><span style="font-size:9px; color:grey;"><br>Generar ticket</span></a></li>
-                <li class="col-xs-3" style="list-style:none;"><a onclick="mostrarAreaExistencias()" href="#existencias" data-toggle="tab"><img src="assets/icon-2.svg" alt=""><span style="font-size:9px; color:grey;"><br>Revisar existencias</span></a></li>
-                <li class="col-xs-3" style="list-style:none;"><img src="assets/icon-3.svg" alt=""><p><span style="font-size:9px; color:grey;">Reporte de calidad</span></p></li>-->
-              </ul>
-            </div>
+            <li style=" max-width:25%; padding:0px; margin:0px;" class="nav-item no-padding" href="#pedido" aria-controls="pedido" role="tab" data-toggle="tab"  ><a class="no-padding"><img width="100%" src="assets/icon-1.svg" alt=""><p style="font-size:10px; color:gray;">Pedidos</p></a></li>
+            <li style=" max-width:25%;"  class="nav-item no-padding" href="#reporte" aria-controls="reporte" role="tab" data-toggle="tab" ><a><img width="100%" src="assets/icon-4.svg" alt=""><p style="font-size:10px; color:gray;">Tickets</p></a></li>
+            <li style=" max-width:25%;"  class="nav-item no-padding" href="#existencias" aria-controls="existencias" role="tab" data-toggle="tab" ><a><img width="100%" src="assets/icon-2.svg" alt=""><p style="font-size:10px; color:gray;">Existencias</p></a></li>
+            <li  style=" max-width:25%;" class="nav-item no-padding" href="#" aria-controls="" role="tab" data-toggle="tab" ><a><img width="100%" src="assets/icon-3.svg" alt=""></a><p style="font-size:10px; margin-top:-10px; color:gray;">Calidad</p></li>
+
+            <!--<li class="col-xs-3" style="list-style:none;"><a onclick="" aria-controls="#pedido" href="#pedido" data-toggle="tab"><img src="assets/icon-1.svg" alt=""><span style="font-size:9px; color:grey;"><br>Generar pedido</span></a></li>
+            <li class="col-xs-3" style="list-style:none;"><a href="#reporte" data-toggle="tab"><img src="assets/icon-4.svg" alt=""><span style="font-size:9px; color:grey;"><br>Generar ticket</span></a></li>
+            <li class="col-xs-3" style="list-style:none;"><a onclick="mostrarAreaExistencias()" href="#existencias" data-toggle="tab"><img src="assets/icon-2.svg" alt=""><span style="font-size:9px; color:grey;"><br>Revisar existencias</span></a></li>
+            <li class="col-xs-3" style="list-style:none;"><img src="assets/icon-3.svg" alt=""><p><span style="font-size:9px; color:grey;">Reporte de calidad</span></p></li>-->
+          </ul>
+
+
+
             <div class="panel-group" style="border:none;" role="tablist" aria-multiselectable="true">
               <div class="panel panel-default" >
                 <div class="panel-heading" role="tab" id="headingTwo" style="height:46px; background-color:white;">
@@ -109,7 +113,7 @@
                 </div>
               </div>
             </div>
-            <button onclick="logout();" class="btn btn-lg btn-danger">Cerrar sesión</button>
+
           </div>
           <div class="tab-pane fade" id="m2">
             <table class="table table-striped">
@@ -118,15 +122,85 @@
               </tbody>
             </table>
           </div>
+
+
+
+
+
+          <div class="tab-pane fade" id="perfil">
+                      <legend style="padding:10px 10px 10px; background-color:#29b6f6 ; color:white;" class=“text-center header”><a style="float:left; margin-top:2px; font-size:18px; color:white;" href="#panel-opciones" data-toggle="tab"><span class="glyphicon glyphicon-menu-left"></span> Volver</a><span style="margin-left:-50px;">Editar perfil</span></legend>
+                      <form class="form-horizontal">
+                        <fieldset style="padding:5%; margin-top:-30px;" class="text-left">
+                          <div class="form-group">
+                            <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                            <div class="col-md-8">
+                              <label for="nombrePerfil">Nombre:</label>
+                              <input readonly type="text" id="nombrePerfil" class="form-control" placeholder="">
+                              <span style="display: none;" id="helpblockNombrePerfil" class="help-block">Campo obligatorio</span>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                            <div class="col-md-8">
+                              <label for="nombreUsuario">Nombre de usuario:</label>
+                              <input readonly type="text" id="nombreUsuario" class="form-control" placeholder="">
+                              <span style="display: none;" id="helpblockNombreUsuario" class="help-block">Campo obligatorio</span>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                            <div class="col-md-8">
+                              <button id="btnHabilitarEditar" class="btn btn-default">Editar</button>
+                              <button id="btnEditarPerfil" disabled="disabled" class="btn btn-success">Guardar</button>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                            <div class="col-md-8">
+                              <label class="control-label">Contraseña</label>
+                              <button class="btn btn-default" type="button" id="btnExpandir" data-toggle="collapse" data-target="#collapseContraseña" aria-expanded="false" aria-controls="collapseContraseña">Expandir</button>
+                            </div>
+                          </div>
+                          <div class="collapse" id="collapseContraseña">
+                            <div class="well">
+                              <div class="form-group">
+                                <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                                <div class="col-md-8">
+                                  <label for="">Nueva contraseña</label>
+                                  <input type="text" id="nuevaContraseña" class="form-control">
+                                  <span style="display: none;" id="helpblockNuevaContraseña" class="help-block">Campo obligatorio</span>
+                                </div>
+                              </div>
+                              <button onclick="guardarContraseña" class="btn btn-success">Guardar contraseña</button>
+                            </div>
+                          </div>
+                        </fieldset>
+                      </form>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
           <div class="tab-pane fade" id="pedido">
-            <legend style="padding:10px 10px 10px; background-color:#29b6f6; color:white;" class="text-center header"><a style="float:left; margin-top:2px; font-size:18px; color:white;" href="#panel" data-toggle="tab"><span class="glyphicon glyphicon-menu-left"></span> Volver</a><span style="margin-left:-50px;">Área de pedidos</span></legend>
-            <form class="form-horizontal">
+            <div style=" height:40px; background-color:#29b6f6; color:white;" class="text-center header"><a style="float:left; margin-top:7px; font-size:18px; color:white;" href="#panel" data-toggle="tab"><span class="glyphicon glyphicon-menu-left"></span> Volver</a><div style="margin-left:-200px; padding-top:7px; font-size:15px;">Área de pedidos</div></div>
+<div  style="color:white;"class="">
+.
+</div>
+
+          <form style="width:100%; margin:0 auto; margin-top:20px;" class="no-padding">
               <fieldset style="padding:5%; margin-top:-30px;" class="text-left">
                 <input class="form-control" id="tienda" name="tienda" style="display:none"></input>
                 <input class="form-control" id="consorcio" name="consorcio" style="display:none"></input>
                 <div class="form-group">
-                  <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
-                  <div class="col-md-8">
+
+                  <div class="col-md-12">
                     <label for="productos">Elige un Producto:</label>
                     <select id="productos" class="form-control input-lg" required>
                       <option value="Seleccionar" disabled>Seleccionar</option>
@@ -135,36 +209,31 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
-                  <div class="col-md-8">
+                  <div class="col-md-12">
                     <label for="region">Región:</label><input class="form-control" id="region" name="region" placeholder="Región" required readonly></input>
                     <!-- <span style="display: none;" id="helpblockRegion" class="help-block">Campo obligatorio</span> -->
                   </div>
                 </div>
                 <div class="form-group">
-                  <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>
-                  <div class="col-md-8">
+                  <div class="col-md-12">
                     <label for="pedidoPz">Pedido Pz:</label><input id="pedidoPz" type="number" placeholder="Pedido Pz" class="form-control" required>
                     <span style="display: none;" id="helpblockPedidoPz" class="help-block">Campo obligatorio</span>
                   </div>
                 </div>
                 <div class="form-group">
-                  <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>
-                  <div class="col-md-8">
+                  <div class="col-md-12">
                     <label for="degusPz">Degustación Pz:</label><input id="degusPz" type="number" placeholder="Degustación Pz" class="form-control" required>
                     <span style="display: none;" id="helpblockDegusPz" class="help-block">Campo obligatorio</span>
                   </div>
                 </div>
                 <div class="form-group">
-                  <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>
-                  <div class="col-md-8">
+                    <div class="col-md-12">
                     <label for="cambioFisico">Cambio físico:</label><input id="cambioFisico" type="number" placeholder="Cambio físico" class="form-control" required>
                     <span style="display: none;" id="helpblockCambioFisico" class="help-block">Campo obligatorio</span>
                   </div>
                 </div>
                 <div class="form-group">
-                  <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>
-                  <div class="col-md-8">
+                  <div class="col-md-12">
                     <label for="totalPz">Total Pz:</label><input id="totalPz" type="number" placeholder="Total Pz" class="form-control" required readonly>
                   </div>
                 </div>
@@ -174,8 +243,7 @@
                 <input class="form-control" id="precioUnitario" name="precioUnitario" style="display:none"></input>
                 <input class="form-control" id="unidad" name="unidad" style="display:none"></input>
                 <div class="form-group">
-                  <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-key" aria-hidden="true"></i></span>
-                  <div class="col-md-8">
+                <div class="col-md-12">
                     <label for="totalKg">Total Kg:</label><input id="totalKg" type="number" placeholder="Total Kg" class="form-control" required readonly>
                   </div>
                 </div>
@@ -195,7 +263,7 @@
                     </div>
                   </div>
                 </div>-->
-                <div class="form-group">
+                <div class="form-group col-md-12 ">
                   <div class="table-responsive">
                     <table id="productosPedido" class="table table-condensed">
                       <thead>
@@ -311,6 +379,8 @@
                     </div>
                   </div>
                 </div>-->
+                <div class="col-md-12 text-center">
+
                 <div class="form-group">
                 <table id="" class="table">
                   <thead>
@@ -563,62 +633,20 @@
               </div>
             </div>
           </div>
-          <div class="tab-pane fade" id="perfil">
-            <legend style="padding:10px 10px 10px; background-color:#29b6f6; color:white;" class="text-center header"><a style="float:left; margin-top:2px; font-size:18px; color:white;" href="#panel" data-toggle="tab"><span class="glyphicon glyphicon-menu-left"></span> Volver</a><span style="margin-left:-50px;">Editar perfil</span></legend>
-            <form class="form-horizontal">
-              <fieldset style="padding:5%; margin-top:-30px;" class="text-left">
-                <div class="form-group">
-                  <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
-                  <div class="col-md-8">
-                    <label for="nombrePerfil">Nombre:</label>
-                    <input readonly type="text" id="nombrePerfil" class="form-control" placeholder="">
-                    <span style="display: none;" id="helpblockNombrePerfil" class="help-block">Campo obligatorio</span>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
-                  <div class="col-md-8">
-                    <label for="nombreUsuario">Nombre de usuario:</label>
-                    <input readonly type="text" id="nombreUsuario" class="form-control" placeholder="">
-                    <span style="display: none;" id="helpblockNombreUsuario" class="help-block">Campo obligatorio</span>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
-                  <div class="col-md-8">
-                    <button id="btnHabilitarEditar" class="btn btn-default">Editar</button>
-                    <button id="btnEditarPerfil" disabled="disabled" class="btn btn-success">Guardar</button>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
-                  <div class="col-md-8">
-                    <label class="control-label">Contraseña</label>
-                    <button class="btn btn-default" type="button" id="btnExpandir" data-toggle="collapse" data-target="#collapseContraseña" aria-expanded="false" aria-controls="collapseContraseña">Expandir</button>
-                  </div>
-                </div>
-                <div class="collapse" id="collapseContraseña">
-                  <div class="well">
-                    <div class="form-group">
-                      <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
-                      <div class="col-md-8">
-                        <label for="">Nueva contraseña</label>
-                        <input type="text" id="nuevaContraseña" class="form-control">
-                        <span style="display: none;" id="helpblockNuevaContraseña" class="help-block">Campo obligatorio</span>
-                      </div>
-                    </div>
-                    <button onclick="guardarContraseña" class="btn btn-success">Guardar contraseña</button>
-                  </div>
-                </div>
-              </fieldset>
-            </form>
+          <div class="tab-pane fade" id="panel-opciones">
+            <ul class="list-group">
+<li class="list-group-item" style="padding-bottom:0px;" href="#perfil" aria-controls="perfil" role="tab" data-toggle="tab"  ><p style="float:left; font-size:13px; "><i class="material-icons md-24">account_circle</i> Editar perfil</p> <i style="float:right;" class="material-icons">keyboard_arrow_right</i></li></a>
+  <button  style="width:100%;"onclick="logout();" class="btn btn-lg btn-danger">Cerrar sesión</button>
+
+</ul>
           </div>
+
         </div>
         <div id="footer-panel">
           <ul class="nav nav-tabs" style="width:100%; border:none !important;">
             <li style="width:33%;"class="active"><a id="tabsemana" href="#panel" data-toggle="tab" aria-label="Left Align"><i class="material-icons no-padding">home</i></a></li>
             <li onclick="verNotificaciones()" style="width:33%;"><a id="tabordenes" href="#m2" data-toggle="tab"><i class="material-icons no-padding">notifications</i><span id="spanNotificaciones" style="background-color: red; display: none;" class="badge"></span></a></li>
-            <li style="width:33%;"><a id="tabPerfil" href="#perfil" data-toggle="tab"><i class="material-icons no-padding">menu</i></a></li>
+            <li style="width:33%;"><a id="tabPerfil" href="#panel-opciones" data-toggle="tab"><i class="material-icons no-padding">menu</i></a></li>
           </ul>
         </div>
       </section>
