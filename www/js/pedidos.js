@@ -8,8 +8,6 @@ function logout() {
   auth.signOut();
 }
 
-
-
 function mostrarDatosPerfil() {
   let uid = auth.currentUser.uid;
   let usuariosRef = db.ref(`usuarios/tiendas/supervisoras/${uid}`);

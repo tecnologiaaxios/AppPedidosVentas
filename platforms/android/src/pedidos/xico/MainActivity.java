@@ -17,7 +17,7 @@
        under the License.
  */
 
-package io.cordova.hellocordova;
+package pedidos.xico;
 
 import android.os.Bundle;
 import org.apache.cordova.*;

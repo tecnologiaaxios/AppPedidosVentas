@@ -104,7 +104,7 @@ p {
 overflow: hidden;}
 
   /***** ESTILOS DE LA APP / PANEL***/
-  .region{ color: white; float: right; margin-top:15px;}
+  .region{ color:white; margin-top: 5px; float: right; }
   #nav-panel{ margin: 0 auto; text-align: center; height: 30px;max-height:30px;}
 
 .nav-tabs>li>a {
@@ -165,13 +165,30 @@ aside {
   border: none;
   max-height: 20px;
 }
-
+.material-icons, .icon-text {
+     vertical-align: middle;
+     
+   }
 
 }
 
 @media (min-width: 768px) {
 
 }
+@media (max-width: 328px) {
+  .navbar-brand{ margin-left: -20px}
+  .region{float:right; font-size: 100px; }
+}
+@media (max-width: 308px) {
+  .navbar-brand{ margin-left: -30px}
+  .region{float:right; font-size: 100px; }
+}
+@media (max-width: 300px) {
+  .navbar-brand{ margin-left: -40px}
+  .region{float:right; font-size: 100px; margin-right: -25px;}
+}
+
+
 body {
   position: relative;
   width: 100%;
