@@ -8,6 +8,8 @@ function logout() {
   auth.signOut();
 }
 
+
+
 function mostrarDatosPerfil() {
   let uid = auth.currentUser.uid;
   let usuariosRef = db.ref(`usuarios/tiendas/supervisoras/${uid}`);
@@ -253,7 +255,7 @@ function llenarSelectTiendas() {
             break;
         }
 
-        row += '<option value="'+tienda+'" data-image="'+imagen+'">'+tiendas[tienda].nombre+'</option>';
+        row += `<option value="${tienda}" data-image="${imagen}">${tiendas[tienda].nombre}</option>`;
       }
 
       $('#tiendas').show().empty().append(row).msDropdown();
@@ -743,6 +745,7 @@ function agregarProducto() {
 }
 
 function guardarPedido() {
+  console.log(listaProductosPedido);
   if(listaProductosPedido.length > 0) {
     let confirmar = confirm("¿Está seguro(a) de enviar el pedido?");
     if(confirmar) {
@@ -779,22 +782,22 @@ function guardarPedido() {
           };
 
           let key = pedidoRef.push(encabezado).getKey();
+          let idTienda = $('#tiendas').val();
 
           let usuarioRef = db.ref('usuarios/tiendas/supervisoras/'+uid);
           usuarioRef.once('value', function(snapshot) {
-            let region = snapshot.region;
-            let idTienda = $('#tiendas').val();
+            let region = snapshot.val().region;
 
             let historialPedidosRef = db.ref('regiones/'+region+'/'+idTienda+'/historialPedidos');
             let keyHistorial = historialPedidosRef.push(encabezado).getKey();
 
-            let pedidoDetalleHistorialRef = db.ref('regiones/'+region+'/'+idTienda+'/historialPedidos/'+key+'/detalle');
+            let pedidoDetalleHistorialRef = db.ref(`regiones/${region}/${idTienda}/historialPedidos/${keyHistorial}/detalle`);
 
             for(let producto in listaProductosPedido) {
               pedidoDetalleHistorialRef.push(listaProductosPedido[producto]);
             }
           });
-          //let historialPedidosRef = db.ref('regiones/');
+
           let pedidoDetalleRef = db.ref('pedidoEntrada/'+key+'/detalle');
           for(let producto in listaProductosPedido) {
             pedidoDetalleRef.push(listaProductosPedido[producto]);
@@ -868,16 +871,16 @@ function guardarPedido() {
           };
 
           let key = pedidoRef.push(encabezado).getKey();
+          let idTienda = $('#tiendas').val();
 
           let usuarioRef = db.ref('usuarios/tiendas/supervisoras/'+uid);
           usuarioRef.once('value', function(snapshot) {
-            let region = snapshot.region;
-            let idTienda = $('#tiendas').val();
+            let region = snapshot.val().region;
 
             let historialPedidosRef = db.ref('regiones/'+region+'/'+idTienda+'/historialPedidos');
             let keyHistorial = historialPedidosRef.push(encabezado).getKey();
 
-            let pedidoDetalleHistorialRef = db.ref('regiones/'+region+'/'+idTienda+'/historialPedidos/'+key+'/detalle');
+            let pedidoDetalleHistorialRef = db.ref(`regiones/${region}/${idTienda}/historialPedidos/${keyHistorial}/detalle`);
 
             for(let producto in listaProductosPedido) {
               pedidoDetalleHistorialRef.push(listaProductosPedido[producto]);

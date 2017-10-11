@@ -199,14 +199,17 @@
                 <input class="form-control" id="tienda" name="tienda" style="display:none"></input>
                 <input class="form-control" id="consorcio" name="consorcio" style="display:none"></input>
                 <div class="form-group">
-                  <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+
+<<<<<<< HEAD
                   <div class="col-md-12">
+=======
+>>>>>>> 64711715d84391c868dfddb2ab5641f3166623e3
                     <label for="productos">Elige un Producto:</label>
                     <select id="productos" class="form-control input-lg" required>
                       <option value="Seleccionar" disabled>Seleccionar</option>
                     </select>
                     <span style="display: none;" id="helpblockProductos" class="help-block">Campo obligatorio</span>
-                   </div>
+                  
                 </div>
                 <div class="form-group">
                   <div class="col-md-12">
