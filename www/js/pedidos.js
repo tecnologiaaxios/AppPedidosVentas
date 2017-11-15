@@ -293,8 +293,49 @@ $('#tiendas').change(function(){
       $('#consorcioTicket').val(tienda.consorcio);
 
       llenarSelectProductos();
+      llenarTablaExistencias();
     });
   });
+});
+
+function llenarTablaExistencias(){
+  let consorcio = $('#consorcio').val();
+
+  let productosRef = db.ref(`productos/${consorcio}`);
+  productosRef.on('value', function(snapshot) {
+    let productos = snapshot.val();
+    let filas = "";
+    for(let producto in productos) {
+      filas += `<tr>
+                  <td>
+                    Clave | Nombre | Empaque <br>
+                    <strong>${producto} | ${productos[producto].nombre} | ${productos[producto].empaque}</strong>
+                    <input id="existencia-${producto}" data-clave="${producto}" type="number" class="form-control input-sm text-right" value="0" min="0">
+                  </td>
+                </tr>`;
+    }
+    $('#tabla-existencias tbody').html(filas);
+  });
+}
+
+function guardarExistencia() {
+  let consorcio = $('#consorcio').val();
+
+  $('#tabla-existencias tbody tr td input').each(function () {
+    let clave = $(this).attr('data-clave');
+    let existencia = Number($(this).val());
+
+    let productoRef = db.ref(`productos/${consorcio}/${clave}`);
+    productoRef.update({existencia: existencia});
+  });
+
+  $.toaster({priority: 'success', title: 'Mensaje de información', message: `La existencia se guardó correctamente`});
+}
+
+$('#tabla-existencias tbody tr td input').keypress(function() {
+     if(!$.trim(this.value).length) { // zero-length string AFTER a trim
+      $(this).parents('p').addClass('warning');
+     }
 });
 
 $('#productos').change(function() {

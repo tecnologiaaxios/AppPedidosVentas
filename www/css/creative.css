@@ -81,6 +81,7 @@ p {
   margin-bottom: 20px;
 }
 /***** ESTILOS DE LA APP***/
+#tabla-existencias{ min-width: 20px;}
 
 #logo-login{
             margin: 0 auto !important;}
@@ -167,7 +168,7 @@ aside {
 }
 .material-icons, .icon-text {
      vertical-align: middle;
-     
+
    }
 
 }
