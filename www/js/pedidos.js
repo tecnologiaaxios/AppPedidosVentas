@@ -196,10 +196,11 @@ function haySesion() {
     //si hay un usuario
     if (user) {
       mostrarTicketsCalidadProducto();
-      llenarSelectTiendas();
+      llenarSelectRegiones();
       mostrarHistorialPedidos();
       mostrarNotificaciones();
       mostrarContador();
+      $('#tiendas').msDropdown();
     }
     else {
       $(location).attr("href", "index.html");
@@ -209,55 +210,69 @@ function haySesion() {
 
 haySesion();
 
+$('#regiones').change(function() {
+  llenarSelectTiendas();
+})
+
+function llenarSelectRegiones() {
+  let regionesRef = db.ref('regiones');
+  regionesRef.once('value', function(snapshot) {
+    let regiones = snapshot.val();
+    let options = '<option value="Regiones" disabled selected>Selecciona una región</option>';
+    for(let region in regiones) {
+      options += `<option value="${region}">${region}</option>`
+    }
+
+    $('#regiones').show().html(options).msDropdown();
+  })
+}
+
 function llenarSelectTiendas() {
-  let uid = auth.currentUser.uid;
-  let usuariosRef = db.ref('usuarios/tiendas/supervisoras/'+uid);
-  usuariosRef.once('value', function(snapshot) {
-    let region = snapshot.val().region;
-    $('.region p').html('Pedidos Región '+region);
+  let $regiones = $('#regiones');
+  let region = $regiones.val();
 
-    let tiendasRef = db.ref('regiones/'+region);
-    tiendasRef.on('value', function(snapshot) {
-      let tiendas = snapshot.val();
-      let row = '<option value="Tiendas" disabled selected>Selecciona una tienda para visitar</option>';
+  $('#tiendas').msDropdown().data("dd").destroy();
 
-      for(let tienda in tiendas) {
-        let imagen = "";
-        switch (tiendas[tienda].consorcio) {
-          case "SORIANA":
-            imagen = "assets/tiendas/soriana.png";
-            break;
-          case "SMART":
-            imagen = "assets/tiendas/smart.png";
-            break;
-          case "GRAND":
-            imagen = "assets/tiendas/grand.png";
-            break;
-          case "IBARRA":
-            imagen = "assets/tiendas/ibarra.png";
-            break;
-          case "CHEDRAUI":
-            imagen = "assets/tiendas/chedraui.png";
-            break;
-          case "STM":
-            imagen = "assets/tiendas/stm.png";
-            break;
-          case "MASBODEGA":
-            imagen = "assets/tiendas/masbodega.png";
-            break;
-          case "CHUPER":
-            imagen = "assets/tiendas/chuper.png";
-            break;
-          case "ARTELI":
-            imagen = "assets/tiendas/arteli.png";
-            break;
-        }
+  let tiendasRef = db.ref(`regiones/${region}`);
+  tiendasRef.on('value', function(snapshot) {
+    let tiendas = snapshot.val();
+    let options = '<option value="Tiendas" disabled selected>Selecciona una tienda para visitar</option>';
 
-        row += `<option value="${tienda}" data-image="${imagen}">${tiendas[tienda].nombre}</option>`;
+    for(let tienda in tiendas) {
+      let imagen = "";
+      switch (tiendas[tienda].consorcio) {
+        case "SORIANA":
+          imagen = "assets/tiendas/soriana.png";
+          break;
+        case "SMART":
+          imagen = "assets/tiendas/smart.png";
+          break;
+        case "GRAND":
+          imagen = "assets/tiendas/grand.png";
+          break;
+        case "IBARRA":
+          imagen = "assets/tiendas/ibarra.png";
+          break;
+        case "CHEDRAUI":
+          imagen = "assets/tiendas/chedraui.png";
+          break;
+        case "STM":
+          imagen = "assets/tiendas/stm.png";
+          break;
+        case "MASBODEGA":
+          imagen = "assets/tiendas/masbodega.png";
+          break;
+        case "CHUPER":
+          imagen = "assets/tiendas/chuper.png";
+          break;
+        case "ARTELI":
+          imagen = "assets/tiendas/arteli.png";
+          break;
       }
 
-      $('#tiendas').show().empty().append(row).msDropdown();
-    });
+      options += `<option value="${tienda}" data-image="${imagen}">${tiendas[tienda].nombre}</option>`;
+    }
+    $('#tiendas').show().html(options).msDropdown();
   });
 }
 
@@ -278,13 +293,9 @@ function llenarSelectProductos() {
 
 $('#tiendas').change(function(){
   let idTienda = $("#tiendas").val();
+  let region = $('#regiones').val();
 
-  let uid = auth.currentUser.uid;
-  let usuariosRef = db.ref('usuarios/tiendas/supervisoras/'+uid);
-  usuariosRef.once('value', function(snapshot) {
-    let region = snapshot.val().region;
-
-    let tiendaActualRef = db.ref('regiones/'+region+'/'+idTienda);
+  let tiendaActualRef = db.ref(`regiones/${region}/${idTienda}`);
     tiendaActualRef.once('value', function(snapshot) {
       let tienda = snapshot.val();
       $('#tienda').val(tienda.nombre);
@@ -294,7 +305,6 @@ $('#tiendas').change(function(){
 
       llenarSelectProductos();
       llenarTablaExistencias();
-    });
   });
 });
 
@@ -343,7 +353,7 @@ $('#productos').change(function() {
   let idProducto = $('#productos').val();
 
   let productoActualRef = db.ref('productos/'+consorcio+'/'+idProducto);
-  productoActualRef.on('value', function(snapshot) {
+  productoActualRef.once('value', function(snapshot) {
     let producto = snapshot.val();
     $('#clave').val(idProducto);
     $('#claveConsorcio').val(producto.claveConsorcio);
@@ -413,15 +423,6 @@ $('#degusPz').keyup(function(){
 
   $('#totalPz').val(totalPz);
   $('#totalKg').val(totalKg);
-
-  if(this.value.length < 1) {
-    $('#degusPz').parent().addClass('has-error');
-    $('#helpblockDegusPz').show();
-  }
-  else {
-    $('#degusPz').parent().removeClass('has-error');
-    $('#helpblockDegusPz').hide();
-  }
 });
 
 $('#cambioFisico').keyup(function(){
@@ -662,6 +663,7 @@ function agregarProducto() {
   let precioUnitario = $('#precioUnitario').val();
   let unidad = $('#unidad').val();
   let productoSeleccionado = $('#productos').val();
+  console.log(claveConsorcio);
 
   if(productoSeleccionado != null && productoSeleccionado != undefined && productoSeleccionado != "SeleccionarProducto" && pedidoPz.length > 0) {
     if(cambioFisico.length < 1) {
@@ -784,51 +786,56 @@ function agregarProducto() {
 }
 
 function guardarPedido() {
-  console.log(listaProductosPedido);
   if(listaProductosPedido.length > 0) {
     let confirmar = confirm("¿Está seguro(a) de enviar el pedido?");
     if(confirmar) {
+      let $ordenCompra = $('#ordenCompra'),
+          numOrden,
+          pedidoRef = db.ref('pedidoEntrada/'),
+          tienda = $('#tienda').val(),
+          consorcio = $('#consorcioTicket').val(),
+          ruta = $('#region').val(),
+          fechaCaptura = moment().format('DD/MM/YYYY'),
+          uid = auth.currentUser.uid;
+
+          if($ordenCompra.val().length === "") {
+            numOrden = "";
+          }
+          else {
+            numOrden = $ordenCompra.val();
+          }
 
       let pedidosRef = db.ref('pedidoEntrada');
       pedidosRef.once('value', function(snapshot) {
         let existe = (snapshot.val() != null);
         if(existe) {
-          let listapedidos = snapshot.val();
+          let listapedidos = snapshot.val(),
+              keys = Object.keys(listapedidos),
+              last = keys[keys.length-1],
+              ultimoPedido = listapedidos[last],
+              lastclave = ultimoPedido.encabezado.clave,
+              encabezado = {
+                encabezado: {
+                  clave: lastclave + 1,
+                  numOrden: numOrden,
+                  fechaCaptura: fechaCaptura,
+                  tienda: tienda,
+                  consorcio: consorcio,
+                  ruta: ruta,
+                  fechaRuta: "",
+                  estado: "Pendiente",
+                  promotora: uid
+                }
+              };
 
-          let keys = Object.keys(listapedidos);
-          let last = keys[keys.length-1];
-          let ultimoPedido = listapedidos[last];
-          let lastclave = ultimoPedido.encabezado.clave;
+          let key = pedidoRef.push(encabezado).getKey(),
+              idTienda = $('#tiendas').val();
+              usuarioRef = db.ref(`usuarios/tiendas/supervisoras/${uid}`);
 
-          let pedidoRef = db.ref('pedidoEntrada/');
-          let tienda = $('#tienda').val();
-          let consorcio = $('#consorcioTicket').val();
-          let ruta = $('#region').val();
-          let fechaCaptura = moment().format('DD/MM/YYYY');
-          let uid = auth.currentUser.uid;
-
-          let encabezado = {
-            encabezado: {
-              clave: lastclave + 1,
-              fechaCaptura: fechaCaptura,
-              tienda: tienda,
-              consorcio: consorcio,
-              ruta: ruta,
-              fechaRuta: "",
-              estado: "Pendiente",
-              promotora: uid
-            }
-          };
-
-          let key = pedidoRef.push(encabezado).getKey();
-          let idTienda = $('#tiendas').val();
-
-          let usuarioRef = db.ref('usuarios/tiendas/supervisoras/'+uid);
           usuarioRef.once('value', function(snapshot) {
-            let region = snapshot.val().region;
-
-            let historialPedidosRef = db.ref('regiones/'+region+'/'+idTienda+'/historialPedidos');
-            let keyHistorial = historialPedidosRef.push(encabezado).getKey();
+            let region = snapshot.val().region,
+            historialPedidosRef = db.ref(`regiones/${region}/${idTienda}/historialPedidos`),
+            keyHistorial = historialPedidosRef.push(encabezado).getKey();
 
             let pedidoDetalleHistorialRef = db.ref(`regiones/${region}/${idTienda}/historialPedidos/${keyHistorial}/detalle`);
 
@@ -841,32 +848,6 @@ function guardarPedido() {
           for(let producto in listaProductosPedido) {
             pedidoDetalleRef.push(listaProductosPedido[producto]);
           }
-
-          //Envío de notificación al almacen
-          let usuariosAlmacenRef = db.ref('usuarios/planta/almacen');
-          usuariosAlmacenRef.once('value', function(snapshot) {
-            let usuarios = snapshot.val();
-            for(let usuario in usuarios) {
-              let notificacionesListaRef = db.ref('notificaciones/almacen/'+usuario+'/lista');
-              moment.locale('es');
-              let formato = moment().format("MMMM DD YYYY, HH:mm:ss");
-              let fecha = formato.toString();
-              let notificacion = {
-                fecha: fecha,
-                leida: false,
-                mensaje: "Se ha generado un pedido: Clave: " + key
-              };
-              notificacionesListaRef.push(notificacion);
-
-              let notificacionesRef = db.ref('notificaciones/almacen/'+usuario);
-              notificacionesRef.once('value', function(snapshot) {
-                let notusuario = snapshot.val();
-                let cont = notusuario.cont + 1;
-
-                notificacionesRef.update({cont: cont});
-              });
-            }
-          });
 
           $("#tiendas").val('Tiendas')
           $('#productos').val($('#productos > option:first').val());
@@ -889,16 +870,10 @@ function guardarPedido() {
           listaClavesProductos.length = 0;
         }
         else {
-          let pedidoRef = db.ref('pedidoEntrada/');
-          let tienda = $('#tienda').val();
-          let consorcio = $('#consorcioTicket').val();
-          let ruta = $('#region').val();
-          let fechaCaptura = moment().format('DD/MM/YYYY');
-          let uid = auth.currentUser.uid;
-
           let encabezado = {
             encabezado: {
               clave: 1,
+              numOrden: numOrden,
               fechaCaptura: fechaCaptura,
               tienda: tienda,
               consorcio: consorcio,
@@ -909,55 +884,25 @@ function guardarPedido() {
             }
           };
 
-          let key = pedidoRef.push(encabezado).getKey();
-          let idTienda = $('#tiendas').val();
-
-          let usuarioRef = db.ref('usuarios/tiendas/supervisoras/'+uid);
+          let key = pedidoRef.push(encabezado).getKey(),
+              idTienda = $('#tiendas').val(),
+              usuarioRef = db.ref(`usuarios/tiendas/supervisoras/${uid}`);
           usuarioRef.once('value', function(snapshot) {
-            let region = snapshot.val().region;
-
-            let historialPedidosRef = db.ref('regiones/'+region+'/'+idTienda+'/historialPedidos');
-            let keyHistorial = historialPedidosRef.push(encabezado).getKey();
-
-            let pedidoDetalleHistorialRef = db.ref(`regiones/${region}/${idTienda}/historialPedidos/${keyHistorial}/detalle`);
+            let region = snapshot.val().region,
+                historialPedidosRef = db.ref(`regiones/${region}/${idTienda}/historialPedidos`),
+                keyHistorial = historialPedidosRef.push(encabezado).getKey(),
+                pedidoDetalleHistorialRef = db.ref(`regiones/${region}/${idTienda}/historialPedidos/${keyHistorial}/detalle`);
 
             for(let producto in listaProductosPedido) {
               pedidoDetalleHistorialRef.push(listaProductosPedido[producto]);
             }
           });
-          //let historialPedidosRef = db.ref('regiones/');
 
-          let pedidoDetalleRef = db.ref('pedidoEntrada/'+key+'/detalle');
+          let pedidoDetalleRef = db.ref(`pedidoEntrada/${key}/detalle`);
 
           for(let producto in listaProductosPedido) {
             pedidoDetalleRef.push(listaProductosPedido[producto]);
           }
-
-          //Envío de notificación al almacen
-          let usuariosAlmacenRef = db.ref('usuarios/planta/almacen');
-          usuariosAlmacenRef.once('value', function(snapshot) {
-            let usuarios = snapshot.val();
-            for(let usuario in usuarios) {
-              let notificacionesListaRef = db.ref('notificaciones/almacen/'+usuario+'/lista');
-              moment.locale('es');
-              let formato = moment().format("MMMM DD YYYY, HH:mm:ss");
-              let fecha = formato.toString();
-              let notificacion = {
-                fecha: fecha,
-                leida: false,
-                mensaje: "Se ha generado un pedido: Clave: " + key
-              };
-              notificacionesListaRef.push(notificacion);
-
-              let notificacionesRef = db.ref('notificaciones/almacen/'+usuario);
-              notificacionesRef.once('value', function(snapshot) {
-                let notusuario = snapshot.val();
-                let cont = notusuario.cont + 1;
-
-                notificacionesRef.update({cont: cont});
-              });
-            }
-          });
 
           $("#tiendas").val('Tiendas')
           $('#productos').val($('#productos > option:first').val());

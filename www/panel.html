@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>Pedidos Xico</title>
+    <link href='logo.ico' rel='shortcut icon' type='image/x-icon'/>
     <link rel="stylesheet" href="css/sample.css" />
 
     <!-- <msdropdown> -->
@@ -18,12 +19,13 @@
     <script src="js/jquery-3.2.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/msdropdown/skin2.css" />
     <link rel="stylesheet" type="text/css" href="css/msdropdown/flags.css" />
-    <link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css"/>
+    <!-- <link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css"/> -->
     <link rel="stylesheet" type="text/css" href="css/msdropdown/dd.css" />
     <link rel="stylesheet" href="css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" href="css/bootstrap-datepicker3.min.css">
     <link rel="stylesheet" href="css/bootstrap-datepicker3.standalone.css">
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap4.min.css">
+    <!-- <link rel="stylesheet" href="css/bootstrap-select.min.css"> -->
     <script src="js/msdropdown/jquery.dd.js"></script>
     <link rel="stylesheet" href="css/xpull.css">
   </head>
@@ -34,10 +36,6 @@
           <a class="navbar-brand" href="#">
             <img width="60px" src="assets/logo.svg" alt="">
           </a>
-
-          <div class="region">
-            <p></p>
-          </div>
         </div>
       </nav>
       <section id="head-blog" >
@@ -50,16 +48,20 @@
             </div>
           </div>-->
           <div class="tab-pane fade in active" id="panel">
-            <select id="tiendas" style="width:90%; display: none;" required></select>
+
+            <div class="form-group">
+              <select id="regiones" style="width:90%;" class="form-control">
+
+              </select>
+            </div>
+            <div class="form-group">
+              <select id="tiendas" class="form-control" style="width:90%;" required></select>
+            </div>
             <ul class="nav justify-content-center no-padding">
               <li style="max-width:25%; padding:0px; margin:0px;" class="nav-item no-padding" href="#pedido" aria-controls="pedido" role="tab" data-toggle="tab"><a class="no-padding"><img width="100%" src="assets/icon-1.svg" alt=""><p style="font-size:10px; color:gray;">Pedidos</p></a></li>
               <li style="max-width:25%;" class="nav-item no-padding" href="#reporte" aria-controls="reporte" role="tab" data-toggle="tab"><a><img width="100%" src="assets/icon-4.svg" alt=""><p style="font-size:10px; color:gray;">Tickets</p></a></li>
               <li style="max-width:25%;" class="nav-item no-padding" href="#existencias" aria-controls="existencias" role="tab" data-toggle="tab"><a><img width="100%" src="assets/icon-2.svg" alt=""><p style="font-size:10px; color:gray;">Existencias</p></a></li>
               <li style="max-width:25%;" class="nav-item no-padding" href="#" aria-controls="" role="tab" data-toggle="tab"><a><img width="100%" src="assets/icon-3.svg" alt=""><p style="font-size:10px; color:gray;">Calidad</p></a></li>
-              <!--<li class="col-xs-3" style="list-style:none;"><a onclick="" aria-controls="#pedido" href="#pedido" data-toggle="tab"><img src="assets/icon-1.svg" alt=""><span style="font-size:9px; color:grey;"><br>Generar pedido</span></a></li>
-              <li class="col-xs-3" style="list-style:none;"><a href="#reporte" data-toggle="tab"><img src="assets/icon-4.svg" alt=""><span style="font-size:9px; color:grey;"><br>Generar ticket</span></a></li>
-              <li class="col-xs-3" style="list-style:none;"><a onclick="mostrarAreaExistencias()" href="#existencias" data-toggle="tab"><img src="assets/icon-2.svg" alt=""><span style="font-size:9px; color:grey;"><br>Revisar existencias</span></a></li>
-              <li class="col-xs-3" style="list-style:none;"><img src="assets/icon-3.svg" alt=""><p><span style="font-size:9px; color:grey;">Reporte de calidad</span></p></li>-->
             </ul>
             <div class="panel-group" style="border:none;" role="tablist" aria-multiselectable="true">
               <div class="panel panel-default" >
@@ -167,6 +169,14 @@
               <fieldset style="padding:5%; margin-top:-30px;" class="text-left">
                 <input class="form-control" id="tienda" name="tienda" style="display:none"></input>
                 <input class="form-control" id="consorcio" name="consorcio" style="display:none"></input>
+                <input type="text" class="form-control hidden" name="claveConsorcio" id="claveConsorcio">
+                <div class="form-group">
+                  <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                  <div class="col-md-12">
+                    <label for="ordenCompra">Orden de compra:</label>
+                    <input type="text" maxlength="12" class="form-control" name="ordenCompra" id="ordenCompra">
+                  </div>
+                </div>
                 <div class="form-group">
                   <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
                   <div class="col-md-12">
@@ -650,6 +660,7 @@
     <script src="js/dataTables.responsive.js"></script>
     <script src="js/jquery.toaster.js"></script>
     <script src="js/bootstrap-tooltip.js"></script>
+    <script src="js/bootstrap-select.min.js"></script>
     <!--<script type="text/javascript" src="js/bootstrap-multiselect.js"></script>-->
     <script type="text/javascript" src="js/bootstrap-datepicker.min.js"></script>
     <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
